@@ -1,0 +1,7 @@
+# concrete-ml is already included in the zamafhe/concrete-ml Docker base image.
+# These are additional deps only.
+numpy>=1.24.0,<2.0.0
+pandas>=2.0.0
+
+# For local installation (Linux/WSL only, not supported on Windows natively):
+# pip install "concrete-ml==1.7.0"

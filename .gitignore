@@ -1,0 +1,28 @@
+node_modules/
+dist/
+.env
+.env.local
+
+# Hardhat
+artifacts/
+cache/
+coverage/
+coverage.json
+deployments/localhost/
+typechain-types/
+
+# FHE artefacts (large binary files — commit only the manifest)
+packages/models/artifacts/*.fhe
+packages/models/artifacts/*.params
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+
+# Misc
+.DS_Store
+*.log
+
+# AI
+.claude/

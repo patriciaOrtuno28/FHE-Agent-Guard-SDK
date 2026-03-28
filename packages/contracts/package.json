@@ -1,0 +1,29 @@
+{
+  "name": "@fhe-guard/contracts",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "compile": "hardhat compile",
+    "node": "hardhat node --no-deploy",
+    "deploy:localhost": "hardhat deploy --network localhost",
+    "deploy:sepolia": "hardhat deploy --network sepolia",
+    "export:sdk:localhost": "ts-node scripts/export-to-sdk.ts --network localhost",
+    "export:sdk:sepolia": "ts-node scripts/export-to-sdk.ts --network sepolia",
+    "test": "hardhat test",
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "@nomicfoundation/hardhat-toolbox": "^5.0.0",
+    "@fhevm/solidity": "^0.7.0",
+    "@zama-fhe/oracle-solidity": "^0.1.0",
+    "encrypted-types": "^0.0.4",
+    "@openzeppelin/contracts-upgradeable": "^5.0.2",
+    "@openzeppelin/contracts": "^5.0.0",
+    "hardhat": "^2.22.0",
+    "hardhat-deploy": "^0.12.4",
+    "@types/node": "^20.0.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.5.4",
+    "dotenv": "^16.4.5"
+  }
+}

@@ -1,0 +1,21 @@
+services:
+  inference:
+    build:
+      context: packages/inference-server
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    volumes:
+      # Mount compiled model artifacts from the models package
+      - ./packages/models/artifacts:/artifacts:ro
+    environment:
+      MODEL_PATH: /artifacts/anomaly_model.json
+      MANIFEST_PATH: /artifacts/anomaly_model.manifest.json
+      # SIMULATE_FHE=true uses fast FHE simulation (good for dev/demo)
+      # SIMULATE_FHE=false uses real FHE execution (slow but cryptographically correct)
+      SIMULATE_FHE: "true"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
