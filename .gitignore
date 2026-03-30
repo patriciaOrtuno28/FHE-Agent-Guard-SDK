@@ -3,6 +3,7 @@ dist/
 .env
 .env.local
 packages/contracts/.env
+apps/demo/.next/*
 
 # Hardhat
 artifacts/
