@@ -5,19 +5,6 @@ Items are ordered roughly by dependency: later items generally require earlier o
 
 ---
 
-## 7. Inference Server: Real FHE Inference + Authentication
-
-**Current state:** The inference server (`packages/inference-server/`) runs a plaintext sklearn model. It has no authentication — anyone who can reach it can request predictions.
-
-**What needs to happen:**
-- Load the compiled FHE circuit from mounted artifacts (see item 1).
-- Replace `model.predict()` with actual FHE encrypted inference.
-- Add an API key check: the Next.js scan route sends `Authorization: Bearer $INFERENCE_API_KEY`; the inference server validates it.
-- Add `INFERENCE_API_KEY` to both `.env.local` and the inference server's environment in `docker-compose.yml`.
-- Rate-limit the `/predict` endpoint per IP or API key.
-
----
-
 ## 8. Training Data: Replace Synthetic Data with Real Data
 
 **Current state:** `packages/models/scripts/compile_random_forest.py` generates fully synthetic training data with hardcoded anomaly patterns. The model has never seen real on-chain behavior.

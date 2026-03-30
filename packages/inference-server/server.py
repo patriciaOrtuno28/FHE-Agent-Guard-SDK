@@ -17,10 +17,12 @@ import os
 import sys
 import json
 import numpy as np
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Header, Request
 from pydantic import BaseModel
 from typing import List
 from concrete.ml.common.serialization.loaders import load
+from collections import defaultdict, deque
+import time
 
 # ── Config ────────────────────────────────────────────────────
 
@@ -33,7 +35,39 @@ FEATURE_NAMES = [
     "gas_price_gwei", "contract_interaction", "time_since_last_tx", "balance_change_ratio",
 ]
 
+INFERENCE_API_KEY = os.getenv("INFERENCE_API_KEY", "")
+RATE_LIMIT_WINDOW_SECS = int(os.getenv("RATE_LIMIT_WINDOW_SECS", "60"))
+RATE_LIMIT_MAX_REQUESTS = int(os.getenv("RATE_LIMIT_MAX_REQUESTS", "30"))
+
 # ── Startup checks ────────────────────────────────────────────
+
+_rate_buckets = defaultdict(deque)
+
+def _require_bearer_token(authorization: str | None) -> str:
+    if not INFERENCE_API_KEY:
+        raise HTTPException(status_code=500, detail="Inference API key is not configured")
+
+    if not authorization or not authorization.startswith("Bearer "):
+        raise HTTPException(status_code=401, detail="Missing bearer token")
+
+    token = authorization.removeprefix("Bearer ").strip()
+    if token != INFERENCE_API_KEY:
+        raise HTTPException(status_code=401, detail="Invalid bearer token")
+
+    return token
+
+def _enforce_rate_limit(bucket_key: str) -> None:
+    now = time.time()
+    bucket = _rate_buckets[bucket_key]
+
+    while bucket and now - bucket[0] > RATE_LIMIT_WINDOW_SECS:
+      bucket.popleft()
+
+    if len(bucket) >= RATE_LIMIT_MAX_REQUESTS:
+      raise HTTPException(status_code=429, detail="Rate limit exceeded")
+
+    bucket.append(now)
+
 # Fail fast with a clear, actionable message if artifacts are missing.
 
 def _check_artifact(path: str, label: str) -> None:
@@ -130,7 +164,16 @@ def health():
 
 
 @app.post("/predict", response_model=PredictResponse)
-def predict(req: PredictRequest):
+def predict(
+    req: PredictRequest,
+    request: Request,
+    authorization: str | None = Header(default=None),
+):
+    token = _require_bearer_token(authorization)
+    client_ip = request.client.host if request.client else "unknown"
+    bucket_key = f"{token}:{client_ip}"
+    _enforce_rate_limit(bucket_key)
+
     if len(req.features) != len(FEATURE_NAMES):
         raise HTTPException(
             status_code=422,

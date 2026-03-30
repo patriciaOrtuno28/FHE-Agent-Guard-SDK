@@ -1,115 +1,177 @@
-# FHE Agent Guard SDK
+<div align="center">
 
-Confidential anomaly detection for on-chain agents, built on [Zama's fhEVM](https://github.com/zama-ai/fhevm) and [Concrete ML](https://github.com/zama-ai/concrete-ml).
+<br/>
 
-Detects fraudulent or anomalous transaction patterns without any plaintext data leaving the client — features are encrypted before analysis, the ML model runs on ciphertext, and only the anomaly label (normal / anomaly) is returned.
+<img src="https://img.shields.io/badge/FHE%20Agent%20Guard-7C3AED?style=for-the-badge&labelColor=000000&logoColor=7C3AED" height="60" alt="FHE Agent Guard"/>
+
+<br/><br/>
+
+# Confidential On-Chain Risk Scanning with FHE
+
+### *Detect suspicious wallet behavior without exposing raw features or plaintext scores.*
+
+<br/>
+
+[![Built with fhEVM](https://img.shields.io/badge/Built%20with-fhEVM-7C3AED?style=flat-square&labelColor=000000)](https://www.zama.ai/)
+[![Model](https://img.shields.io/badge/Model-Concrete%20ML-7C3AED?style=flat-square&labelColor=000000)]()
+[![Network](https://img.shields.io/badge/Network-Sepolia-7C3AED?style=flat-square&labelColor=000000)]()
+[![Mainnet](https://img.shields.io/badge/Mainnet-Coming%20Soon-F59E0B?style=flat-square&labelColor=000000)]()
+[![Stack](https://img.shields.io/badge/Stack-Next.js%20%7C%20Hardhat%20%7C%20FastAPI-7C3AED?style=flat-square&labelColor=000000)]()
+[![License](https://img.shields.io/badge/License-BSD--3--Clause--Clear-7C3AED?style=flat-square&labelColor=000000)]()
+
+<br/>
 
 ---
 
-## What's in this repo
+<table width="100%">
+<tr>
+<td width="100%" valign="top" align="center">
 
-```
-packages/
-├── contracts/          Solidity — AnomalyAgent.sol receives encrypted scores on-chain
-├── sdk/                TypeScript — AgentGuard, FhEVMConnector, types
-├── models/             Python — trains and compiles the RandomForest FHE model via Docker
-└── inference-server/   Python — FastAPI server that loads the model and serves /predict
+**📖 &nbsp;Project**
+
+[Overview](#-overview) &nbsp;·&nbsp; [Why it matters](#-why-it-matters) &nbsp;·&nbsp; [Architecture](#-architecture) &nbsp;·&nbsp; [How the flow works](#-how-the-flow-works) &nbsp;·&nbsp; [Repository structure](#-repository-structure)
+
+</td>
+</tr>
+<tr>
+<td width="100%" valign="top" align="center">
+
+**🛠️ &nbsp;Build and run**
+
+[Prerequisites](#-prerequisites) &nbsp;·&nbsp; [Environment](#-environment) &nbsp;·&nbsp; [Local setup](#-local-setup) &nbsp;·&nbsp; [Sepolia deployment](#-sepolia-deployment)
+
+</td>
+</tr>
+</table>
+
+---
+
+</div>
+
+<br/>
+
+## 🔍 Overview
+
+**FHE Agent Guard** is a confidential anomaly-detection system for on-chain activity.
+
+It scans wallet behavior, derives a small set of transaction features, sends them to a **Concrete ML** inference service, encrypts the resulting score using **Zama's relayer SDK**, submits that encrypted score **on-chain**, and allows the wallet owner to decrypt the result later through **MetaMask + KMS authorization**.
+
+The goal is simple:
+
+> **Detect risky wallet behavior without putting plaintext scores or sensitive intermediate data on-chain.**
+
+<br/>
+
+## ⚡ Why it matters
+
+Most risk engines and fraud tools rely on off-chain scoring and plaintext data pipelines. That makes them hard to verify, hard to integrate with smart contracts, and easy to overexpose.
+
+**FHE Agent Guard** keeps the result confidential while still making it usable on-chain:
+
+- **Client-side submission** of encrypted anomaly scores
+- **On-chain storage** of FHE-protected values
+- **User-scoped ACL permissions** for decryption
+- **MetaMask-based authorization** for decrypting the score
+- **Sepolia-first architecture**, with Mainnet reserved for a later rollout
+
+<br/>
+
+## 🏛️ Architecture
+
+<div align="center">
+  <img src="./docs/fhe_agent_guard_architecture.png" alt="FHE Agent Guard architecture" width="100%" />
+</div>
+
+<div align="center">
+  <img src="./docs/flow_diagram.png" alt="Full architecture flow diagram" width="100%" />
+</div>
+
+<br/>
+
+## 🔄 How the flow works
+
+1. The user connects **MetaMask** on **Sepolia**.
+2. The web app scans the wallet and builds the feature vector.
+3. The feature vector is sent to the **inference API server**.
+4. The model returns an anomaly score / label.
+5. The frontend encrypts the score with the **Zama relayer SDK**.
+6. The encrypted handle and proof are submitted to **`AnomalyAgent.sol`** on-chain.
+7. The contract stores the encrypted score and grants the right ACL permissions.
+8. When the user clicks **Decrypt My Score**, MetaMask signs the EIP-712 payload.
+9. The KMS verifies permissions and returns the plaintext score to the frontend.
+
+<br/>
+
+## 🧩 Repository structure
+
+```text
 apps/
-└── demo/               DeFi fraud detection demo using the SDK
+└── demo/                  Next.js demo app
+
+packages/
+├── contracts/             Hardhat project and AnomalyAgent contract
+├── sdk/                   TypeScript SDK and FHE helpers
+├── models/                Concrete ML training / compilation pipeline
+└── inference-server/      FastAPI inference server
 ```
 
-The SDK fetches 8 on-chain features (tx value, frequency, gas price, etc.) via `FhEVMConnector`, normalizes them, sends them to the inference server, and fires `onAnomaly` if the model flags the transaction pattern as suspicious.
+## 🛠️ Prerequisites
+- Node.js 20+
+- pnpm
+- Docker Desktop
+- MetaMask
+- Sepolia ETH for contract interaction
+  
+## 🔧 Environment
 
----
+Create these files before running the project.
 
-## Requirements
+1. Root `.env` based on root `.env.example`
+2. `apps/demo/.env.local` based on `.env.example` in that same path
+3. `packages/contracts/.env` based on `.env.example` in that same path
 
-- Node.js 20+ and pnpm
-- Docker Desktop (running)
+## 🚀 Local setup
 
----
-
-## Setup
-
+Install dependencies:
 ```bash
-# Install JS dependencies
 pnpm install
-
-# Run SDK tests
-pnpm test
 ```
 
----
-
-## Compile the FHE model
-
-This trains a `RandomForestClassifier` on synthetic DeFi transaction data (normal vs anomalous) and serializes it via Concrete ML. Only needed once — output goes to `packages/models/artifacts/`.
-
+Build and start the inference server:
 ```bash
-pnpm models:build       # build Docker image (~3 min)
-pnpm models:dry-run     # verify environment (fast)
-pnpm models:compile     # compile FHE model (~10 min)
+pnpm inference:build
+pnpm inference:start
 ```
 
----
-
-## Run the inference server
-
-The server loads `anomaly_model.json`, recompiles the FHE circuit, and exposes `POST /predict`.
-
+Compile and deploy the contract:
 ```bash
-pnpm inference:build    # build Docker image (~3 min)
-pnpm inference:start    # start on http://localhost:8000
-```
-
-Verify it's running:
-```bash
-curl http://localhost:8000/health
-# {"status":"ok","model":"base-anomaly-rf-v1","fhe_mode":"simulate"}
-```
-
----
-
-## Deploy contracts and run the demo
-
-```bash
-# Copy env file and fill in your keys
-cp .env.example .env
-
-# Start local Hardhat node
-pnpm chain
-
-# Deploy AnomalyAgent.sol
-pnpm deploy:local
-
-# Export contract addresses into the SDK
-pnpm contracts:export
-
-# Run the DeFi fraud detection demo
-pnpm demo
-```
-
----
-
-## Deploy to Sepolia
-
-```bash
+pnpm --filter @fhe-guard/contracts compile
 pnpm deploy:sepolia
 pnpm contracts:export:sepolia
 ```
 
----
-
-## How a check works
-
-```
-FhEVMConnector
-  → fetches 8 tx features from the chain (ethers.js v6)
-  → POST /predict to inference server
-  → RandomForestClassifier runs in FHE simulation
-  → returns { label: "normal" | "anomaly" }
-  → fires onAnomaly handler if flagged
-  → handler can call AnomalyAgent.sol to pause / alert on-chain
+Run the demo:
+```bash
+pnpm demo
 ```
 
-Built for [Zama Bounty Track — Mainnet Season 2](https://www.zama.ai/developer-programs).
+Open `http://localhost:3000`
+
+## 🌐 Sepolia deployment
+
+The current supported network is:
+
+- Sepolia ✅
+- Ethereum Mainnet 🚧 Coming Soon
+
+After deploying to Sepolia, update `NEXT_PUBLIC_ANOMALY_AGENT_SEPOLIA=0x...` in `apps/demo/.env.local`. Then restart the demo app.
+
+## 🧪 Typical user flow
+1. Connect wallet
+2. Click Scan My Wallet
+3. Review the returned anomaly result
+4. Click Submit Score On-Chain
+5. Wait for confirmation
+6. Click Decrypt My Score
+7. Sign with MetaMask
+8. View the decrypted score

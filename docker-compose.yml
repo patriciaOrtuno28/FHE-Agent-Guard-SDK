@@ -13,7 +13,10 @@ services:
       MANIFEST_PATH: /artifacts/anomaly_model.manifest.json
       # SIMULATE_FHE=true uses fast FHE simulation (good for dev/demo)
       # SIMULATE_FHE=false uses real FHE execution (slow but cryptographically correct)
-      SIMULATE_FHE: "true"
+      SIMULATE_FHE: "false"
+      INFERENCE_API_KEY: ${INFERENCE_API_KEY}
+      RATE_LIMIT_WINDOW_SECS: "60"
+      RATE_LIMIT_MAX_REQUESTS: "30"
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
       interval: 10s

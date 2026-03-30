@@ -53,10 +53,12 @@ export class AgentGuard {
   readonly #config: AgentGuardConfig;
   readonly #eventHandlers = new Set<GuardEventHandler>();
   readonly #inferenceUrl: string;
+  readonly #inferenceApiKey?: string;
 
   constructor(config: AgentGuardConfig) {
     this.#config = config;
     this.#inferenceUrl = config.inferenceServerUrl ?? "http://localhost:8000";
+    this.#inferenceApiKey = config.inferenceApiKey;
   }
 
   // ── Public ────────────────────────────────────────────────
@@ -190,9 +192,17 @@ export class AgentGuard {
     const flat = { ...merged.onChain, ...merged.offChain };
     const featureValues = artifact.inputSchema.map(d => flat[d.name] ?? 0);
 
+    const headers: Record<string, string> = {
+      "Content-Type": "application/json",
+    };
+
+    if (this.#inferenceApiKey) {
+      headers.Authorization = `Bearer ${this.#inferenceApiKey}`;
+    }
+
     const res = await fetch(`${this.#inferenceUrl}/predict`, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers,
       body: JSON.stringify({ features: featureValues, subject: "" }),
     });
 

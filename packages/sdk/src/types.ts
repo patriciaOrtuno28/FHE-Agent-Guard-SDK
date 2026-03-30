@@ -95,6 +95,7 @@ export type AgentGuardConfig = {
   readonly contractAddress?: Address;
   /** URL of the Python inference server. Default: http://localhost:8000 */
   readonly inferenceServerUrl?: string;
+  readonly inferenceApiKey?: string;
 };
 
 export type GuardEvent =

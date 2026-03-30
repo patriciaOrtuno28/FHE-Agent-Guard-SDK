@@ -35,6 +35,14 @@ export async function POST(req: NextRequest) {
   const chainId      = NETWORKS.find((n) => n.id === network)?.chainId;
   const inferenceUrl = process.env.INFERENCE_URL ?? 'http://localhost:8000';
 
+  const inferenceApiKey = process.env.INFERENCE_API_KEY;
+  if (!inferenceApiKey) {
+    return Response.json(
+      { error: 'Missing INFERENCE_API_KEY in server environment' },
+      { status: 500 }
+    );
+  }
+
   const stream = new ReadableStream({
     async start(controller) {
       try {
@@ -53,6 +61,7 @@ export async function POST(req: NextRequest) {
           model: { kind: 'isolation-forest', artifact: 'base', threshold: 0.65 },
           connectors,
           inferenceServerUrl: inferenceUrl,
+          inferenceApiKey,
           onAnomaly: async (ctx) => {
             sse(controller, {
               type:    'anomaly',
