@@ -361,7 +361,11 @@ export default function Page() {
   // ── Derived ──────────────────────────────────────────────────────────────
 
   const activeNetwork    = NETWORKS.find((n) => n.id === selectedNetwork)!;
-  const contractAddress  = walletChainId ? ANOMALY_AGENT_ADDRESS[walletChainId] : undefined;
+  const rawContractAddress = walletChainId ? ANOMALY_AGENT_ADDRESS[walletChainId] : undefined;
+
+  const contractAddress = rawContractAddress
+    ? (getAddress(rawContractAddress) as `0x${string}`)
+    : undefined;
   const fheDecryptReady  = walletChainId !== null && isFheSupported(walletChainId);
 
   // ── Helpers ────────────────────────────────────────────────────────
@@ -425,7 +429,7 @@ export default function Page() {
 
     const onAccountsChanged = (raw: unknown) => {
       const accounts = raw as string[];
-      setWalletAddress(accounts[0] ?? null);
+      setWalletAddress(accounts[0] ? getAddress(accounts[0]) : null);
       clearFheSubmissionState();
     };
 
@@ -464,7 +468,7 @@ export default function Page() {
         params: [{ eth_accounts: {} }],
       });
       const accounts = await window.ethereum.request<string[]>({ method: 'eth_accounts' });
-      setWalletAddress(accounts[0] ?? null);
+      setWalletAddress(accounts[0] ? getAddress(accounts[0]) : null);
     } catch (err) {
       const msg = err instanceof Error ? err.message : 'Connection rejected';
       setWalletError(msg.toLowerCase().includes('reject') ? 'Connection rejected.' : msg);
@@ -619,18 +623,24 @@ export default function Page() {
 
   async function handleDecrypt() {
     if (!walletAddress || !result || !walletChainId || !contractAddress) return;
+
     const contractAddr = contractAddress;
-    // Prefer the real fhevm handle from client-side encryption; fall back to mock.
     const handle = (realFheHandle ?? result.encryptedScore) as `0x${string}`;
+
     setDecrypting(true);
     setDecryptError(null);
+
     try {
+      const normalizedUser = getAddress(walletAddress) as `0x${string}`;
+      const normalizedContract = getAddress(contractAddr) as `0x${string}`;
+
       const score = await decryptAnomalyScore({
-        chainId:         walletChainId,
-        userAddress:     walletAddress as `0x${string}`,
-        contractAddress: contractAddr,
+        chainId: walletChainId,
+        userAddress: normalizedUser,
+        contractAddress: normalizedContract,
         handle,
       });
+
       setDecryptedScore(score);
     } catch (err) {
       setDecryptError(err instanceof Error ? err.message : 'Decryption failed');
