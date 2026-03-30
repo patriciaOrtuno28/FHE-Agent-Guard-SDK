@@ -5,44 +5,6 @@ Items are ordered roughly by dependency: later items generally require earlier o
 
 ---
 
-## 4. Wire On-Chain Score Submission
-
-**Current state:** The `onAnomaly` callback in `AgentGuard` logs the anomaly but does **not** call the smart contract. The comment in `apps/demo/src/defi-fraud.ts` shows the intended ethers.js call but it is commented out.
-
-**What needs to happen:**
-- In the scan route (`apps/demo/src/app/api/scan/route.ts`), implement `onAnomaly` to call `AnomalyAgent.submitScore(subject, encryptedHandle, inputProof)` using ethers.js and a server-side signer (private key from env).
-- The `encryptedHandle` must be a real FHE ciphertext handle (see item 2) — the current mock handle will be rejected by the contract's `FHE.fromExternal()` verification.
-- Add `SUBMITTER_PRIVATE_KEY` to `.env.local` (server-side only, never client).
-- Add the submitter address as a watcher via `AnomalyAgent.addWatcher(submitterAddress)` after deployment.
-
----
-
-## 5. On-Chain Decryption (Decrypt My Score button)
-
-**Current state:** `apps/demo/src/lib/fhe.ts › decryptAnomalyScore()` is fully wired. The UI shows the button when on Sepolia with a known contract address. But it will fail because:
-1. The contract is not deployed on Sepolia (item 3).
-2. The encrypted score handle is a mock, not a real FHE ciphertext (item 2).
-3. `FHE.allow(isAnomaly, owner())` is called in the contract but the user's address is not `allow()`'d — the contract needs `FHE.allow(handle, userAddress)` so the KMS ACL permits decryption for that specific user.
-
-**What needs to happen:**
-- Complete items 2, 3, and 4 first.
-- In `AnomalyAgent.sol › submitScore()`, add `FHE.allow(isAnomaly, subject)` so the subject wallet can decrypt their own score.
-- Re-deploy and re-export.
-- The existing `decryptAnomalyScore()` flow in `fhe.ts` will then work end-to-end: MetaMask signs EIP-712 → Zama KMS verifies ACL → returns plaintext score.
-
----
-
-## 6. Replace the Public RPC URLs with Private Ones
-
-**Current state:** `.env.local` uses public RPCs (`sepolia.drpc.org`, `eth.llamarpc.com`) which are rate-limited and unreliable under any real load.
-
-**What needs to happen:**
-- Provision Alchemy or Infura project keys.
-- Set `SEPOLIA_RPC_URL` and `MAINNET_RPC_URL` to the private endpoints in `.env.local` (local) and Vercel environment variables (production).
-- Never commit these keys — `.env.local` is already in `.gitignore`.
-
----
-
 ## 7. Inference Server: Real FHE Inference + Authentication
 
 **Current state:** The inference server (`packages/inference-server/`) runs a plaintext sklearn model. It has no authentication — anyone who can reach it can request predictions.

@@ -6,10 +6,9 @@ export const runtime    = 'nodejs';
 export const maxDuration = 30;
 
 // Server-side RPC map — keys never reach the client
-const RPC_BY_NETWORK: Record<NetworkId, string> = {
-  sepolia:   process.env.SEPOLIA_RPC_URL ?? 'https://sepolia.drpc.org',
-  mainnet:   process.env.MAINNET_RPC_URL ?? 'https://eth.llamarpc.com',
-  localhost: process.env.LOCAL_RPC_URL   ?? 'http://localhost:8545',
+const RPC_BY_NETWORK: Partial<Record<NetworkId, string>> = {
+  sepolia: process.env.SEPOLIA_RPC_URL,
+  mainnet: process.env.MAINNET_RPC_URL,
 };
 
 function sse(controller: ReadableStreamDefaultController, data: unknown) {
@@ -28,7 +27,10 @@ export async function POST(req: NextRequest) {
 
   const rpcUrl = RPC_BY_NETWORK[network];
   if (!rpcUrl)
-    return Response.json({ error: `No RPC configured for network: ${network}` }, { status: 400 });
+    return Response.json(
+      { error: `No RPC configured for network: ${network}.` },
+      { status: 500 }
+    );
 
   const chainId      = NETWORKS.find((n) => n.id === network)?.chainId;
   const inferenceUrl = process.env.INFERENCE_URL ?? 'http://localhost:8000';

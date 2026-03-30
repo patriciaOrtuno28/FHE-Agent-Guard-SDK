@@ -28,9 +28,8 @@ const exportedSepoliaAddress =
   sdkByChainId[11155111]?.addresses?.AnomalyAgent as `0x${string}` | undefined;
 
 const ANOMALY_AGENT_ADDRESS: Partial<Record<number, `0x${string}`>> = {
-  11155111: exportedSepoliaAddress ?? (process.env.NEXT_PUBLIC_ANOMALY_AGENT_SEPOLIA as `0x${string}` | undefined),
-  31337: process.env.NEXT_PUBLIC_ANOMALY_AGENT_LOCALHOST as `0x${string}` | undefined,
-};
+  11155111: process.env.NEXT_PUBLIC_ANOMALY_AGENT_SEPOLIA as `0x${string}` | undefined,
+} as Partial<Record<number, `0x${string}`>>;
 
 // ── Types ────────────────────────────────────────────────────────────────────
 
@@ -360,8 +359,9 @@ export default function Page() {
 
   // ── Derived ──────────────────────────────────────────────────────────────
 
-  const activeNetwork    = NETWORKS.find((n) => n.id === selectedNetwork)!;
-  const rawContractAddress = walletChainId ? ANOMALY_AGENT_ADDRESS[walletChainId] : undefined;
+  const activeNetwork       = NETWORKS.find((n) => n.id === selectedNetwork)!;
+  const rawContractAddress  = walletChainId ? ANOMALY_AGENT_ADDRESS[walletChainId] : undefined;
+  const networkLocked       = Boolean(activeNetwork.disabled);
 
   const contractAddress = rawContractAddress
     ? (getAddress(rawContractAddress) as `0x${string}`)
@@ -418,7 +418,11 @@ export default function Page() {
       const id = parseInt(hex, 16);
       setWalletChainId(id);
       const net = networkByChainId(id);
-      if (net) setSelectedNetwork(net.id);
+      if (net && !net.disabled) {
+        setSelectedNetwork(net.id);
+      } else {
+        setSelectedNetwork('sepolia');
+      }
     }).catch(() => null);
   }, []);
 
@@ -440,7 +444,11 @@ export default function Page() {
       clearFheSubmissionState();
 
       const net = networkByChainId(id);
-      if (net) setSelectedNetwork(net.id);
+      if (net && !net.disabled) {
+        setSelectedNetwork(net.id);
+      } else {
+        setSelectedNetwork('sepolia');
+      }
     };
 
     window.ethereum.on('accountsChanged', onAccountsChanged);
@@ -449,6 +457,13 @@ export default function Page() {
       window.ethereum?.removeListener('accountsChanged', onAccountsChanged);
       window.ethereum?.removeListener('chainChanged',    onChainChanged);
     };
+  }, []);
+
+  // ── Load last FHE handle from local storage in case the user restarted the app ──────
+
+  useEffect(() => {
+    const saved = localStorage.getItem('lastFheHandle');
+    if (saved) setRealFheHandle(saved);
   }, []);
 
   // ── Connect wallet ────────────────────────────────────────────────────────
@@ -515,6 +530,8 @@ export default function Page() {
         userAddress: normalizedUser,
       });
 
+      localStorage.setItem('lastFheHandle', handle); // persist restarts
+
       appendLog(makeLog('fhe_client', `Handle: ${handle.slice(0, 20)}… proof: ${inputProof.slice(0, 10)}…`));
     } catch (err) {
       appendLog(makeLog('error', `Client FHE encryption: ${err instanceof Error ? err.message : 'failed'}`));
@@ -579,7 +596,10 @@ export default function Page() {
       const hash = txHash as string;
       appendLog(makeLog('fhe_client', `Tx: ${hash.slice(0, 14)}… — waiting for confirmation…`));
       await waitForReceipt(hash);
+
       setSubmitted(true);
+      if (realFheHandle) localStorage.setItem('lastFheHandle', realFheHandle);
+
       appendLog(makeLog('success', 'Score recorded on-chain — ACL granted, ready to decrypt'));
     } catch (err: unknown) {
       // MetaMask throws ProviderRpcError (not a plain Error) — extract message carefully
@@ -625,7 +645,8 @@ export default function Page() {
     if (!walletAddress || !result || !walletChainId || !contractAddress) return;
 
     const contractAddr = contractAddress;
-    const handle = (realFheHandle ?? result.encryptedScore) as `0x${string}`;
+    if (!realFheHandle) throw new Error('No encrypted handle available. Run a fresh scan first.');
+    const handle = realFheHandle as `0x${string}`;
 
     setDecrypting(true);
     setDecryptError(null);
@@ -654,7 +675,7 @@ export default function Page() {
   function appendLog(entry: LogEntry) { setLogs((prev) => [...prev, entry]); }
 
   async function startScan() {
-    if (!walletAddress || scanning) return;
+    if (!walletAddress || scanning || networkLocked) return;
     abortRef.current?.abort();
     const controller = new AbortController();
     abortRef.current = controller;
@@ -821,30 +842,48 @@ export default function Page() {
             <section>
               <label className="block text-[10px] uppercase tracking-widest text-zinc-500 mb-2">Network</label>
               <div className="space-y-1.5">
-                {NETWORKS.map((net) => (
-                  <button
-                    key={net.id}
-                    onClick={() => setSelectedNetwork(net.id)}
-                    className={`w-full text-left px-3 py-2 rounded border text-xs transition-all duration-150 ${
-                      selectedNetwork === net.id
-                        ? `${net.border} ${net.bg} ${net.color}`
-                        : 'border-zinc-800 text-zinc-500 hover:border-zinc-700 hover:text-zinc-400'
-                    }`}
-                  >
-                    <div className="flex items-center justify-between">
-                      <span className="font-semibold">{net.label}</span>
-                      <div className="flex items-center gap-2">
-                        {isFheSupported(net.chainId) && (
-                          <span className="text-[8px] uppercase tracking-widest text-violet-500 border border-violet-700/50 px-1 rounded">fhe</span>
-                        )}
-                        {selectedNetwork === net.id && (
-                          <span className="text-[9px] uppercase tracking-widest opacity-70">active</span>
-                        )}
+                {NETWORKS.map((net) => {
+                  const isDisabled = Boolean(net.disabled);
+                  const isActive = selectedNetwork === net.id && !isDisabled;
+
+                  return (
+                    <button
+                      key={net.id}
+                      onClick={() => {
+                        if (!isDisabled) setSelectedNetwork(net.id);
+                      }}
+                      disabled={isDisabled}
+                      className={`w-full text-left px-3 py-2 rounded border text-xs transition-all duration-150 ${
+                        isDisabled
+                          ? 'border-zinc-800 text-zinc-600 bg-zinc-950/40 cursor-not-allowed opacity-70'
+                          : isActive
+                            ? `${net.border} ${net.bg} ${net.color}`
+                            : 'border-zinc-800 text-zinc-500 hover:border-zinc-700 hover:text-zinc-400'
+                      }`}
+                    >
+                      <div className="flex items-center justify-between">
+                        <span className="font-semibold">{net.label}</span>
+                        <div className="flex items-center gap-2">
+                          {net.badge === 'FHE' && (
+                            <span className="text-[8px] uppercase tracking-widest text-violet-500 border border-violet-700/50 px-1 rounded">
+                              FHE
+                            </span>
+                          )}
+                          {net.badge === 'Coming Soon' && (
+                            <span className="text-[8px] uppercase tracking-widest text-amber-400 border border-amber-500/40 px-1 rounded">
+                              Coming Soon
+                            </span>
+                          )}
+                          {isActive && (
+                            <span className="text-[9px] uppercase tracking-widest opacity-70">active</span>
+                          )}
+                        </div>
                       </div>
-                    </div>
-                    <div className="text-[10px] opacity-60 mt-0.5">chain {net.chainId}</div>
-                  </button>
-                ))}
+
+                      <div className="text-[10px] opacity-60 mt-0.5">chain {net.chainId}</div>
+                    </button>
+                  );
+                })}
               </div>
             </section>
 
@@ -874,7 +913,7 @@ export default function Page() {
             ) : (
               <button
                 onClick={() => { void startScan(); }}
-                disabled={!walletAddress || scanning}
+                disabled={!walletAddress || scanning || networkLocked}
                 className={`w-full py-3 rounded border text-xs font-black uppercase tracking-widest transition-all duration-150 flex items-center justify-center gap-2 ${
                   scanning
                     ? 'border-emerald-600/50 text-emerald-600 cursor-wait'
@@ -883,10 +922,14 @@ export default function Page() {
               >
                 {scanning ? (
                   <>
-                    <span className="inline-block w-3.5 h-3.5 border-2 border-emerald-600 border-t-transparent rounded-full animate-spin" />
+                    <span className="inline-block w-3 h-3 border-2 border-emerald-500 border-t-transparent rounded-full animate-spin" />
                     Scanning…
                   </>
-                ) : 'Scan My Wallet'}
+                ) : networkLocked ? (
+                  'Coming Soon'
+                ) : (
+                  'Scan My Wallet'
+                )}
               </button>
             )}
           </div>
