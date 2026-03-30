@@ -1,9 +1,11 @@
-import "@nomicfoundation/hardhat-toolbox";
+import "@fhevm/hardhat-plugin";
+import "@nomicfoundation/hardhat-chai-matchers";
+import "@nomicfoundation/hardhat-ethers";
+import "@nomicfoundation/hardhat-verify";
 import "hardhat-deploy";
-import * as dotenv from "dotenv";
-import { HardhatUserConfig } from "hardhat/config";
+import "dotenv/config";
 
-dotenv.config();
+import type { HardhatUserConfig } from "hardhat/config";
 
 const SEPOLIA_RPC_URL = process.env.SEPOLIA_RPC_URL || "";
 const PRIVATE_KEY     = process.env.PRIVATE_KEY;

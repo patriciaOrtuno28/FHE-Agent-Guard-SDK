@@ -2,7 +2,7 @@
 pragma solidity ^0.8.27;
 
 import {FHE, euint64, ebool, externalEuint64} from "@fhevm/solidity/lib/FHE.sol";
-import {SepoliaConfig} from "@fhevm/solidity/config/ZamaConfig.sol";
+import {ZamaEthereumConfig} from "@fhevm/solidity/config/ZamaConfig.sol";
 import {Ownable2Step, Ownable} from "@openzeppelin/contracts/access/Ownable2Step.sol";
 import {Pausable} from "@openzeppelin/contracts/utils/Pausable.sol";
 import {IAnomalyAgent} from "./interfaces/IAnomalyAgent.sol";
@@ -10,7 +10,7 @@ import {IAnomalyAgent} from "./interfaces/IAnomalyAgent.sol";
 /// @title AnomalyAgent — FHE-based on-chain anomaly detection agent
 /// @notice Receives encrypted anomaly scores from the SDK and executes
 ///         configurable actions without revealing the underlying score in plaintext.
-contract AnomalyAgent is SepoliaConfig, Ownable2Step, Pausable, IAnomalyAgent {
+contract AnomalyAgent is ZamaEthereumConfig, Ownable2Step, Pausable, IAnomalyAgent {
 
     // ── State ────────────────────────────────────────────────
 

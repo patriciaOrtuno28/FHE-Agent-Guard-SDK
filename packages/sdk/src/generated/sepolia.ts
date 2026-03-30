@@ -7,7 +7,7 @@ import type { ContractAddresses } from "../types.js";
 export const chainId = 11155111 as const;
 
 export const addresses = {
-  "AnomalyAgent": "0x92428aFFfa38a4cbfFFCb8CF5721c8462C8b3e25"
+  "AnomalyAgent": "0xa7eFe6B0E7AbCcDf0262F631Aee42a6378465cA2"
 } as const satisfies ContractAddresses;
 
 export const abis = {
@@ -67,8 +67,29 @@ export const abis = {
       "type": "error"
     },
     {
+      "inputs": [
+        {
+          "internalType": "bytes32",
+          "name": "handle",
+          "type": "bytes32"
+        },
+        {
+          "internalType": "address",
+          "name": "sender",
+          "type": "address"
+        }
+      ],
+      "name": "SenderNotAllowedToUseHandle",
+      "type": "error"
+    },
+    {
       "inputs": [],
       "name": "ThresholdNotSet",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "ZamaProtocolUnsupported",
       "type": "error"
     },
     {
@@ -245,6 +266,19 @@ export const abis = {
           "internalType": "bool",
           "name": "",
           "type": "bool"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "confidentialProtocolId",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
         }
       ],
       "stateMutability": "view",

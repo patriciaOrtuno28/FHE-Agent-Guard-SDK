@@ -12,7 +12,7 @@
  * the Zama KMS gateway and ACL contracts are deployed.
  */
 
-import { pad, toHex, bytesToHex, isHex } from 'viem';
+import { toHex, bytesToHex, isHex } from 'viem';
 import type { Hex } from 'viem';
 
 // ── Supported FHE networks ─────────────────────────────────────────────────
@@ -36,32 +36,58 @@ export function resetFhevmInstance(): void {
 
 // ── Handle normalisation ───────────────────────────────────────────────────
 
+function asHex(handle: unknown): Hex {
+  if (typeof handle === 'string') {
+    if (!isHex(handle)) throw new Error('handle string is not hex');
+    return handle as Hex;
+  }
+  if (typeof handle === 'bigint') return toHex(handle);
+  if (typeof handle === 'number') return toHex(BigInt(handle));
+  if (handle instanceof Uint8Array) return bytesToHex(handle);
+  if (handle instanceof ArrayBuffer) return bytesToHex(new Uint8Array(handle));
+
+  if (handle && typeof handle === 'object') {
+    const h = handle as {
+      data?: Uint8Array;
+      hex?: string;
+      value?: string;
+      toString?: () => string;
+    };
+
+    if (h.data instanceof Uint8Array) return bytesToHex(h.data);
+    if (typeof h.hex === 'string' && isHex(h.hex)) return h.hex as Hex;
+    if (typeof h.value === 'string' && isHex(h.value)) return h.value as Hex;
+
+    if (typeof h.toString === 'function') {
+      const s = h.toString();
+      if (isHex(s)) return s as Hex;
+    }
+  }
+
+  throw new Error(`Unsupported handle type: ${typeof handle}`);
+}
+
+function hexByteLength(hex: Hex): number {
+  return (hex.length - 2) / 2;
+}
+
 /**
  * Normalize any handle format returned by the relayer SDK into a bytes32 hex
  * string, which is what AnomalyAgent.sol expects as `externalEuint64`.
  */
 export function handleToHex32(handle: unknown): Hex {
-  if (typeof handle === 'string') {
-    const h = handle as Hex;
-    if (!isHex(h)) throw new Error('handle string is not hex');
-    return pad(h, { size: 32 });
+  const hex = asHex(handle);
+  const len = hexByteLength(hex);
+
+  if (len === 32) return hex;
+
+  // Temporary compatibility shim for your current output:
+  // your screenshot shows a 33-byte handle with an extra trailing 00.
+  if (len === 33 && hex.endsWith('00')) {
+    return `0x${hex.slice(2, -2)}` as Hex;
   }
-  if (typeof handle === 'bigint') return pad(toHex(handle), { size: 32 });
-  if (typeof handle === 'number') return pad(toHex(BigInt(handle)), { size: 32 });
-  if (handle instanceof Uint8Array) return pad(bytesToHex(handle), { size: 32 });
-  if (handle instanceof ArrayBuffer) return pad(bytesToHex(new Uint8Array(handle)), { size: 32 });
-  if (handle && typeof handle === 'object') {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const h = handle as any;
-    if (h.data instanceof Uint8Array) return pad(bytesToHex(h.data), { size: 32 });
-    if (typeof h.hex === 'string')    return pad(h.hex as Hex, { size: 32 });
-    if (typeof h.value === 'string')  return pad(h.value as Hex, { size: 32 });
-    if (typeof h.toString === 'function') {
-      const s: string = h.toString();
-      if (s.startsWith('0x')) return pad(s as Hex, { size: 32 });
-    }
-  }
-  throw new Error(`Unsupported handle type: ${typeof handle}`);
+
+  throw new Error(`Expected 32-byte externalEuint64 handle, got ${len} bytes: ${hex}`);
 }
 
 // ── SDK init ───────────────────────────────────────────────────────────────

@@ -4,6 +4,8 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { encodeFunctionData, getAddress } from 'viem';
 import { NETWORKS, networkByChainId, type NetworkId } from '../lib/networks';
 import { decryptAnomalyScore, encryptUint64, isFheSupported, resetFhevmInstance } from '../lib/fhe';
+import { clear } from 'node:console';
+import { sdkByChainId } from '@fhe-guard/sdk';
 
 // ── Ethereum provider type (MetaMask) ────────────────────────────────────────
 
@@ -22,10 +24,13 @@ declare global {
 // Set NEXT_PUBLIC_ANOMALY_AGENT_SEPOLIA and NEXT_PUBLIC_ANOMALY_AGENT_LOCALHOST
 // in apps/demo/.env.local (see .env.example for the values).
 
+const exportedSepoliaAddress =
+  sdkByChainId[11155111]?.addresses?.AnomalyAgent as `0x${string}` | undefined;
+
 const ANOMALY_AGENT_ADDRESS: Partial<Record<number, `0x${string}`>> = {
-  11155111: process.env.NEXT_PUBLIC_ANOMALY_AGENT_SEPOLIA  as `0x${string}` | undefined,
-  31337:    process.env.NEXT_PUBLIC_ANOMALY_AGENT_LOCALHOST as `0x${string}` | undefined,
-} as Partial<Record<number, `0x${string}`>>;
+  11155111: exportedSepoliaAddress ?? (process.env.NEXT_PUBLIC_ANOMALY_AGENT_SEPOLIA as `0x${string}` | undefined),
+  31337: process.env.NEXT_PUBLIC_ANOMALY_AGENT_LOCALHOST as `0x${string}` | undefined,
+};
 
 // ── Types ────────────────────────────────────────────────────────────────────
 
@@ -343,11 +348,34 @@ export default function Page() {
   const logBottomRef = useRef<HTMLDivElement>(null);
   const abortRef     = useRef<AbortController | null>(null);
 
+  // State to store encryption context
+  
+  type FheProofContext = {
+    chainId: number;
+    contractAddress: `0x${string}`;
+    userAddress: `0x${string}`;
+  };
+  
+  const [fheProofContext, setFheProofContext] = useState<FheProofContext | null>(null);
+
   // ── Derived ──────────────────────────────────────────────────────────────
 
   const activeNetwork    = NETWORKS.find((n) => n.id === selectedNetwork)!;
   const contractAddress  = walletChainId ? ANOMALY_AGENT_ADDRESS[walletChainId] : undefined;
   const fheDecryptReady  = walletChainId !== null && isFheSupported(walletChainId);
+
+  // ── Helpers ────────────────────────────────────────────────────────
+
+  function clearFheSubmissionState() {
+    setRealFheHandle(null);
+    setRealFheProof(null);
+    setFheProofContext(null);
+    setSubmitting(false);
+    setSubmitted(false);
+    setSubmitError(null);
+    setDecryptedScore(null);
+    setDecryptError(null);
+  }
 
   // ── Health polling ────────────────────────────────────────────────────────
 
@@ -398,12 +426,15 @@ export default function Page() {
     const onAccountsChanged = (raw: unknown) => {
       const accounts = raw as string[];
       setWalletAddress(accounts[0] ?? null);
+      clearFheSubmissionState();
     };
 
     const onChainChanged = (raw: unknown) => {
       const id = parseInt(raw as string, 16);
       setWalletChainId(id);
       resetFhevmInstance(); // reset FHE SDK singleton — keys are chain-specific
+      clearFheSubmissionState();
+
       const net = networkByChainId(id);
       if (net) setSelectedNetwork(net.id);
     };
@@ -447,9 +478,7 @@ export default function Page() {
     setResult(null);
     setLogs([]);
     setFeatures([]);
-    setRealFheHandle(null);
-    setDecryptedScore(null);
-    setDecryptError(null);
+    clearFheSubmissionState();
   }
 
   // ── Client-side FHE encryption ────────────────────────────────────────────
@@ -459,17 +488,29 @@ export default function Page() {
 
   async function handleClientEncrypt(rawPrediction: number) {
     if (!walletAddress || !walletChainId || !contractAddress) return;
+
     setFheEncrypting(true);
     try {
+      const normalizedUser = getAddress(walletAddress) as `0x${string}`;
+      const normalizedContract = getAddress(contractAddress) as `0x${string}`;
+
       appendLog(makeLog('fhe_client', 'Encrypting score with Zama KMS network public key…'));
+
       const { handle, inputProof } = await encryptUint64({
-        chainId:         walletChainId,
-        contractAddress: contractAddress,
-        userAddress:     getAddress(walletAddress) as `0x${string}`,
-        value:           BigInt(rawPrediction),
+        chainId: walletChainId,
+        contractAddress: normalizedContract,
+        userAddress: normalizedUser,
+        value: BigInt(rawPrediction),
       });
+
       setRealFheHandle(handle);
       setRealFheProof(inputProof);
+      setFheProofContext({
+        chainId: walletChainId,
+        contractAddress: normalizedContract,
+        userAddress: normalizedUser,
+      });
+
       appendLog(makeLog('fhe_client', `Handle: ${handle.slice(0, 20)}… proof: ${inputProof.slice(0, 10)}…`));
     } catch (err) {
       appendLog(makeLog('error', `Client FHE encryption: ${err instanceof Error ? err.message : 'failed'}`));
@@ -483,8 +524,26 @@ export default function Page() {
   async function handleSubmitOnChain() {
     if (!walletAddress || !walletChainId || !contractAddress || !realFheHandle || !realFheProof) return;
     if (!window.ethereum) return;
+
+    const currentUser = getAddress(walletAddress) as `0x${string}`;
+    const currentContract = getAddress(contractAddress) as `0x${string}`;
+
+    if (
+      !fheProofContext ||
+      fheProofContext.chainId !== walletChainId ||
+      fheProofContext.userAddress.toLowerCase() !== currentUser.toLowerCase() ||
+      fheProofContext.contractAddress.toLowerCase() !== currentContract.toLowerCase()
+    ) {
+      const msg =
+        'Encrypted proof is stale. It was generated for a different wallet, chain, or contract. Re-run the scan before submitting.';
+      setSubmitError(msg);
+      appendLog(makeLog('error', msg));
+      return;
+    }
+
     setSubmitting(true);
     setSubmitError(null);
+
     try {
       appendLog(makeLog('fhe_client', 'Registering encrypted score on-chain (grants KMS ACL)…'));
 
@@ -510,7 +569,7 @@ export default function Page() {
       // 1,000,000 gas is a safe upper bound for registerMyScore on Sepolia fhevm.
       const txHash = await window.ethereum.request<string>({
         method: 'eth_sendTransaction',
-        params: [{ from: walletAddress, to: contractAddress, data, gas: '0xF4240' }],
+        params: [{ from: walletAddress, to: contractAddress, data, gas: '0x2DC6C0' }],
       });
 
       const hash = txHash as string;
@@ -536,23 +595,23 @@ export default function Page() {
 
   async function waitForReceipt(txHash: string, maxWaitMs = 120_000): Promise<void> {
     const deadline = Date.now() + maxWaitMs;
+
     while (Date.now() < deadline) {
-      await new Promise(r => setTimeout(r, 3000));
+      await new Promise((r) => setTimeout(r, 3000));
+
       const receipt = await window.ethereum!.request<{ status: string } | null>({
         method: 'eth_getTransactionReceipt',
         params: [txHash],
       });
+
       if (receipt) {
-        if ((receipt as { status: string }).status === '0x0') {
-          throw new Error(
-            `Transaction reverted on-chain (tx: ${txHash.slice(0, 12)}…). ` +
-            `Possible causes: proof was generated for a different contract address — ` +
-            `run a fresh scan so the proof matches the current contract.`
-          );
+        if (receipt.status === '0x0') {
+          throw new Error(`Transaction reverted on-chain (tx: ${txHash.slice(0, 12)}…). Check proof context, sender, contract state, or gas limit.`);
         }
         return;
       }
     }
+
     throw new Error('Transaction not mined within 2 minutes');
   }
 
@@ -594,13 +653,7 @@ export default function Page() {
     setLogs([]);
     setFeatures([]);
     setResult(null);
-    setRealFheHandle(null);
-    setRealFheProof(null);
-    setSubmitting(false);
-    setSubmitted(false);
-    setSubmitError(null);
-    setDecryptedScore(null);
-    setDecryptError(null);
+    clearFheSubmissionState();
 
     try {
       const res = await fetch('/api/scan', {
