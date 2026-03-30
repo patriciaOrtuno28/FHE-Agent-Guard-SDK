@@ -115,13 +115,30 @@ packages/
 └── inference-server/      FastAPI inference server
 ```
 
+<br/>
+
+## 🚀 Deployment
+
+| Component | Where it runs | Notes |
+|---|---|---|
+| `apps/demo` | **Vercel** | Frontend + Next.js API routes |
+| `packages/inference-server` | **Render** | FastAPI + Concrete ML inference |
+| `AnomalyAgent.sol` | **Sepolia** | On-chain encrypted score storage |
+| RPC access | **Alchemy / Infura** | Blockchain reads and transaction broadcast |
+| Wallet | **MetaMask** | Runs on the user device |
+| Relayer / KMS | **Zama network services** | FHE encryption and authorized decryption |
+
+<br/>
+
 ## 🛠️ Prerequisites
 - Node.js 20+
 - pnpm
 - Docker Desktop
 - MetaMask
 - Sepolia ETH for contract interaction
-  
+
+<br/>
+
 ## 🔧 Environment
 
 Create these files before running the project.
@@ -130,11 +147,19 @@ Create these files before running the project.
 2. `apps/demo/.env.local` based on `.env.example` in that same path
 3. `packages/contracts/.env` based on `.env.example` in that same path
 
+<br/>
+
 ## 🚀 Local setup
 
 Install dependencies:
 ```bash
 pnpm install
+```
+
+Build and compile the ML model for the inference server:
+```bash
+pnpm models:build
+pnpm models:compile -- --dataset /app/data/test_data.csv
 ```
 
 Build and start the inference server:
@@ -157,6 +182,8 @@ pnpm demo
 
 Open `http://localhost:3000`
 
+<br/>
+
 ## 🌐 Sepolia deployment
 
 The current supported network is:
@@ -165,6 +192,8 @@ The current supported network is:
 - Ethereum Mainnet 🚧 Coming Soon
 
 After deploying to Sepolia, update `NEXT_PUBLIC_ANOMALY_AGENT_SEPOLIA=0x...` in `apps/demo/.env.local`. Then restart the demo app.
+
+<br/>
 
 ## 🧪 Typical user flow
 1. Connect wallet

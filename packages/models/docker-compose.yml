@@ -6,6 +6,7 @@ services:
     volumes:
       # Artefacts are written inside the container and saved here on the host
       - ./artifacts:/app/artifacts
+      - ./data:/app/data:ro
     # Override CMD to pass extra flags:
     #   docker compose run models --dry-run
     #   docker compose run models --output ./artifacts --n-bits 8

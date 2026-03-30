@@ -58,6 +58,14 @@ Items are ordered roughly by dependency: later items generally require earlier o
 
 ---
 
+## 12. Real use case
+
+**Ideas:**
+- A platform where you can send other wallets (with FHE ACLs) the result of the scan of your wallet and depending on your score 0-10 they grant you access to a platform or not.
+- The score must be 0-10 instead of true/false.
+
+---
+
 ## Summary: Minimum Viable Production Path
 
 ```
