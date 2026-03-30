@@ -5,52 +5,6 @@ Items are ordered roughly by dependency: later items generally require earlier o
 
 ---
 
-## 1. Real FHE Model Compilation
-
-**Current state:** The Python script trains and compiles a `RandomForestClassifier` via Concrete ML, but the output artifacts (`.fhe`, `.params`) are gitignored and not used by the inference server — it loads a fresh in-memory model at startup instead.
-
-**What needs to happen:**
-- Run `pnpm models:compile` inside Docker to produce real compiled FHE artifacts.
-- Mount those artifacts into the inference server Docker container at startup.
-- Update `packages/inference-server/server.py` to load the compiled FHE circuit and run actual FHE inference (currently uses plaintext sklearn predict).
-- Commit the model manifest (not the binary artifacts) and document the `pnpm models:compile` step in the README.
-
----
-
-## 2. Real FHE Encryption on the Client
-
-**Current state:** `AgentGuard.ts › #encrypt()` is a mock — it encodes feature values as a UTF-8 string prefixed with `fhe:`. No actual FHE encryption happens.
-
-**What needs to happen:**
-- Move encryption to the browser using `@zama-fhe/relayer-sdk` (already installed).
-- The scan flow must change: the client encrypts the feature vector with the network FHE public key **before** sending anything to the server.
-- Use `encryptUint64()` from `apps/demo/src/lib/fhe.ts` for each feature.
-- The resulting `handle` + `inputProof` pairs are what get sent to the inference server and the smart contract — never the raw float values.
-- The server receives only ciphertexts. It passes them to the FHE circuit without ever seeing plaintext.
-
-**Architectural change required:**
-```
-Current:  browser → (plaintext features) → server → inference → score
-Target:   browser → encrypt → (ciphertext) → server → FHE inference → encrypted score
-```
-
-This is the core privacy guarantee of the system. Nothing else matters until this is real.
-
----
-
-## 3. Deploy AnomalyAgent to Sepolia
-
-**Current state:** `packages/sdk/src/generated/sepolia.ts` has empty `addresses` — the contract has never been deployed to a public network.
-
-**What needs to happen:**
-- Get a Sepolia RPC URL with a funded deployer account (Alchemy or Infura).
-- Set `SEPOLIA_RPC_URL` and `DEPLOYER_PRIVATE_KEY` in `packages/contracts/.env`.
-- Run `pnpm deploy:sepolia` → `pnpm contracts:export:sepolia`.
-- Commit the updated `packages/sdk/src/generated/sepolia.ts` (addresses + ABIs).
-- Add the deployed `AnomalyAgent` address to `ANOMALY_AGENT_ADDRESS[11155111]` in `apps/demo/src/app/page.tsx` so the Decrypt My Score button becomes active.
-
----
-
 ## 4. Wire On-Chain Score Submission
 
 **Current state:** The `onAnomaly` callback in `AgentGuard` logs the anomaly but does **not** call the smart contract. The comment in `apps/demo/src/defi-fraud.ts` shows the intended ethers.js call but it is commented out.
@@ -158,10 +112,7 @@ This is the core privacy guarantee of the system. Nothing else matters until thi
 ## Summary: Minimum Viable Production Path
 
 ```
-Item 1  Compile real FHE model artifacts
-Item 2  Real client-side FHE encryption
-Item 3  Deploy AnomalyAgent to Sepolia
-Item 4  Wire on-chain score submission
+Item 4  Deploy AnomalyAgent + wire score submission ← most critical next step
 Item 6  Private RPC URLs
 Item 7  Inference server auth + rate limiting
 Item 9  Deploy to Vercel + hosted inference

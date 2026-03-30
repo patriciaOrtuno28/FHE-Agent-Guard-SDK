@@ -2,6 +2,7 @@ node_modules/
 dist/
 .env
 .env.local
+packages/contracts/.env
 
 # Hardhat
 artifacts/
@@ -11,7 +12,16 @@ coverage.json
 deployments/localhost/
 typechain-types/
 
-# FHE artefacts (large binary files — commit only the manifest)
+# Zama Relayer SDK WASM binaries — copied to public/ by postinstall, not committed
+apps/demo/public/tfhe_bg.wasm
+apps/demo/public/kms_lib_bg.wasm
+apps/demo/public/workerHelpers.js
+
+# FHE artefacts
+# - anomaly_model.json     : large compiled weights — excluded, regenerate with `pnpm models:compile`
+# - anomaly_model.manifest.json : schema/metadata — committed so the server knows the feature schema
+# - *.fhe / *.params       : raw Concrete binary circuits — excluded
+packages/models/artifacts/anomaly_model.json
 packages/models/artifacts/*.fhe
 packages/models/artifacts/*.params
 

@@ -1,8 +1,9 @@
 'use client';
 
 import { useCallback, useEffect, useRef, useState } from 'react';
+import { encodeFunctionData, getAddress } from 'viem';
 import { NETWORKS, networkByChainId, type NetworkId } from '../lib/networks';
-import { decryptAnomalyScore, isFheSupported, resetFhevmInstance } from '../lib/fhe';
+import { decryptAnomalyScore, encryptUint64, isFheSupported, resetFhevmInstance } from '../lib/fhe';
 
 // ── Ethereum provider type (MetaMask) ────────────────────────────────────────
 
@@ -17,15 +18,18 @@ declare global {
 }
 
 // ── Contract addresses (per chain) ───────────────────────────────────────────
-// Update 11155111 once AnomalyAgent is deployed to Sepolia.
+// Addresses come from .env.local — never hardcode them here.
+// Set NEXT_PUBLIC_ANOMALY_AGENT_SEPOLIA and NEXT_PUBLIC_ANOMALY_AGENT_LOCALHOST
+// in apps/demo/.env.local (see .env.example for the values).
 
 const ANOMALY_AGENT_ADDRESS: Partial<Record<number, `0x${string}`>> = {
-  31337: '0x5FbDB2315678afecb367f032d93F642f64180aa3', // localhost Hardhat
-};
+  11155111: process.env.NEXT_PUBLIC_ANOMALY_AGENT_SEPOLIA  as `0x${string}` | undefined,
+  31337:    process.env.NEXT_PUBLIC_ANOMALY_AGENT_LOCALHOST as `0x${string}` | undefined,
+} as Partial<Record<number, `0x${string}`>>;
 
 // ── Types ────────────────────────────────────────────────────────────────────
 
-type LogKind = 'start' | 'success' | 'error' | 'encrypt' | 'predict' | 'fetch' | 'info';
+type LogKind = 'start' | 'success' | 'error' | 'encrypt' | 'fhe_client' | 'predict' | 'fetch' | 'info';
 
 interface LogEntry {
   id: number;
@@ -46,6 +50,7 @@ interface ScanResult {
   encryptedScore: string;
   isAnomaly: string;
   computedAt: number;
+  rawPrediction?: number | null;
 }
 
 interface FeatureEntry {
@@ -76,25 +81,27 @@ function ts(epochMs: number): string {
 
 function logIcon(kind: LogKind): string {
   switch (kind) {
-    case 'start':   return '▶';
-    case 'success': return '✓';
-    case 'error':   return '✗';
-    case 'encrypt': return '🔒';
-    case 'predict': return '◈';
-    case 'fetch':   return '↓';
-    case 'info':    return '·';
+    case 'start':      return '▶';
+    case 'success':    return '✓';
+    case 'error':      return '✗';
+    case 'encrypt':    return '🔒';
+    case 'fhe_client': return '⚿';
+    case 'predict':    return '◈';
+    case 'fetch':      return '↓';
+    case 'info':       return '·';
   }
 }
 
 function logColor(kind: LogKind): string {
   switch (kind) {
-    case 'start':   return 'text-blue-400';
-    case 'success': return 'text-emerald-400';
-    case 'error':   return 'text-red-400';
-    case 'encrypt': return 'text-violet-400';
-    case 'predict': return 'text-amber-400';
-    case 'fetch':   return 'text-zinc-400';
-    case 'info':    return 'text-zinc-500';
+    case 'start':      return 'text-blue-400';
+    case 'success':    return 'text-emerald-400';
+    case 'error':      return 'text-red-400';
+    case 'encrypt':    return 'text-violet-400';
+    case 'fhe_client': return 'text-fuchsia-400';
+    case 'predict':    return 'text-amber-400';
+    case 'fetch':      return 'text-zinc-400';
+    case 'info':       return 'text-zinc-500';
   }
 }
 
@@ -137,21 +144,31 @@ function ResultPanel({
   result,
   canDecrypt,
   contractAddress,
-  walletAddress,
   chainId,
+  realFheHandle,
+  fheEncrypting,
+  submitting,
+  submitted,
+  submitError,
   decryptedScore,
   decrypting,
   decryptError,
+  onSubmit,
   onDecrypt,
 }: {
   result: ScanResult;
   canDecrypt: boolean;
   contractAddress?: `0x${string}`;
-  walletAddress: string;
   chainId: number;
+  realFheHandle: string | null;
+  fheEncrypting: boolean;
+  submitting: boolean;
+  submitted: boolean;
+  submitError: string | null;
   decryptedScore: bigint | null;
   decrypting: boolean;
   decryptError: string | null;
+  onSubmit: () => void;
   onDecrypt: () => void;
 }) {
   const isAnomaly = result.label === 'anomaly_detected';
@@ -177,50 +194,97 @@ function ResultPanel({
 
       {/* Encrypted handles */}
       <div className="space-y-1.5 mb-3">
-        <div className="flex items-start gap-2">
-          <span className="text-[10px] text-zinc-500 uppercase tracking-wide flex-shrink-0 mt-0.5 w-28">Encrypted Score</span>
-          <span className="text-xs text-violet-400 font-mono break-all">{result.encryptedScore}</span>
-        </div>
+        {realFheHandle ? (
+          <div className="flex items-start gap-2">
+            <span className="text-[10px] text-zinc-500 uppercase tracking-wide flex-shrink-0 mt-0.5 w-28">FHE Handle</span>
+            <span className="text-xs text-fuchsia-400 font-mono break-all">{realFheHandle}</span>
+          </div>
+        ) : fheEncrypting ? (
+          <div className="flex items-center gap-2">
+            <span className="text-[10px] text-zinc-500 uppercase tracking-wide flex-shrink-0 w-28">FHE Handle</span>
+            <span className="flex items-center gap-1.5 text-xs text-fuchsia-500">
+              <span className="inline-block w-3 h-3 border-2 border-fuchsia-500 border-t-transparent rounded-full animate-spin" />
+              encrypting with KMS key…
+            </span>
+          </div>
+        ) : (
+          <div className="flex items-start gap-2">
+            <span className="text-[10px] text-zinc-500 uppercase tracking-wide flex-shrink-0 mt-0.5 w-28">Score (mock)</span>
+            <span className="text-xs text-violet-400/60 font-mono break-all">{result.encryptedScore}</span>
+          </div>
+        )}
         <div className="flex items-center gap-2">
-          <span className="text-[10px] text-zinc-500 uppercase tracking-wide flex-shrink-0 w-28">Is Anomaly Handle</span>
+          <span className="text-[10px] text-zinc-500 uppercase tracking-wide flex-shrink-0 w-28">Is Anomaly</span>
           <span className="text-xs text-violet-400 font-mono">{result.isAnomaly}</span>
         </div>
       </div>
 
-      {/* Decryption */}
+      {/* On-chain submit + Decryption */}
       {canDecrypt && contractAddress ? (
-        <div className="border-t border-zinc-800/60 pt-3 mt-3">
+        <div className="border-t border-zinc-800/60 pt-3 mt-3 flex flex-col gap-2">
           {decryptedScore !== null ? (
             <div className="flex items-center gap-2">
               <span className="text-[10px] text-zinc-500 uppercase tracking-wide w-28 flex-shrink-0">Decrypted Score</span>
               <span className="text-sm font-black text-emerald-300 font-mono">{decryptedScore.toString()}</span>
             </div>
           ) : (
-            <div className="flex flex-col gap-2">
-              <p className="text-[10px] text-zinc-500 leading-relaxed">
-                Sign with MetaMask to decrypt your anomaly score from the blockchain.
-                The KMS verifies the on-chain ACL before revealing the plaintext.
-              </p>
-              <button
-                onClick={onDecrypt}
-                disabled={decrypting}
-                className="w-full py-2 rounded border border-violet-500/50 text-violet-400 text-xs font-semibold
-                           hover:bg-violet-500/10 hover:border-violet-400 transition-all duration-150
-                           disabled:opacity-50 disabled:cursor-wait flex items-center justify-center gap-2"
-              >
-                {decrypting ? (
-                  <>
-                    <span className="inline-block w-3 h-3 border-2 border-violet-500 border-t-transparent rounded-full animate-spin" />
-                    Signing & decrypting…
-                  </>
-                ) : (
-                  '🔓 Decrypt My Score'
-                )}
-              </button>
-              {decryptError && (
-                <p className="text-[10px] text-red-400 leading-relaxed">{decryptError}</p>
+            <>
+              {/* Step 1 — submit score on-chain so the ACL is set */}
+              {!submitted ? (
+                <>
+                  <p className="text-[10px] text-zinc-500 leading-relaxed">
+                    Submit your encrypted score on-chain. The contract runs the FHE comparison
+                    and grants your address permission to decrypt the result via the Zama KMS.
+                  </p>
+                  <button
+                    onClick={onSubmit}
+                    disabled={submitting || !realFheHandle}
+                    className="w-full py-2 rounded border border-fuchsia-500/50 text-fuchsia-400 text-xs font-semibold
+                               hover:bg-fuchsia-500/10 hover:border-fuchsia-400 transition-all duration-150
+                               disabled:opacity-50 disabled:cursor-wait flex items-center justify-center gap-2"
+                  >
+                    {submitting ? (
+                      <>
+                        <span className="inline-block w-3 h-3 border-2 border-fuchsia-500 border-t-transparent rounded-full animate-spin" />
+                        Submitting…
+                      </>
+                    ) : (
+                      '⛓ Submit Score On-Chain'
+                    )}
+                  </button>
+                  {submitError && (
+                    <p className="text-[10px] text-red-400 leading-relaxed">{submitError}</p>
+                  )}
+                </>
+              ) : (
+                /* Step 2 — score is on-chain, ACL granted, now decrypt */
+                <>
+                  <p className="text-[10px] text-zinc-500 leading-relaxed">
+                    Score recorded on-chain. Sign with MetaMask to decrypt your anomaly score —
+                    the KMS verifies the on-chain ACL before revealing the plaintext.
+                  </p>
+                  <button
+                    onClick={onDecrypt}
+                    disabled={decrypting}
+                    className="w-full py-2 rounded border border-violet-500/50 text-violet-400 text-xs font-semibold
+                               hover:bg-violet-500/10 hover:border-violet-400 transition-all duration-150
+                               disabled:opacity-50 disabled:cursor-wait flex items-center justify-center gap-2"
+                  >
+                    {decrypting ? (
+                      <>
+                        <span className="inline-block w-3 h-3 border-2 border-violet-500 border-t-transparent rounded-full animate-spin" />
+                        Signing & decrypting…
+                      </>
+                    ) : (
+                      '🔓 Decrypt My Score'
+                    )}
+                  </button>
+                  {decryptError && (
+                    <p className="text-[10px] text-red-400 leading-relaxed">{decryptError}</p>
+                  )}
+                </>
               )}
-            </div>
+            </>
           )}
         </div>
       ) : canDecrypt && !contractAddress ? (
@@ -257,6 +321,16 @@ export default function Page() {
   const [logs,      setLogs]      = useState<LogEntry[]>([]);
   const [features,  setFeatures]  = useState<FeatureEntry[]>([]);
   const [result,    setResult]    = useState<ScanResult | null>(null);
+
+  // Client-side FHE encryption (browser → Zama KMS public key → real handle)
+  const [realFheHandle,  setRealFheHandle]  = useState<string | null>(null);
+  const [realFheProof,   setRealFheProof]   = useState<string | null>(null);
+  const [fheEncrypting,  setFheEncrypting]  = useState(false);
+
+  // On-chain submission (submitMyScore tx)
+  const [submitting,     setSubmitting]     = useState(false);
+  const [submitted,      setSubmitted]      = useState(false);
+  const [submitError,    setSubmitError]    = useState<string | null>(null);
 
   // Decryption
   const [decryptedScore, setDecryptedScore] = useState<bigint | null>(null);
@@ -373,8 +447,113 @@ export default function Page() {
     setResult(null);
     setLogs([]);
     setFeatures([]);
+    setRealFheHandle(null);
     setDecryptedScore(null);
     setDecryptError(null);
+  }
+
+  // ── Client-side FHE encryption ────────────────────────────────────────────
+  // After the server returns a rawPrediction (0 or 1), the browser encrypts it
+  // using the Zama KMS network public key. This produces a real fhevm handle +
+  // inputProof that can be submitted to AnomalyAgent.submitScore() on-chain.
+
+  async function handleClientEncrypt(rawPrediction: number) {
+    if (!walletAddress || !walletChainId || !contractAddress) return;
+    setFheEncrypting(true);
+    try {
+      appendLog(makeLog('fhe_client', 'Encrypting score with Zama KMS network public key…'));
+      const { handle, inputProof } = await encryptUint64({
+        chainId:         walletChainId,
+        contractAddress: contractAddress,
+        userAddress:     getAddress(walletAddress) as `0x${string}`,
+        value:           BigInt(rawPrediction),
+      });
+      setRealFheHandle(handle);
+      setRealFheProof(inputProof);
+      appendLog(makeLog('fhe_client', `Handle: ${handle.slice(0, 20)}… proof: ${inputProof.slice(0, 10)}…`));
+    } catch (err) {
+      appendLog(makeLog('error', `Client FHE encryption: ${err instanceof Error ? err.message : 'failed'}`));
+    } finally {
+      setFheEncrypting(false);
+    }
+  }
+
+  // ── On-chain submission ───────────────────────────────────────────────────
+
+  async function handleSubmitOnChain() {
+    if (!walletAddress || !walletChainId || !contractAddress || !realFheHandle || !realFheProof) return;
+    if (!window.ethereum) return;
+    setSubmitting(true);
+    setSubmitError(null);
+    try {
+      appendLog(makeLog('fhe_client', 'Registering encrypted score on-chain (grants KMS ACL)…'));
+
+      // externalEuint64 is bytes32 at the ABI level
+      const data = encodeFunctionData({
+        abi: [{
+          name: 'registerMyScore',
+          type: 'function',
+          stateMutability: 'nonpayable',
+          inputs: [
+            { name: 'encScore',   type: 'bytes32' },
+            { name: 'inputProof', type: 'bytes'   },
+          ],
+          outputs: [],
+        }] as const,
+        functionName: 'registerMyScore',
+        args: [realFheHandle as `0x${string}`, realFheProof as `0x${string}`],
+      });
+
+      // fhevm's FHE.fromExternal() reads coprocessor state in ways that cause
+      // MetaMask's static-call gas estimation to revert (→ fallback 21M gas → cap error).
+      // Set an explicit gas limit to bypass estimation entirely.
+      // 1,000,000 gas is a safe upper bound for registerMyScore on Sepolia fhevm.
+      const txHash = await window.ethereum.request<string>({
+        method: 'eth_sendTransaction',
+        params: [{ from: walletAddress, to: contractAddress, data, gas: '0xF4240' }],
+      });
+
+      const hash = txHash as string;
+      appendLog(makeLog('fhe_client', `Tx: ${hash.slice(0, 14)}… — waiting for confirmation…`));
+      await waitForReceipt(hash);
+      setSubmitted(true);
+      appendLog(makeLog('success', 'Score recorded on-chain — ACL granted, ready to decrypt'));
+    } catch (err: unknown) {
+      // MetaMask throws ProviderRpcError (not a plain Error) — extract message carefully
+      let msg = 'Unknown error';
+      if (typeof err === 'object' && err !== null) {
+        const e = err as { message?: unknown; reason?: unknown; data?: { message?: unknown } };
+        msg = String(e.reason ?? e.message ?? e.data?.message ?? JSON.stringify(err));
+      } else if (typeof err === 'string') {
+        msg = err;
+      }
+      setSubmitError(msg);
+      appendLog(makeLog('error', `On-chain submission: ${msg}`));
+    } finally {
+      setSubmitting(false);
+    }
+  }
+
+  async function waitForReceipt(txHash: string, maxWaitMs = 120_000): Promise<void> {
+    const deadline = Date.now() + maxWaitMs;
+    while (Date.now() < deadline) {
+      await new Promise(r => setTimeout(r, 3000));
+      const receipt = await window.ethereum!.request<{ status: string } | null>({
+        method: 'eth_getTransactionReceipt',
+        params: [txHash],
+      });
+      if (receipt) {
+        if ((receipt as { status: string }).status === '0x0') {
+          throw new Error(
+            `Transaction reverted on-chain (tx: ${txHash.slice(0, 12)}…). ` +
+            `Possible causes: proof was generated for a different contract address — ` +
+            `run a fresh scan so the proof matches the current contract.`
+          );
+        }
+        return;
+      }
+    }
+    throw new Error('Transaction not mined within 2 minutes');
   }
 
   // ── Decrypt ───────────────────────────────────────────────────────────────
@@ -382,6 +561,8 @@ export default function Page() {
   async function handleDecrypt() {
     if (!walletAddress || !result || !walletChainId || !contractAddress) return;
     const contractAddr = contractAddress;
+    // Prefer the real fhevm handle from client-side encryption; fall back to mock.
+    const handle = (realFheHandle ?? result.encryptedScore) as `0x${string}`;
     setDecrypting(true);
     setDecryptError(null);
     try {
@@ -389,7 +570,7 @@ export default function Page() {
         chainId:         walletChainId,
         userAddress:     walletAddress as `0x${string}`,
         contractAddress: contractAddr,
-        handle:          result.encryptedScore as `0x${string}`,
+        handle,
       });
       setDecryptedScore(score);
     } catch (err) {
@@ -413,6 +594,11 @@ export default function Page() {
     setLogs([]);
     setFeatures([]);
     setResult(null);
+    setRealFheHandle(null);
+    setRealFheProof(null);
+    setSubmitting(false);
+    setSubmitted(false);
+    setSubmitError(null);
     setDecryptedScore(null);
     setDecryptError(null);
 
@@ -480,6 +666,12 @@ export default function Page() {
         const r = ev.result as ScanResult;
         setResult(r);
         appendLog(makeLog('success', `Complete — ${r.label}`));
+        // Kick off client-side FHE encryption on Sepolia when contract is deployed.
+        // encryptUint64 requires window.ethereum and the Zama KMS network public key.
+        if (r.rawPrediction !== null && r.rawPrediction !== undefined
+            && walletChainId && isFheSupported(walletChainId) && contractAddress) {
+          void handleClientEncrypt(r.rawPrediction);
+        }
         break;
       }
       case 'error':
@@ -665,11 +857,16 @@ export default function Page() {
               result={result}
               canDecrypt={fheDecryptReady}
               contractAddress={contractAddress}
-              walletAddress={walletAddress ?? ''}
               chainId={walletChainId ?? 0}
+              realFheHandle={realFheHandle}
+              fheEncrypting={fheEncrypting}
+              submitting={submitting}
+              submitted={submitted}
+              submitError={submitError}
               decryptedScore={decryptedScore}
               decrypting={decrypting}
               decryptError={decryptError}
+              onSubmit={() => { void handleSubmitOnChain(); }}
               onDecrypt={() => { void handleDecrypt(); }}
             />
           )}

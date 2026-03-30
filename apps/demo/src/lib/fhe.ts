@@ -66,6 +66,60 @@ export function handleToHex32(handle: unknown): Hex {
 
 // ── SDK init ───────────────────────────────────────────────────────────────
 
+// Must match the installed @zama-fhe/relayer-sdk version in package.json.
+// Changing this busts the browser's memory-cache for the UMD script tag so a
+// stale window.relayerSDK from an older SDK version never survives a restart.
+const RELAYER_SDK_VERSION = '0.4.2';
+
+/**
+ * Injects the Zama Relayer SDK UMD bundle as a <script> tag (once) and waits
+ * for it to execute. The UMD sets window.relayerSDK = { initSDK, createInstance,
+ * SepoliaConfig }. The thin @zama-fhe/relayer-sdk/bundle wrapper just re-exports
+ * from window.relayerSDK, so the UMD must run first — it can't be webpack-bundled.
+ * We serve it from /api/relayer-sdk to avoid copying files out of node_modules.
+ *
+ * The src URL is versioned (?v=x.y.z) so that after an SDK upgrade the old
+ * script tag (which lives in the browser's memory cache between navigations)
+ * is treated as a different resource and re-fetched.
+ */
+function loadRelayerSdkScript(): Promise<void> {
+  const scriptSrc = `/api/relayer-sdk?v=${RELAYER_SDK_VERSION}`;
+
+  // If there is an old script tag from a previous SDK version, remove it and
+  // clear window.relayerSDK so the new UMD runs fresh.
+  const existing = document.getElementById('zama-relayer-sdk') as HTMLScriptElement | null;
+  if (existing && existing.dataset.sdkVersion !== RELAYER_SDK_VERSION) {
+    existing.remove();
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    (window as any).relayerSDK = undefined;
+  }
+
+  // Already loaded at the correct version.
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  if ((window as any).relayerSDK) return Promise.resolve();
+
+  if (document.getElementById('zama-relayer-sdk')) {
+    // Correct-version script tag already injected — poll until UMD executes.
+    return new Promise((resolve, reject) => {
+      const check = setInterval(() => {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        if ((window as any).relayerSDK) { clearInterval(check); resolve(); }
+      }, 50);
+      setTimeout(() => { clearInterval(check); reject(new Error('Zama SDK load timeout')); }, 30_000);
+    });
+  }
+
+  return new Promise((resolve, reject) => {
+    const script = document.createElement('script');
+    script.id                  = 'zama-relayer-sdk';
+    script.dataset.sdkVersion  = RELAYER_SDK_VERSION;
+    script.src                 = scriptSrc;
+    script.onload              = () => resolve();
+    script.onerror             = () => reject(new Error(`Failed to load Zama Relayer SDK from ${scriptSrc}`));
+    document.head.appendChild(script);
+  });
+}
+
 async function getFhevmInstance(chainId: number) {
   if (typeof window === 'undefined') throw new Error('FHE can only be used in the browser.');
   if (!isFheSupported(chainId)) throw new Error(`FHE not supported on chain ${chainId}. Switch to Sepolia.`);
@@ -75,12 +129,19 @@ async function getFhevmInstance(chainId: number) {
 
   _instanceChainId = chainId;
   _instancePromise = (async () => {
-    // Dynamic import keeps the heavy WASM bundle out of the initial page load
+    // Load the real UMD bundle that sets window.relayerSDK, then use it directly.
+    await loadRelayerSdkScript();
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const mod = await import('@zama-fhe/relayer-sdk/bundle') as any;
-    await mod.initSDK();
-    return mod.createInstance({ ...mod.SepoliaConfig, network: window.ethereum });
-  })();
+    const sdk = (window as any).relayerSDK;
+    if (!sdk) throw new Error('window.relayerSDK not defined after script load');
+    await sdk.initSDK();
+    return sdk.createInstance({ ...sdk.SepoliaConfig, network: window.ethereum });
+  })().catch((err) => {
+    // Don't cache a failed initialisation — next call will retry.
+    _instancePromise = null;
+    _instanceChainId = null;
+    throw err;
+  });
 
   return _instancePromise;
 }
@@ -151,17 +212,22 @@ export async function decryptAnomalyScore(params: {
   const eip712 = instance.createEIP712(keypair.publicKey, contracts, startTs, durationD);
 
   // Ask MetaMask to sign the EIP-712 authorization message
+  // MetaMask's eth_signTypedData_v4 expects a JSON string.
+  // The SDK may put BigInt values (e.g. chainId) inside the EIP-712 object,
+  // which JSON.stringify cannot handle natively — convert them to strings.
+  const eip712Json = JSON.stringify(
+    {
+      domain:      eip712.domain,
+      types:       eip712.types,
+      primaryType: 'UserDecryptRequestVerification',
+      message:     eip712.message,
+    },
+    (_key, value) => (typeof value === 'bigint' ? value.toString() : value),
+  );
+
   const signature = await window.ethereum.request<string>({
     method: 'eth_signTypedData_v4',
-    params: [
-      params.userAddress,
-      JSON.stringify({
-        domain:      eip712.domain,
-        types:       eip712.types,
-        primaryType: 'UserDecryptRequestVerification',
-        message:     eip712.message,
-      }),
-    ],
+    params: [params.userAddress, eip712Json],
   });
 
   if (!signature) throw new Error('Signature rejected');

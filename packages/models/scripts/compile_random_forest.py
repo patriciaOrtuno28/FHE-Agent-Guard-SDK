@@ -159,8 +159,8 @@ def main():
         # Quick sanity check without FHE compilation
         from sklearn.ensemble import RandomForestClassifier as SklearnRF
         model = SklearnRF(n_estimators=10, max_depth=4, random_state=42)
-        model.fit(X_train, y)
-        acc = model.score(X_train, y)
+        model.fit(X_raw, y)
+        acc = model.score(X_raw, y)
         print(f"\n[dry-run] sklearn accuracy: {acc:.3f}")
         print("[dry-run] Concrete ML import: OK")
         print("[dry-run] Environment ready for full compilation.")

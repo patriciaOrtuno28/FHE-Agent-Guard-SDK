@@ -78,6 +78,7 @@ export async function POST(req: NextRequest) {
             encryptedScore: result.encryptedScore.toString(),
             isAnomaly:      result.isAnomaly.toString(),
             computedAt:     result.computedAt,
+            rawPrediction:  result.rawPrediction ?? null,
           },
         });
       } catch (err) {

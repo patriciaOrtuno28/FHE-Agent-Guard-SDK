@@ -65,8 +65,7 @@ contract AnomalyAgent is SepoliaConfig, Ownable2Step, Pausable, IAnomalyAgent {
     // ── Score submission ──────────────────────────────────────
 
     /// @notice Submit an encrypted anomaly score for a subject address.
-    ///         The comparison FHE.gt() runs entirely in ciphertext —
-    ///         neither the score nor the threshold is ever decrypted here.
+    ///         Only registered watchers (trusted SDK backends) may call this.
     /// @param subject   The address being monitored
     /// @param encScore  Encrypted score handle (produced by the FHE client SDK)
     function submitScore(
@@ -74,15 +73,50 @@ contract AnomalyAgent is SepoliaConfig, Ownable2Step, Pausable, IAnomalyAgent {
         externalEuint64 encScore,
         bytes calldata inputProof
     ) external onlyWatcher whenNotPaused {
+        _processScore(subject, encScore, inputProof);
+    }
+
+    /// @notice Self-service variant: any address may submit an encrypted score
+    ///         for themselves (requires threshold to be set for the comparison).
+    function submitMyScore(
+        externalEuint64 encScore,
+        bytes calldata inputProof
+    ) external whenNotPaused {
+        _processScore(msg.sender, encScore, inputProof);
+    }
+
+    /// @notice Register an encrypted score for yourself — only grants ACL
+    ///         permissions so the subject can decrypt their own score via the
+    ///         Zama KMS. Does not require the threshold to be set.
+    ///         Use this when you want to prove you encrypted a value without
+    ///         triggering the anomaly comparison.
+    function registerMyScore(
+        externalEuint64 encScore,
+        bytes calldata inputProof
+    ) external whenNotPaused {
+        euint64 score = FHE.fromExternal(encScore, inputProof);
+        FHE.allowThis(score);
+        FHE.allow(score, msg.sender);
+        emit ScoreSubmitted(msg.sender, block.timestamp);
+    }
+
+    /// @dev Shared logic for score submission.
+    function _processScore(
+        address subject,
+        externalEuint64 encScore,
+        bytes calldata inputProof
+    ) internal {
         if (!FHE.isInitialized(_threshold)) revert ThresholdNotSet();
 
         euint64 score = FHE.fromExternal(encScore, inputProof);
         FHE.allowThis(score);
+        FHE.allow(score, subject); // subject can decrypt their raw score via Zama KMS
 
         // FHE comparison — runs on ciphertext, no plaintext leaks
         ebool isAnomaly = FHE.gt(score, _threshold);
         FHE.allowThis(isAnomaly);
         FHE.allow(isAnomaly, owner());
+        FHE.allow(isAnomaly, subject);
         _anomalyActive = isAnomaly;
 
         emit ScoreSubmitted(subject, block.timestamp);

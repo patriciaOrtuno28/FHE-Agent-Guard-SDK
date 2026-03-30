@@ -37,6 +37,8 @@ export type AnomalyScore = {
   readonly isAnomaly: FheHandle;
   readonly label: "anomaly_detected" | "normal" | "insufficient_data";
   readonly computedAt: number;
+  /** Raw 0/1 prediction from the inference server — used by the client to produce a real fhevm ciphertext. */
+  readonly rawPrediction?: number;
 };
 
 export type ConnectorQuery = {

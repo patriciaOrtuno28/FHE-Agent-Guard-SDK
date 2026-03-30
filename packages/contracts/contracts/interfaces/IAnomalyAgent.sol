@@ -24,6 +24,8 @@ interface IAnomalyAgent {
 
     // ── Score submission ──────────────────────────────────────
     function submitScore(address subject, externalEuint64 encScore, bytes calldata inputProof) external;
+    function submitMyScore(externalEuint64 encScore, bytes calldata inputProof) external;
+    function registerMyScore(externalEuint64 encScore, bytes calldata inputProof) external;
 
     // ── Threshold ─────────────────────────────────────────────
     function setThreshold(externalEuint64 encThreshold, bytes calldata inputProof) external;

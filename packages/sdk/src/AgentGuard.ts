@@ -205,12 +205,17 @@ export class AgentGuard {
         ? "anomaly_detected"
         : "normal";
 
+    // NOTE: encryptedScore is a placeholder derived from the ciphertext bytes.
+    // The real fhevm handle is produced client-side by the demo app using
+    // encryptUint64(rawPrediction) from @zama-fhe/relayer-sdk — see apps/demo/src/lib/fhe.ts.
+    // Server-side fhevm encryption is not possible because it requires window.ethereum.
     const mockHandle = BigInt("0x" + Buffer.from(features.ciphertext).toString("hex").slice(0, 16));
     return {
       encryptedScore: mockHandle,
       isAnomaly: BigInt(body.prediction),
       label,
       computedAt: Date.now(),
+      rawPrediction: body.prediction,
     };
   }
 
