@@ -32,13 +32,13 @@ export type MergedFeatures = {
   readonly mergedAt: number;
 };
 
-export type AnomalyScore = {
+export type TrustScoreResult = {
   readonly encryptedScore: FheHandle;
-  readonly isAnomaly: FheHandle;
-  readonly label: "anomaly_detected" | "normal" | "insufficient_data";
+  readonly decision: FheHandle; // 1 = blocked, 0 = allowed, or remove later
+  readonly label: "trusted" | "blocked" | "insufficient_data";
   readonly computedAt: number;
-  /** Raw 0/1 prediction from the inference server — used by the client to produce a real fhevm ciphertext. */
-  readonly rawPrediction?: number;
+  readonly rawScore?: number;      // 0..10
+  readonly rawRisk?: number;       // 0..1
 };
 
 export type ConnectorQuery = {
@@ -61,7 +61,7 @@ export interface DataConnector {
   healthCheck?(): Promise<boolean>;
 }
 
-export type ModelKind = "isolation-forest" | "one-class-svm" | "autoencoder" | "custom";
+export type ModelKind = "random-forest" | "one-class-svm" | "autoencoder" | "custom";
 
 export type FheArtifact = {
   readonly modelId: string;
@@ -80,7 +80,7 @@ export type ModelConfig = {
 
 export type AgentActionContext = {
   readonly subject: string;
-  readonly result: AnomalyScore;
+  readonly result: TrustScoreResult;
   readonly contractAddress?: Address;
 };
 
@@ -103,7 +103,7 @@ export type GuardEvent =
   | { type: "fetch_done";     subject: string; connectorId: string; durationMs: number }
   | { type: "fetch_error";    subject: string; connectorId: string; error: Error }
   | { type: "encrypt_done";   subject: string; durationMs: number }
-  | { type: "predict_done";   subject: string; label: AnomalyScore["label"]; durationMs: number }
+  | { type: "predict_done";   subject: string; label: TrustScoreResult["label"]; durationMs: number }
   | { type: "anomaly_action"; subject: string; handlerDurationMs: number }
   | { type: "watch_tick";     subject: string; tickAt: number }
   | { type: "features_merged"; subject: string; features: NormalizedFeatures };

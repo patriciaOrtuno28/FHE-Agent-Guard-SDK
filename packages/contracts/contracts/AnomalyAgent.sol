@@ -18,7 +18,7 @@ contract AnomalyAgent is ZamaEthereumConfig, Ownable2Step, Pausable, IAnomalyAge
     euint64 private _threshold;
 
     /// @notice Encrypted result of the last score comparison
-    ebool private _anomalyActive;
+    ebool private _thresholdMet;
 
     /// @notice Registered watchers allowed to submit scores (private — access via view functions)
     mapping(address => bool) private _watchers;
@@ -35,7 +35,7 @@ contract AnomalyAgent is ZamaEthereumConfig, Ownable2Step, Pausable, IAnomalyAge
     constructor(address initialOwner) Ownable(initialOwner) {
         // Threshold starts unset. Call setThreshold() after deployment
         // to configure it via the FHE coprocessor.
-        // Default: 0.6 × 65535 ≈ 39321 in uint64 range.
+        /// @notice Encrypted threshold in the same 0..10 scale as the trust score.
     }
 
     // ── Watcher management ────────────────────────────────────
@@ -113,15 +113,15 @@ contract AnomalyAgent is ZamaEthereumConfig, Ownable2Step, Pausable, IAnomalyAge
         FHE.allow(score, subject); // subject can decrypt their raw score via Zama KMS
 
         // FHE comparison — runs on ciphertext, no plaintext leaks
-        ebool isAnomaly = FHE.gt(score, _threshold);
-        FHE.allowThis(isAnomaly);
-        FHE.allow(isAnomaly, owner());
-        FHE.allow(isAnomaly, subject);
-        _anomalyActive = isAnomaly;
+        ebool meetsThreshold = FHE.ge(score, _threshold);
+        FHE.allowThis(meetsThreshold);
+        FHE.allow(meetsThreshold, owner());
+        FHE.allow(meetsThreshold, subject);
+        _thresholdMet = meetsThreshold;
 
         emit ScoreSubmitted(subject, block.timestamp);
 
-        _handleAnomaly(subject, isAnomaly);
+        _handleScoreEvaluation(subject, meetsThreshold);
     }
 
     /// @notice Update the encrypted anomaly threshold.
@@ -145,12 +145,8 @@ contract AnomalyAgent is ZamaEthereumConfig, Ownable2Step, Pausable, IAnomalyAge
 
     /// @dev Executes the anomaly action. Override in subcontracts to customize.
     ///      Uses FHE.select pattern to avoid branching on an encrypted bool.
-    function _handleAnomaly(address subject, ebool isAnomaly) internal virtual {
-        // For the demo: emit an event — the SDK's onAnomaly handler is the
-        // primary action surface off-chain.
-        // In production: use FHE.select or a decrypt+callback to gate on-chain state.
-        emit AnomalyTriggered(subject, block.timestamp);
-        // isAnomaly is stored in _anomalyActive and ACL-permissioned for owner use.
-        isAnomaly;
+    function _handleScoreEvaluation(address subject, ebool meetsThreshold) internal virtual {
+        emit ScoreEvaluated(subject, block.timestamp);
+        meetsThreshold;
     }
 }

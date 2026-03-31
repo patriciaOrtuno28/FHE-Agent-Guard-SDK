@@ -8,7 +8,7 @@ interface IAnomalyAgent {
     event WatcherAdded(address indexed watcher);
     event WatcherRemoved(address indexed watcher);
     event ScoreSubmitted(address indexed subject, uint256 timestamp);
-    event AnomalyTriggered(address indexed subject, uint256 timestamp);
+    event ScoreEvaluated(address indexed subject, uint256 timestamp);
     event ThresholdUpdated(uint256 timestamp);
 
     // ── Errors ────────────────────────────────────────────────

@@ -76,7 +76,7 @@ export async function POST(req: NextRequest) {
 
         const guard = new AgentGuard({
           rpcUrl,
-          model: { kind: 'isolation-forest', artifact: 'base', threshold: 0.65 },
+          model: { kind: 'random-forest', artifact: 'base', threshold: 7 },
           connectors,
           inferenceServerUrl: inferenceUrl,
           inferenceApiKey,
@@ -110,9 +110,10 @@ export async function POST(req: NextRequest) {
           result: {
             label: result.label,
             encryptedScore: result.encryptedScore.toString(),
-            isAnomaly: result.isAnomaly.toString(),
+            decision: result.decision.toString(),
             computedAt: result.computedAt,
-            rawPrediction: result.rawPrediction ?? null,
+            rawScore: result.rawScore ?? null,
+            rawRisk: result.rawRisk ?? null,
           },
         });
       } catch (err) {

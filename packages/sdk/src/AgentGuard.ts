@@ -1,20 +1,20 @@
 import type {
   AgentGuardConfig,
   ConnectorQuery,
-  AnomalyScore,
+  TrustScoreResult,
   GuardEventHandler,
   NormalizedFeatures,
   MergedFeatures,
   EncryptedFeatures,
 } from "./types.js";
 
-// ── BASE ISOLATION FOREST ARTIFACT ───────────────────────────
+// ── BASE RANDOM FOREST ARTIFACT ───────────────────────────
 
 const BASE_ARTIFACT = {
   modelId: "base-anomaly-rf-v1",
   version: "1.0.0",
-  circuitPath: "./artifacts/isolation_forest.fhe",
-  parametersPath: "./artifacts/isolation_forest.params",
+  circuitPath: "./artifacts/random_forest.fhe",
+  parametersPath: "./artifacts/random_forest.params",
   compiledAt: 0,
   inputSchema: [
     { name: "tx_value_eth",         type: "float32" as const, min: 0,  max: 10000  },
@@ -43,7 +43,7 @@ export const ModelRegistry = {
     return a;
   },
   list() {
-    return ["base-isolation-forest-v1", ..._registry.keys()];
+    return ["base-anomaly-rf-v1", ..._registry.keys()];
   },
 };
 
@@ -63,7 +63,7 @@ export class AgentGuard {
 
   // ── Public ────────────────────────────────────────────────
 
-  async run(subject: string, queryParams?: Partial<ConnectorQuery>): Promise<AnomalyScore> {
+  async run(subject: string, queryParams?: Partial<ConnectorQuery>): Promise<TrustScoreResult> {
     const query: ConnectorQuery = { subject, windowSecs: 3600, limit: 100, ...queryParams };
 
     // 1. Fetch + merge features
@@ -82,10 +82,14 @@ export class AgentGuard {
     const score = await this.#predict(encrypted, merged);
     this.#emit({ type: "predict_done", subject, label: score.label, durationMs: Date.now() - t1 });
 
-    // 4. Act on anomaly
-    if (score.label === "anomaly_detected") {
+    // 4. Act on blocked result
+    if (score.label === "blocked") {
       const t2 = Date.now();
-      await this.#config.onAnomaly({ subject, result: score, contractAddress: this.#config.contractAddress });
+      await this.#config.onAnomaly({
+        subject,
+        result: score,
+        contractAddress: this.#config.contractAddress,
+      });
       this.#emit({ type: "anomaly_action", subject, handlerDurationMs: Date.now() - t2 });
     }
 
@@ -204,7 +208,7 @@ export class AgentGuard {
     };
   }
 
-  async #predict(features: EncryptedFeatures, merged: MergedFeatures): Promise<AnomalyScore> {
+  async #predict(features: EncryptedFeatures, merged: MergedFeatures): Promise<TrustScoreResult> {
     const artifact = this.#config.model.artifact === "base"
       ? BASE_ARTIFACT
       : this.#config.model.artifact;
@@ -218,10 +222,11 @@ export class AgentGuard {
     if (this.#isInsufficientData(flat)) {
       return {
         encryptedScore: mockHandle,
-        isAnomaly: 0n,
+        decision: 1n,
         label: "insufficient_data",
         computedAt: Date.now(),
-        rawPrediction: 0,
+        rawScore: 0,
+        rawRisk: 1,
       };
     }
 
@@ -241,21 +246,24 @@ export class AgentGuard {
 
     if (!res.ok) throw new Error(`Inference server error: HTTP ${res.status}`);
 
-    const body = await res.json() as { label: string; prediction: number };
+    const body = await res.json() as {
+      label: string;
+      prediction: number;
+      risk_probability: number;
+      trust_score: number;
+    };
 
-    const label: AnomalyScore["label"] =
-      body.label === "anomaly"
-        ? "anomaly_detected"
-        : body.prediction === 1
-          ? "anomaly_detected"
-          : "normal";
+    const threshold = this.#config.model.threshold ?? 7;
+    const trustScore = Math.max(0, Math.min(10, Math.round(body.trust_score)));
+    const blocked = trustScore < threshold;
 
     return {
       encryptedScore: mockHandle,
-      isAnomaly: BigInt(body.prediction),
-      label,
+      decision: BigInt(blocked ? 1 : 0),
+      label: blocked ? "blocked" : "trusted",
       computedAt: Date.now(),
-      rawPrediction: body.prediction,
+      rawScore: trustScore,
+      rawRisk: body.risk_probability,
     };
   }
 

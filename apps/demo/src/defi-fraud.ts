@@ -36,9 +36,9 @@ async function main() {
   const guard = new AgentGuard({
     rpcUrl: RPC_URL,
     model: {
-      kind: "isolation-forest",
+      kind: "random-forest",
       artifact: "base",
-      threshold: 0.65,
+      threshold: 7,
     },
     connectors: [fhevmConnector],
     contractAddress: CONTRACT_ADDR,

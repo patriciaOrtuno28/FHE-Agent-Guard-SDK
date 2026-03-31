@@ -7,7 +7,7 @@ import type { ContractAddresses } from "../types.js";
 export const chainId = 11155111 as const;
 
 export const addresses = {
-  "AnomalyAgent": "0xa7eFe6B0E7AbCcDf0262F631Aee42a6378465cA2"
+  "AnomalyAgent": "0x3f3655B3E66c6B88e8888c3e6395B8A9de304683"
 } as const satisfies ContractAddresses;
 
 export const abis = {
@@ -103,25 +103,6 @@ export const abis = {
         {
           "indexed": true,
           "internalType": "address",
-          "name": "subject",
-          "type": "address"
-        },
-        {
-          "indexed": false,
-          "internalType": "uint256",
-          "name": "timestamp",
-          "type": "uint256"
-        }
-      ],
-      "name": "AnomalyTriggered",
-      "type": "event"
-    },
-    {
-      "anonymous": false,
-      "inputs": [
-        {
-          "indexed": true,
-          "internalType": "address",
           "name": "previousOwner",
           "type": "address"
         },
@@ -165,6 +146,25 @@ export const abis = {
         }
       ],
       "name": "Paused",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "subject",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "timestamp",
+          "type": "uint256"
+        }
+      ],
+      "name": "ScoreEvaluated",
       "type": "event"
     },
     {
@@ -505,7 +505,7 @@ export const abis = {
           "type": "uint256"
         }
       ],
-      "name": "AnomalyTriggered",
+      "name": "ScoreEvaluated",
       "type": "event"
     },
     {

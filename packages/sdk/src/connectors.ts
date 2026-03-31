@@ -7,7 +7,7 @@
  *   - Gas prices from recent blocks
  *   - Block timestamps to compute time deltas
  *
- * Produces the 8 features expected by the Isolation Forest model.
+ * Produces the 8 features expected by the Random Forest model.
  */
 
 import { ethers } from "ethers";
@@ -271,15 +271,20 @@ export class FhEVMConnector implements DataConnector {
     const cutoff24h = latestBlockTimestamp - 86400
 
     for (let page = 0; page < this.#cfg.explorerMaxPages; page += 1) {
-      const query = nextPageParams
-        ? `?${new URLSearchParams(
-            Object.entries(nextPageParams).map(([k, v]) => [k, String(v)]),
-          )}`
-        : ""
+      const qs = new URLSearchParams()
 
-      const payload = await this.#fetchJson<BlockscoutAddressTransactionsResponse>(
-        `${this.#cfg.explorerApiUrl}/addresses/${subject}/transactions${query}`,
-      )
+      if (nextPageParams) {
+        for (const [key, value] of Object.entries(nextPageParams)) {
+          qs.set(key, String(value))
+        }
+      }
+
+      const suffix = qs.toString() ? `?${qs.toString()}` : ""
+
+      const payload: BlockscoutAddressTransactionsResponse =
+        await this.#fetchJson<BlockscoutAddressTransactionsResponse>(
+          `${this.#cfg.explorerApiUrl}/addresses/${subject}/transactions${suffix}`,
+        )
 
       const items = Array.isArray(payload?.items) ? payload.items : []
       if (items.length === 0) break

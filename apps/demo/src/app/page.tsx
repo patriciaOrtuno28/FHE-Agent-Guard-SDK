@@ -4,7 +4,6 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { encodeFunctionData, getAddress } from 'viem';
 import { NETWORKS, networkByChainId, type NetworkId } from '../lib/networks';
 import { decryptAnomalyScore, encryptUint64, isFheSupported, resetFhevmInstance } from '../lib/fhe';
-import { clear } from 'node:console';
 import { sdkByChainId } from '@fhe-guard/sdk';
 
 // ── Ethereum provider type (MetaMask) ────────────────────────────────────────
@@ -20,15 +19,9 @@ declare global {
 }
 
 // ── Contract addresses (per chain) ───────────────────────────────────────────
-// Addresses come from .env.local — never hardcode them here.
-// Set NEXT_PUBLIC_ANOMALY_AGENT_SEPOLIA and NEXT_PUBLIC_ANOMALY_AGENT_LOCALHOST
-// in apps/demo/.env.local (see .env.example for the values).
 
-const exportedSepoliaAddress =
-  sdkByChainId[11155111]?.addresses?.AnomalyAgent as `0x${string}` | undefined;
-
-const ANOMALY_AGENT_ADDRESS: Partial<Record<number, `0x${string}`>> = {
-  11155111: process.env.NEXT_PUBLIC_ANOMALY_AGENT_SEPOLIA as `0x${string}` | undefined,
+const TRUST_SCORE_AGENT_ADDRESS: Partial<Record<number, `0x${string}`>> = {
+  11155111: process.env.NEXT_PUBLIC_TRUST_SCORE_AGENT_SEPOLIA as `0x${string}` | undefined,
 } as Partial<Record<number, `0x${string}`>>;
 
 // ── Types ────────────────────────────────────────────────────────────────────
@@ -50,11 +43,12 @@ interface HealthState {
 }
 
 interface ScanResult {
-  label: 'anomaly_detected' | 'normal' | 'insufficient_data';
+  label: 'trusted' | 'blocked' | 'insufficient_data';
   encryptedScore: string;
-  isAnomaly: string;
+  decision: string;
   computedAt: number;
-  rawPrediction?: number | null;
+  rawScore?: number | null;
+  rawRisk?: number | null;
 }
 
 interface FeatureEntry {
@@ -175,17 +169,17 @@ function ResultPanel({
   onSubmit: () => void;
   onDecrypt: () => void;
 }) {
-  const isAnomaly = result.label === 'anomaly_detected';
+  const isBlocked = result.label === 'blocked';
   const isInsuff  = result.label === 'insufficient_data';
 
-  const glowClass = isAnomaly
+  const glowClass = isBlocked
     ? 'shadow-[0_0_30px_rgba(239,68,68,0.25)] border-red-500/40'
     : isInsuff
       ? 'border-amber-500/40 shadow-[0_0_30px_rgba(245,158,11,0.15)]'
       : 'shadow-[0_0_30px_rgba(16,185,129,0.2)] border-emerald-500/40';
 
-  const labelText  = isAnomaly ? 'ANOMALY DETECTED' : isInsuff ? 'INSUFFICIENT DATA' : 'NORMAL';
-  const labelColor = isAnomaly ? 'text-red-400'     : isInsuff ? 'text-amber-400'    : 'text-emerald-400';
+  const labelText  = isBlocked ? 'BLOCKED' : isInsuff ? 'INSUFFICIENT DATA' : 'TRUSTED';
+  const labelColor = isBlocked ? 'text-red-400' : isInsuff ? 'text-amber-400' : 'text-emerald-400';
 
   return (
     <div className={`mx-4 mb-4 p-4 rounded border bg-zinc-950/80 ${glowClass}`}>
@@ -218,9 +212,24 @@ function ResultPanel({
           </div>
         )}
         <div className="flex items-center gap-2">
-          <span className="text-[10px] text-zinc-500 uppercase tracking-wide flex-shrink-0 w-28">Is Anomaly</span>
-          <span className="text-xs text-violet-400 font-mono">{result.isAnomaly}</span>
+          <span className="text-[10px] text-zinc-500 uppercase tracking-wide flex-shrink-0 w-28">Decision</span>
+          <span className="text-xs text-violet-400 font-mono">{result.decision}</span>
         </div>
+
+        {result.rawScore !== null && result.rawScore !== undefined && (
+          <div className="flex items-center gap-2">
+            <span className="text-[10px] text-zinc-500 uppercase tracking-wide flex-shrink-0 w-28">Trust Score</span>
+            <span className="text-sm font-black text-emerald-300 font-mono">{result.rawScore}/10</span>
+          </div>
+        )}
+
+        {result.rawRisk !== null && result.rawRisk !== undefined && (
+          <div className="flex items-center gap-2">
+            <span className="text-[10px] text-zinc-500 uppercase tracking-wide flex-shrink-0 w-28">Risk</span>
+            <span className="text-xs text-zinc-400 font-mono">{result.rawRisk.toFixed(4)}</span>
+          </div>
+        )}
+
       </div>
 
       {/* On-chain submit + Decryption */}
@@ -264,7 +273,7 @@ function ResultPanel({
                 /* Step 2 — score is on-chain, ACL granted, now decrypt */
                 <>
                   <p className="text-[10px] text-zinc-500 leading-relaxed">
-                    Score recorded on-chain. Sign with MetaMask to decrypt your anomaly score —
+                    Score recorded on-chain. Sign with MetaMask to decrypt your trust score —
                     the KMS verifies the on-chain ACL before revealing the plaintext.
                   </p>
                   <button
@@ -294,7 +303,7 @@ function ResultPanel({
       ) : canDecrypt && !contractAddress ? (
         <div className="border-t border-zinc-800/60 pt-3 mt-3">
           <p className="text-[10px] text-zinc-600 italic">
-            AnomalyAgent not deployed on chain {chainId} yet — deploy with{' '}
+            TrustScoreAgent not deployed on chain {chainId} yet — deploy with{' '}
             <span className="font-mono">pnpm deploy:sepolia</span> to enable on-chain decryption.
           </p>
         </div>
@@ -360,7 +369,7 @@ export default function Page() {
   // ── Derived ──────────────────────────────────────────────────────────────
 
   const activeNetwork       = NETWORKS.find((n) => n.id === selectedNetwork)!;
-  const rawContractAddress  = walletChainId ? ANOMALY_AGENT_ADDRESS[walletChainId] : undefined;
+  const rawContractAddress  = walletChainId ? TRUST_SCORE_AGENT_ADDRESS[walletChainId] : undefined;
   const networkLocked       = Boolean(activeNetwork.disabled);
 
   const contractAddress = rawContractAddress
@@ -501,11 +510,11 @@ export default function Page() {
   }
 
   // ── Client-side FHE encryption ────────────────────────────────────────────
-  // After the server returns a rawPrediction (0 or 1), the browser encrypts it
+  // After the server returns a rawScore (0 to 10), the browser encrypts it
   // using the Zama KMS network public key. This produces a real fhevm handle +
-  // inputProof that can be submitted to AnomalyAgent.submitScore() on-chain.
+  // inputProof that can be submitted to TrustScoreAgent.submitScore() on-chain.
 
-  async function handleClientEncrypt(rawPrediction: number) {
+  async function handleClientEncrypt(rawScore: number) {
     if (!walletAddress || !walletChainId || !contractAddress) return;
 
     setFheEncrypting(true);
@@ -519,7 +528,7 @@ export default function Page() {
         chainId: walletChainId,
         contractAddress: normalizedContract,
         userAddress: normalizedUser,
-        value: BigInt(rawPrediction),
+        value: BigInt(rawScore),
       });
 
       setRealFheHandle(handle);
@@ -571,7 +580,7 @@ export default function Page() {
       // externalEuint64 is bytes32 at the ABI level
       const data = encodeFunctionData({
         abi: [{
-          name: 'registerMyScore',
+          name: 'submitMyScore',
           type: 'function',
           stateMutability: 'nonpayable',
           inputs: [
@@ -580,14 +589,14 @@ export default function Page() {
           ],
           outputs: [],
         }] as const,
-        functionName: 'registerMyScore',
+        functionName: 'submitMyScore',
         args: [realFheHandle as `0x${string}`, realFheProof as `0x${string}`],
       });
 
       // fhevm's FHE.fromExternal() reads coprocessor state in ways that cause
       // MetaMask's static-call gas estimation to revert (→ fallback 21M gas → cap error).
       // Set an explicit gas limit to bypass estimation entirely.
-      // 1,000,000 gas is a safe upper bound for registerMyScore on Sepolia fhevm.
+      // 1,000,000 gas is a safe upper bound for submitMyScore on Sepolia fhevm.
       const txHash = await window.ethereum.request<string>({
         method: 'eth_sendTransaction',
         params: [{ from: walletAddress, to: contractAddress, data, gas: '0x2DC6C0' }],
@@ -750,11 +759,15 @@ export default function Page() {
         const r = ev.result as ScanResult;
         setResult(r);
         appendLog(makeLog('success', `Complete — ${r.label}`));
-        // Kick off client-side FHE encryption on Sepolia when contract is deployed.
-        // encryptUint64 requires window.ethereum and the Zama KMS network public key.
-        if (r.rawPrediction !== null && r.rawPrediction !== undefined
-            && walletChainId && isFheSupported(walletChainId) && contractAddress) {
-          void handleClientEncrypt(r.rawPrediction);
+
+        if (
+          r.rawScore !== null &&
+          r.rawScore !== undefined &&
+          walletChainId &&
+          isFheSupported(walletChainId) &&
+          contractAddress
+        ) {
+          void handleClientEncrypt(r.rawScore);
         }
         break;
       }

@@ -1,8 +1,4 @@
-import * as chai from "chai";
-import chaiAsPromised from "chai-as-promised";
-chai.use(chaiAsPromised);
-export const expect = chai.expect;
-
+import { expect } from "chai";
 import { ethers, fhevm } from "hardhat";
 
 // ── Helpers ───────────────────────────────────────────────────
@@ -30,6 +26,16 @@ async function deployAgent() {
   return { agent, agentAddr, owner, watcher, subject, attacker };
 }
 
+async function setEncryptedThreshold(agent: any, agentAddr: string, owner: any, value: number) {
+  const enc = await fhevm
+    .createEncryptedInput(agentAddr, owner.address)
+    .add64(value)
+    .encrypt();
+
+  const tx = await agent.connect(owner).setThreshold(getHandle(enc), getProof(enc));
+  await tx.wait();
+}
+
 // ── Tests ─────────────────────────────────────────────────────
 
 describe("AnomalyAgent", () => {
@@ -47,7 +53,7 @@ describe("AnomalyAgent", () => {
 
     it("deployer is not a watcher by default", async () => {
       const { agent, owner } = await deployAgent();
-      expect(await agent.watchers(owner.address)).to.be.false;
+      expect(await agent.isWatcher(owner.address)).to.be.false;
     });
   });
 
@@ -55,14 +61,14 @@ describe("AnomalyAgent", () => {
     it("owner can add a watcher", async () => {
       const { agent, watcher } = await deployAgent();
       await (await agent.addWatcher(watcher.address)).wait();
-      expect(await agent.watchers(watcher.address)).to.be.true;
+      expect(await agent.isWatcher(watcher.address)).to.be.true;
     });
 
     it("owner can remove a watcher", async () => {
       const { agent, watcher } = await deployAgent();
       await (await agent.addWatcher(watcher.address)).wait();
       await (await agent.removeWatcher(watcher.address)).wait();
-      expect(await agent.watchers(watcher.address)).to.be.false;
+      expect(await agent.isWatcher(watcher.address)).to.be.false;
     });
 
     it("non-owner cannot add a watcher", async () => {
@@ -115,14 +121,14 @@ describe("AnomalyAgent", () => {
       ).to.be.revertedWithCustomError(agent, "NotWatcher");
     });
 
-    it("watcher can submit a score below threshold (normal)", async () => {
-      const { agent, agentAddr, watcher, subject } = await deployAgent();
+    it("watcher can submit a trust score below threshold (blocked)", async () => {
+      const { agent, agentAddr, owner, watcher, subject } = await deployAgent();
       await (await agent.addWatcher(watcher.address)).wait();
+      await setEncryptedThreshold(agent, agentAddr, owner, 7);
 
-      // Score = 20000, default threshold = 39321 → normal
       const enc = await fhevm
         .createEncryptedInput(agentAddr, watcher.address)
-        .add64(20000)
+        .add64(6)
         .encrypt();
 
       const tx = await agent.connect(watcher).submitScore(
@@ -134,14 +140,14 @@ describe("AnomalyAgent", () => {
       expect(receipt?.status).to.equal(1);
     });
 
-    it("watcher can submit a score above threshold (anomaly)", async () => {
-      const { agent, agentAddr, watcher, subject } = await deployAgent();
+    it("watcher can submit a trust score above threshold (trusted)", async () => {
+      const { agent, agentAddr, owner, watcher, subject } = await deployAgent();
       await (await agent.addWatcher(watcher.address)).wait();
+      await setEncryptedThreshold(agent, agentAddr, owner, 7);
 
-      // Score = 50000, default threshold = 39321 → anomaly
       const enc = await fhevm
         .createEncryptedInput(agentAddr, watcher.address)
-        .add64(50000)
+        .add64(8)
         .encrypt();
 
       const tx = await agent.connect(watcher).submitScore(
@@ -179,7 +185,7 @@ describe("AnomalyAgent", () => {
 
       const enc = await fhevm
         .createEncryptedInput(agentAddr, owner.address)
-        .add64(50000)
+        .add64(7)
         .encrypt();
 
       const tx = await agent.setThreshold(getHandle(enc), getProof(enc));
@@ -192,7 +198,7 @@ describe("AnomalyAgent", () => {
 
       const enc = await fhevm
         .createEncryptedInput(agentAddr, attacker.address)
-        .add64(50000)
+        .add64(7)
         .encrypt();
 
       await expect(

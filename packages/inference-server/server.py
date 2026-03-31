@@ -150,6 +150,8 @@ class PredictRequest(BaseModel):
 class PredictResponse(BaseModel):
     label: str       # "normal" or "anomaly"
     prediction: int  # 0 = normal, 1 = anomaly
+    risk_probability: float
+    trust_score: int
     subject: str
 
 
@@ -182,13 +184,22 @@ def predict(
 
     X = np.array([req.features], dtype=np.float32)
 
-    # "simulate" — FHE simulation (fast, same accuracy as real FHE)
-    # "execute"  — real FHE encrypted inference (slow, cryptographically correct)
-    prediction = model.predict(X, fhe=fhe_mode)
-    pred_int   = int(prediction[0])
-    label      = manifest["labels"].get(str(pred_int), "unknown")
+    # Preferred: probability output
+    proba = model.predict_proba(X, fhe=fhe_mode)
+    risk_probability = float(proba[0][1])   # class 1 = anomaly/risky
 
-    return PredictResponse(label=label, prediction=pred_int, subject=req.subject)
+    prediction = 1 if risk_probability >= 0.5 else 0
+    trust_score = int(np.clip(round((1.0 - risk_probability) * 10), 0, 10))
+
+    label = "trusted" if trust_score >= 7 else "blocked"
+
+    return PredictResponse(
+        label=label,
+        prediction=prediction,
+        risk_probability=risk_probability,
+        trust_score=trust_score,
+        subject=req.subject,
+    )
 
 
 @app.get("/schema")

@@ -52,7 +52,7 @@ def file_sha256(path: str) -> str:
     with open(path, "rb") as f:
         for chunk in iter(lambda: f.read(1024 * 1024), b""):
             h.update(chunk)
-            return h.hexdigest()
+    return h.hexdigest()
 
 
 def read_dataset(path: str) -> pd.DataFrame:
@@ -101,7 +101,7 @@ def clip_feature_ranges(df: pd.DataFrame) -> pd.DataFrame:
     for name in FEATURE_NAMES:
         lo, hi = FEATURE_RANGES[name]
         out[name] = pd.to_numeric(out[name], errors="coerce").clip(lo, hi)
-        return out
+    return out
 
 
 def validate_dataset(df: pd.DataFrame, label_column: str) -> None:
@@ -176,18 +176,23 @@ def evaluate_model(model, X_test, y_test):
 
 def save_artifacts(model, output_dir, manifest, metrics):
     os.makedirs(output_dir, exist_ok=True)
+
     model_path = os.path.join(output_dir, "anomaly_model.json")
     with open(model_path, "w") as f:
         model.dump(f)
-        manifest["modelPath"] = model_path
-        manifest["metrics"] = metrics
-        manifest_path = os.path.join(output_dir, "anomaly_model.manifest.json")
-        with open(manifest_path, "w") as f:
-            json.dump(manifest, f, indent=2)
-            metrics_path = os.path.join(output_dir, "training_metrics.json")
-            with open(metrics_path, "w") as f:
-                json.dump(metrics, f, indent=2)
-                return model_path, manifest_path, metrics_path
+
+    manifest["modelPath"] = model_path
+    manifest["metrics"] = metrics
+
+    manifest_path = os.path.join(output_dir, "anomaly_model.manifest.json")
+    with open(manifest_path, "w") as f:
+        json.dump(manifest, f, indent=2)
+
+    metrics_path = os.path.join(output_dir, "training_metrics.json")
+    with open(metrics_path, "w") as f:
+        json.dump(metrics, f, indent=2)
+
+    return model_path, manifest_path, metrics_path
 
 
 def main():
