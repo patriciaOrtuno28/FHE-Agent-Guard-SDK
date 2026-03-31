@@ -11,10 +11,10 @@ import type {
 // ── BASE RANDOM FOREST ARTIFACT ───────────────────────────
 
 const BASE_ARTIFACT = {
-  modelId: "base-anomaly-rf-v1",
+  modelId: "base-anomaly-rf-v2",
   version: "1.0.0",
-  circuitPath: "./artifacts/random_forest.fhe",
-  parametersPath: "./artifacts/random_forest.params",
+  circuitPath: "./artifacts/anomaly_model.json",
+  parametersPath: "./artifacts/anomaly_model.manifest.json",
   compiledAt: 0,
   inputSchema: [
     { name: "tx_value_eth",         type: "float32" as const, min: 0,  max: 10000  },
@@ -43,7 +43,7 @@ export const ModelRegistry = {
     return a;
   },
   list() {
-    return ["base-anomaly-rf-v1", ..._registry.keys()];
+    return ["base-anomaly-rf-v2", ..._registry.keys()];
   },
 };
 

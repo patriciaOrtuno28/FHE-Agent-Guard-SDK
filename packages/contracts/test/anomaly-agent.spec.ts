@@ -78,6 +78,22 @@ describe("AnomalyAgent", () => {
       ).to.be.revertedWithCustomError(agent, "OwnableUnauthorizedAccount");
     });
 
+    it("non-owner cannot remove a watcher", async () => {
+      const { agent, attacker, watcher } = await deployAgent();
+      await expect(
+        agent.connect(attacker).removeWatcher(watcher.address)
+      ).to.be.revertedWithCustomError(agent, "OwnableUnauthorizedAccount");
+    });
+
+    it("non-owner cannot unpause", async () => {
+      const { agent, attacker } = await deployAgent();
+      await (await agent.pause()).wait();
+
+      await expect(
+        agent.connect(attacker).unpause()
+      ).to.be.revertedWithCustomError(agent, "OwnableUnauthorizedAccount");
+    });
+
     it("reverts on zero address", async () => {
       const { agent } = await deployAgent();
       await expect(

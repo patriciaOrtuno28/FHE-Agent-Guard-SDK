@@ -7,8 +7,8 @@ import "dotenv/config";
 
 import type { HardhatUserConfig } from "hardhat/config";
 
-const SEPOLIA_RPC_URL = process.env.SEPOLIA_RPC_URL || "";
-const PRIVATE_KEY     = process.env.PRIVATE_KEY;
+const SEPOLIA_RPC_URL           = process.env.SEPOLIA_RPC_URL || "";
+const DEPLOYER_PRIVATE_KEY      = process.env.DEPLOYER_PRIVATE_KEY;
 
 const config: HardhatUserConfig = {
   solidity: {
@@ -25,7 +25,7 @@ const config: HardhatUserConfig = {
     },
     sepolia: {
       url: SEPOLIA_RPC_URL,
-      accounts: PRIVATE_KEY ? [PRIVATE_KEY] : [],
+      accounts: DEPLOYER_PRIVATE_KEY ? [DEPLOYER_PRIVATE_KEY] : [],
       chainId: 11155111,
     },
   },

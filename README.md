@@ -50,6 +50,12 @@
 
 <br/>
 
+<video src="docs/FHETrustScoreAgent.mp4" autoplay loop muted playsinline width="100%" controls>
+  Your browser does not support the video tag.
+</video>
+
+<br/>
+
 ## 🔍 Overview
 
 **FHE Agent Guard** is a confidential anomaly-detection system for on-chain activity.

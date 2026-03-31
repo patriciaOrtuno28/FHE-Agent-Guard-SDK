@@ -1,6 +1,8 @@
 import { NextRequest } from 'next/server';
 import { AgentGuard, FhEVMConnector } from '@fhe-guard/sdk';
 import { NETWORKS, type NetworkId } from '../../../lib/networks';
+import { checkScanRateLimit } from '../../../lib/rate-limit';
+import { buildCorsHeaders, preflight } from '../../../lib/cors';
 
 export const runtime = 'nodejs';
 export const maxDuration = 30;
@@ -19,7 +21,30 @@ function sse(controller: ReadableStreamDefaultController, data: unknown) {
   controller.enqueue(new TextEncoder().encode(`data: ${JSON.stringify(data)}\n\n`));
 }
 
+export function OPTIONS(req: NextRequest) {
+  return preflight(req, 'POST, OPTIONS');
+}
+
 export async function POST(req: NextRequest) {
+  // Check rate limiting
+  // TODO: Deploy on Vercel first and verify that rate limiting works as expected before re-enabling this code
+  // const rl = await checkScanRateLimit(req);
+  // if (!rl.success) {
+  //   return Response.json(
+  //     { error: 'Rate limit exceeded' },
+  //     {
+  //       status: 429,
+  //       headers: {
+  //         'Retry-After': String(Math.max(1, Math.ceil((rl.reset - Date.now()) / 1000))),
+  //         'X-RateLimit-Limit': String(rl.limit),
+  //         'X-RateLimit-Remaining': String(rl.remaining),
+  //         'X-RateLimit-Reset': String(rl.reset),
+  //       },
+  //     },
+  //   );
+  // }
+
+  // Parse and validate request body
   let body: { target?: string; network?: NetworkId; enabledConnectors?: string[] };
   try {
     body = await req.json() as typeof body;
@@ -127,8 +152,12 @@ export async function POST(req: NextRequest) {
     },
   });
 
+  // TODO: Cache CORS headers for preflight after Vercel deployment
+  // const cors = buildCorsHeaders(req, 'POST, OPTIONS');
+
   return new Response(stream, {
     headers: {
+      // ...cors,
       'Content-Type': 'text/event-stream',
       'Cache-Control': 'no-cache, no-transform',
       'X-Accel-Buffering': 'no',
