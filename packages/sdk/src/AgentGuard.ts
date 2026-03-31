@@ -121,6 +121,26 @@ export class AgentGuard {
 
   // ── Private ───────────────────────────────────────────────
 
+  #isInsufficientData(flat: NormalizedFeatures): boolean {
+    const tx1h          = flat.tx_count_1h ?? 0;
+    const tx24h         = flat.tx_count_24h ?? 0;
+    const counterparts  = flat.unique_counterparts ?? 0;
+    const gas           = flat.gas_price_gwei ?? 0;
+    const contract      = flat.contract_interaction ?? 0;
+    const sinceLast     = flat.time_since_last_tx ?? 86400;
+    const balanceChange = Math.abs(flat.balance_change_ratio ?? 0);
+
+    return (
+      tx1h === 0 &&
+      tx24h === 0 &&
+      counterparts === 0 &&
+      gas === 0 &&
+      contract === 0 &&
+      sinceLast >= 86400 &&
+      balanceChange < 0.02
+    );
+  }
+
   async #mergeFeatures(query: ConnectorQuery): Promise<MergedFeatures> {
     const results = await Promise.allSettled(
       this.#config.connectors.map(async (c) => {
@@ -192,6 +212,19 @@ export class AgentGuard {
     const flat = { ...merged.onChain, ...merged.offChain };
     const featureValues = artifact.inputSchema.map(d => flat[d.name] ?? 0);
 
+    const mockHandle = BigInt("0x" + Buffer.from(features.ciphertext).toString("hex").slice(0, 16));
+
+    // Low-signal wallets should not be treated as hard anomalies.
+    if (this.#isInsufficientData(flat)) {
+      return {
+        encryptedScore: mockHandle,
+        isAnomaly: 0n,
+        label: "insufficient_data",
+        computedAt: Date.now(),
+        rawPrediction: 0,
+      };
+    }
+
     const headers: Record<string, string> = {
       "Content-Type": "application/json",
     };
@@ -209,17 +242,14 @@ export class AgentGuard {
     if (!res.ok) throw new Error(`Inference server error: HTTP ${res.status}`);
 
     const body = await res.json() as { label: string; prediction: number };
-    const label: AnomalyScore["label"] = body.label === "anomaly"
-      ? "anomaly_detected"
-      : body.prediction === 1
-        ? "anomaly_detected"
-        : "normal";
 
-    // NOTE: encryptedScore is a placeholder derived from the ciphertext bytes.
-    // The real fhevm handle is produced client-side by the demo app using
-    // encryptUint64(rawPrediction) from @zama-fhe/relayer-sdk — see apps/demo/src/lib/fhe.ts.
-    // Server-side fhevm encryption is not possible because it requires window.ethereum.
-    const mockHandle = BigInt("0x" + Buffer.from(features.ciphertext).toString("hex").slice(0, 16));
+    const label: AnomalyScore["label"] =
+      body.label === "anomaly"
+        ? "anomaly_detected"
+        : body.prediction === 1
+          ? "anomaly_detected"
+          : "normal";
+
     return {
       encryptedScore: mockHandle,
       isAnomaly: BigInt(body.prediction),

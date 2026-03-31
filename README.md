@@ -156,6 +156,11 @@ Install dependencies:
 pnpm install
 ```
 
+(Optional) Create a real dataset if not available:
+```bash
+python packages/models/scripts/build_real_test_data.py --output packages/models/data/test_data.csv --verbose
+```
+
 Build and compile the ML model for the inference server:
 ```bash
 pnpm models:build

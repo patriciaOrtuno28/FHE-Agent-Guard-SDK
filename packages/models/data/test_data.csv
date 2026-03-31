@@ -1,106 +1,221 @@
-tx_value_eth,tx_count_1h,tx_count_24h,unique_counterparts,gas_price_gwei,contract_interaction,time_since_last_tx,balance_change_ratio,label
-0.12,2,8,3,18,1,4200,0.03,normal
-0.45,4,15,5,22,1,2100,-0.02,normal
-1.20,6,28,7,35,1,1800,0.08,normal
-0.03,1,3,2,14,0,9600,0.01,normal
-2.75,8,35,9,42,1,900,0.12,normal
-0.80,3,11,4,26,1,3600,-0.05,normal
-0.18,2,6,3,19,0,7200,0.00,normal
-3.10,9,41,10,55,1,600,0.15,normal
-0.67,5,19,6,29,1,2400,-0.01,normal
-0.09,1,4,2,16,0,8400,0.02,normal
-250.0,180,2100,140,650,1,25,0.95,anomaly
-90.0,120,1450,85,420,1,40,-0.88,anomaly
-500.0,260,3200,220,900,1,12,1.00,anomaly
-75.0,95,980,70,350,1,55,-0.75,anomaly
-320.0,210,2750,180,700,1,18,0.82,anomaly
-0.12,2,8,3,18,1,4200,0.03,normal
-0.45,4,15,5,22,1,2100,-0.02,normal
-1.20,6,28,7,35,1,1800,0.08,normal
-0.03,1,3,2,14,0,9600,0.01,normal
-2.75,8,35,9,42,1,900,0.12,normal
-0.80,3,11,4,26,1,3600,-0.05,normal
-0.18,2,6,3,19,0,7200,0.00,normal
-3.10,9,41,10,55,1,600,0.15,normal
-0.67,5,19,6,29,1,2400,-0.01,normal
-0.09,1,4,2,16,0,8400,0.02,normal
-250.0,180,2100,140,650,1,25,0.95,anomaly
-90.0,120,1450,85,420,1,40,-0.88,anomaly
-500.0,260,3200,220,900,1,12,1.00,anomaly
-75.0,95,980,70,350,1,55,-0.75,anomaly
-320.0,210,2750,180,700,1,18,0.82,anomaly
-0.12,2,8,3,18,1,4200,0.03,normal
-0.45,4,15,5,22,1,2100,-0.02,normal
-1.20,6,28,7,35,1,1800,0.08,normal
-0.03,1,3,2,14,0,9600,0.01,normal
-2.75,8,35,9,42,1,900,0.12,normal
-0.80,3,11,4,26,1,3600,-0.05,normal
-0.18,2,6,3,19,0,7200,0.00,normal
-3.10,9,41,10,55,1,600,0.15,normal
-0.67,5,19,6,29,1,2400,-0.01,normal
-0.09,1,4,2,16,0,8400,0.02,normal
-250.0,180,2100,140,650,1,25,0.95,anomaly
-90.0,120,1450,85,420,1,40,-0.88,anomaly
-500.0,260,3200,220,900,1,12,1.00,anomaly
-75.0,95,980,70,350,1,55,-0.75,anomaly
-320.0,210,2750,180,700,1,18,0.82,anomaly
-0.12,2,8,3,18,1,4200,0.03,normal
-0.45,4,15,5,22,1,2100,-0.02,normal
-1.20,6,28,7,35,1,1800,0.08,normal
-0.03,1,3,2,14,0,9600,0.01,normal
-2.75,8,35,9,42,1,900,0.12,normal
-0.80,3,11,4,26,1,3600,-0.05,normal
-0.18,2,6,3,19,0,7200,0.00,normal
-3.10,9,41,10,55,1,600,0.15,normal
-0.67,5,19,6,29,1,2400,-0.01,normal
-0.09,1,4,2,16,0,8400,0.02,normal
-250.0,180,2100,140,650,1,25,0.95,anomaly
-90.0,120,1450,85,420,1,40,-0.88,anomaly
-500.0,260,3200,220,900,1,12,1.00,anomaly
-75.0,95,980,70,350,1,55,-0.75,anomaly
-320.0,210,2750,180,700,1,18,0.82,anomaly
-0.12,2,8,3,18,1,4200,0.03,normal
-0.45,4,15,5,22,1,2100,-0.02,normal
-1.20,6,28,7,35,1,1800,0.08,normal
-0.03,1,3,2,14,0,9600,0.01,normal
-2.75,8,35,9,42,1,900,0.12,normal
-0.80,3,11,4,26,1,3600,-0.05,normal
-0.18,2,6,3,19,0,7200,0.00,normal
-3.10,9,41,10,55,1,600,0.15,normal
-0.67,5,19,6,29,1,2400,-0.01,normal
-0.09,1,4,2,16,0,8400,0.02,normal
-250.0,180,2100,140,650,1,25,0.95,anomaly
-90.0,120,1450,85,420,1,40,-0.88,anomaly
-500.0,260,3200,220,900,1,12,1.00,anomaly
-75.0,95,980,70,350,1,55,-0.75,anomaly
-320.0,210,2750,180,700,1,18,0.82,anomaly
-0.12,2,8,3,18,1,4200,0.03,normal
-0.45,4,15,5,22,1,2100,-0.02,normal
-1.20,6,28,7,35,1,1800,0.08,normal
-0.03,1,3,2,14,0,9600,0.01,normal
-2.75,8,35,9,42,1,900,0.12,normal
-0.80,3,11,4,26,1,3600,-0.05,normal
-0.18,2,6,3,19,0,7200,0.00,normal
-3.10,9,41,10,55,1,600,0.15,normal
-0.67,5,19,6,29,1,2400,-0.01,normal
-0.09,1,4,2,16,0,8400,0.02,normal
-250.0,180,2100,140,650,1,25,0.95,anomaly
-90.0,120,1450,85,420,1,40,-0.88,anomaly
-500.0,260,3200,220,900,1,12,1.00,anomaly
-75.0,95,980,70,350,1,55,-0.75,anomaly
-320.0,210,2750,180,700,1,18,0.82,anomaly
-0.12,2,8,3,18,1,4200,0.03,normal
-0.45,4,15,5,22,1,2100,-0.02,normal
-1.20,6,28,7,35,1,1800,0.08,normal
-0.03,1,3,2,14,0,9600,0.01,normal
-2.75,8,35,9,42,1,900,0.12,normal
-0.80,3,11,4,26,1,3600,-0.05,normal
-0.18,2,6,3,19,0,7200,0.00,normal
-3.10,9,41,10,55,1,600,0.15,normal
-0.67,5,19,6,29,1,2400,-0.01,normal
-0.09,1,4,2,16,0,8400,0.02,normal
-250.0,180,2100,140,650,1,25,0.95,anomaly
-90.0,120,1450,85,420,1,40,-0.88,anomaly
-500.0,260,3200,220,900,1,12,1.00,anomaly
-75.0,95,980,70,350,1,55,-0.75,anomaly
-320.0,210,2750,180,700,1,18,0.82,anomaly
+tx_value_eth,tx_count_1h,tx_count_24h,unique_counterparts,gas_price_gwei,contract_interaction,time_since_last_tx,balance_change_ratio,label,subject,source,observed_at,label_reason
+0.0,0,0,0,0.0,1,86400,0.0,normal,0xac92ae734ef64a66cf29f7914f80e545d131ed5f,etherscan-label-dump:balancer,2026-03-30T18:23:03Z,etherscan label dump / balancer
+12.37007611,0,0,0,0.0,0,86400,0.0,anomaly,0x679c34c26e7841b9fc0ce0ff40579219ee3a1ed6,forta:phishing_scams,2026-03-30T18:23:05Z,phishing / forta labels
+0.0,0,0,0,0.0,1,86400,0.0,normal,0x83297cdfd415301bd27fa2c68c7b639c717b1a3a,etherscan-label-dump:balancer,2026-03-30T18:23:06Z,etherscan label dump / balancer
+2.99,0,0,0,0.0,0,86400,0.0,anomaly,0x8c810a2288db4e471114db6ce7caf342fd1d8f02,forta:phishing_scams,2026-03-30T18:23:07Z,phishing / forta labels
+0.0,0,0,0,0.0,1,86400,0.0,normal,0x9dc859807d5222d708caa40a5eebe7f6b6517e69,etherscan-label-dump:balancer,2026-03-30T18:23:09Z,etherscan label dump / balancer
+0.0,0,0,0,0.0,1,86400,0.0,anomaly,0xa4a8e5b450b88b1e4f8639a07fd89b9f80767764,forta:malicious_smart_contracts,2026-03-30T18:23:10Z,malicious smart contract / forta labels
+0.0,0,0,0,0.0,1,86400,0.0,normal,0xeabccd75da6c021c7553db4a74cacc958812432a,etherscan-label-dump:audius,2026-03-30T18:23:13Z,etherscan label dump / audius
+0.099727,0,0,0,0.0,0,86400,0.0,anomaly,0x9ec1bc5508f4e874aabac692380f45e51d344902,forta:phishing_scams,2026-03-30T18:23:14Z,phishing / forta labels
+0.0,0,0,0,0.0,1,86400,0.0,normal,0x890d00d4f34a6dc471d8230655a1cbe4acfd5cdf,etherscan-label-dump:balancer,2026-03-30T18:23:15Z,etherscan label dump / balancer
+2.37804726,0,0,0,0.0,0,86400,0.0,anomaly,0x9a4a8d9133a7d7401904d72789b1a925b20499ca,forta:etherscan_malicious_labels,2026-03-30T18:23:17Z,exploit/heist/phish-hack / forta labels
+0.0,0,0,0,0.0,1,86400,0.0,normal,0x96732e575a0e570d90c839a7e3acf7203aea6004,etherscan-label-dump:balancer,2026-03-30T18:23:19Z,etherscan label dump / balancer
+12.30578048,0,0,0,0.0,0,86400,0.0,anomaly,0x6668bd45b15e2775f03e738ef6257637a9745287,forta:phishing_scams,2026-03-30T18:23:20Z,phishing / forta labels
+0.0,0,0,0,0.0,1,86400,0.0,normal,0xeba4dd6771c3e8ba3f168e47d052819abcc87cb2,etherscan-label-dump:balancer,2026-03-30T18:23:22Z,etherscan label dump / balancer
+0.0,0,0,0,0.0,1,86400,0.0,anomaly,0x0eaed32dae22d43ce7f5f36aac11e614700b1442,forta:malicious_smart_contracts,2026-03-30T18:23:24Z,malicious smart contract / forta labels
+0.0,0,0,0,0.0,1,86400,0.0,normal,0xf04aa45c3a0d993092e8fa5425fbe1ed4821cd53,etherscan-label-dump:balancer,2026-03-30T18:23:25Z,etherscan label dump / balancer
+0.5843068,0,0,0,0.0,0,86400,0.0,anomaly,0x2a1cbda9f24255ff3489561af72342871c06b7a3,forta:phishing_scams,2026-03-30T18:23:27Z,phishing / forta labels
+0.0,0,0,0,0.0,1,86400,0.0,normal,0xac4cceb8bb7bf4d9ff6493cdf3f87fe349ab1bec,etherscan-label-dump:bancor,2026-03-30T18:23:28Z,etherscan label dump / bancor
+5.00981377,0,0,0,0.0,0,86400,0.0,anomaly,0x8ffcc402b530de684039a96fb87e7e15db095abc,forta:phishing_scams,2026-03-30T18:23:29Z,phishing / forta labels
+0.0,0,0,0,0.0,1,86400,0.0,normal,0x209b4787064c0c375bdd181a2d1807431c919f58,etherscan-label-dump:bancor,2026-03-30T18:23:30Z,etherscan label dump / bancor
+0.66287614,0,0,0,0.0,0,86400,0.0,anomaly,0x11112f684cb88d43ca0e132e585e882606063fbe,forta:etherscan_malicious_labels,2026-03-30T18:23:32Z,exploit/heist/phish-hack / forta labels
+0.0,0,0,0,0.0,1,86400,0.0,normal,0xb908ca330af4a18a6067b3d77af0873403f787d8,etherscan-label-dump:balancer,2026-03-30T18:23:34Z,etherscan label dump / balancer
+0.02435654,0,0,0,0.0,0,86400,0.0,anomaly,0x5821cfb6d4e8a8b04dbfd6410e9d37955afea3cd,forta:etherscan_malicious_labels,2026-03-30T18:23:35Z,exploit/heist/phish-hack / forta labels
+0.0,0,0,0,0.0,1,86400,0.0,normal,0x8d5c91324da4c4ef46b623ae62bf5586de0f4507,etherscan-label-dump:balancer,2026-03-30T18:23:37Z,etherscan label dump / balancer
+0.9999433,0,0,0,0.0,0,86400,0.0,anomaly,0x35f8753c2e492ae0200ddea40404f01178a7744a,forta:phishing_scams,2026-03-30T18:23:38Z,phishing / forta labels
+0.0,0,0,0,0.0,1,86400,0.0,normal,0xbdc7310289dcd30d16e284d6f207a8e2f76a37ad,etherscan-label-dump:bancor,2026-03-30T18:23:40Z,etherscan label dump / bancor
+1.69,0,0,0,0.0,0,86400,0.0,anomaly,0xfb864b083b6284a864cd3a18378e65babd13ce1b,forta:phishing_scams,2026-03-30T18:23:41Z,phishing / forta labels
+0.0,0,0,0,0.0,1,86400,0.0,normal,0xc88fd90b4b410640b755d733e8ee69930e39522d,etherscan-label-dump:balancer,2026-03-30T18:23:43Z,etherscan label dump / balancer
+0.11572343,0,0,0,0.0,0,86400,0.0,anomaly,0xc2a3829F459B3Edd87791c74cD45402BA0a20Be3,ofac,2026-03-30T18:23:44Z,sanctioned / public OFAC list
+0.0,0,0,0,0.0,1,86400,0.0,normal,0x9dcc2104f25d40db2f455b458fcbe538c6812bbc,etherscan-label-dump:balancer,2026-03-30T18:23:46Z,etherscan label dump / balancer
+0.0,0,0,0,0.0,0,86400,0.0,anomaly,0xefeddec5de1aef4c70b264d7b56b6d479b3ba520,forta:etherscan_malicious_labels,2026-03-30T18:23:47Z,exploit/heist/phish-hack / forta labels
+0.0,0,0,0,0.0,1,86400,0.0,normal,0x9af9c7016e9a759b1a1c9d31ffce04b31a5456bf,etherscan-label-dump:balancer,2026-03-30T18:23:48Z,etherscan label dump / balancer
+0.0,0,0,0,0.0,0,86400,0.0,anomaly,0x6c4f56B116E91f15E790508d4212906B75835B63,forta:phishing_scams,2026-03-30T18:23:50Z,phishing / forta labels
+0.0,0,0,0,0.0,1,86400,0.0,normal,0xcba435408f3b3a7ad231e0083d7ee2e9ec03764f,etherscan-label-dump:balancer,2026-03-30T18:23:51Z,etherscan label dump / balancer
+0.5821448,0,0,0,0.0,0,86400,0.0,anomaly,0xfcf6738cabd9ce27f908a480ecaea53219fc08f4,forta:etherscan_malicious_labels,2026-03-30T18:23:52Z,exploit/heist/phish-hack / forta labels
+0.0,0,0,0,0.0,1,86400,0.0,normal,0xbe6daaf4ab70a1690759331aec740881620856f0,etherscan-label-dump:balancer,2026-03-30T18:23:54Z,etherscan label dump / balancer
+600.0,0,0,0,0.0,0,86400,0.0,anomaly,0xd2d458e9a4bb2ae35406311156deff405c3e7509,historical-exploit:plustoken,2026-03-30T18:23:56Z,historical exploit / plustoken
+0.0,0,0,0,0.0,1,86400,0.0,normal,0x9bd60265d6e894dbbbba55eb76c6c9dd09efb22e,etherscan-label-dump:bancor,2026-03-30T18:23:58Z,etherscan label dump / bancor
+0.000462,0,0,0,0.0,0,86400,0.0,anomaly,0x5e1f89284b8283edcd082901b78c7589f39d5b51,forta:phishing_scams,2026-03-30T18:23:59Z,phishing / forta labels
+0.0,0,0,0,0.0,1,86400,0.0,normal,0xc4d88d7f9ccb1b4c24c0edaa27bf662256b85e31,etherscan-label-dump:bancor,2026-03-30T18:24:00Z,etherscan label dump / bancor
+0.0,0,0,0,0.0,0,86400,0.0,anomaly,0x87e7ee3cd0c38e49060f3f092f689a094b692039,forta:phishing_scams,2026-03-30T18:24:02Z,phishing / forta labels
+0.0,0,0,0,0.0,1,86400,0.0,normal,0xa8b8a0b3b04b861623a0ce5bfa7a5bce58fbe353,etherscan-label-dump:balancer,2026-03-30T18:24:03Z,etherscan label dump / balancer
+0.0,0,0,0,0.0,0,86400,0.0,anomaly,0x5f38DcBc5a2DBE1e040a60153750feb7E1CfA570,forta:phishing_scams,2026-03-30T18:24:04Z,phishing / forta labels
+0.0,0,0,0,0.0,1,86400,0.0,normal,0x1cee432dae65c74c38f3411da33bec2be1a9cc0d,etherscan-label-dump:balancer,2026-03-30T18:24:06Z,etherscan label dump / balancer
+0.46546146,0,0,0,0.0,0,86400,0.0,anomaly,0xff481ca14e6c16b79fc8ab299b4d2387ec8ecdd2,forta:phishing_scams,2026-03-30T18:24:07Z,phishing / forta labels
+0.0,0,0,0,0.0,1,86400,0.0,normal,0x5d1f2d1002bd0b3a23e0d7b4828c128a6ae4964d,etherscan-label-dump:balancer,2026-03-30T18:24:08Z,etherscan label dump / balancer
+0.99643,0,0,0,0.0,0,86400,0.0,anomaly,0xcaf1285c4536a0230f6bfbbb7c31cfca696dd76d,forta:phishing_scams,2026-03-30T18:24:10Z,phishing / forta labels
+0.0,0,0,0,0.0,1,86400,0.0,normal,0x20412bd6d146309c55cc607d30c5aad07fbf6148,etherscan-label-dump:bancor,2026-03-30T18:24:11Z,etherscan label dump / bancor
+0.0,0,0,0,0.0,1,86400,0.0,anomaly,0x4f0c3774047bd03fd9bfb53e5faadc469adc6e53,forta:phishing_scams,2026-03-30T18:24:14Z,phishing / forta labels
+0.0,0,0,0,0.0,1,86400,0.0,normal,0x7172c5b24bdce3b93a78c53ef1ece011b0472c1b,etherscan-label-dump:bancor,2026-03-30T18:24:16Z,etherscan label dump / bancor
+0.0,0,0,0,0.0,0,86400,0.0,anomaly,0x87320719f0f02912096e3d19fc05da8110c9c424,forta:phishing_scams,2026-03-30T18:24:18Z,phishing / forta labels
+0.0,0,0,0,0.0,1,86400,0.0,normal,0xd01ba6a1662437ff2a0c008498f9edb98c49d68c,etherscan-label-dump:bancor,2026-03-30T18:24:20Z,etherscan label dump / bancor
+0.17249932,0,0,0,0.0,0,86400,0.0,anomaly,0xd8a6a22d500a9c0489af3cecf0b6c8b491e040a4,forta:phishing_scams,2026-03-30T18:24:21Z,phishing / forta labels
+0.0,0,0,0,0.0,1,86400,0.0,normal,0xb0b4e2936852e2621b51507263fc14b94386fac8,etherscan-label-dump:bancor,2026-03-30T18:24:22Z,etherscan label dump / bancor
+446.08562678,0,0,0,0.0,0,86400,0.0,anomaly,0xf6884686a999f5ae6c1af03db92bab9c6d7dc8de,forta:phishing_scams,2026-03-30T18:24:24Z,phishing / forta labels
+0.0,0,0,0,0.0,1,86400,0.0,normal,0x0bcaea3571448877ff875bc3825ccf54e5d04df0,etherscan-label-dump:balancer,2026-03-30T18:24:26Z,etherscan label dump / balancer
+0.001662,0,0,0,0.0,0,86400,0.0,anomaly,0x9b14dd998023a024fdd69249a8d961a66844105f,forta:phishing_scams,2026-03-30T18:24:27Z,phishing / forta labels
+0.0,0,0,0,0.0,1,86400,0.0,normal,0x8fc0324d7a62a47c69e7c186c3a761d2f835aadc,etherscan-label-dump:balancer,2026-03-30T18:24:28Z,etherscan label dump / balancer
+95.66583685,0,0,0,0.0,0,86400,0.0,anomaly,0x3731ee38b675d83b61cff716d4530cdd11f02812,forta:phishing_scams,2026-03-30T18:24:29Z,phishing / forta labels
+0.0,0,0,0,0.0,1,86400,0.0,normal,0x354594ab5018fed842146c0b2062c82ea8834292,etherscan-label-dump:balancer,2026-03-30T18:24:31Z,etherscan label dump / balancer
+0.0,0,0,0,0.0,0,86400,0.0,anomaly,0x7b6e99ba5304edeed50c0ab2001740c39b4022ad,forta:phishing_scams,2026-03-30T18:24:32Z,phishing / forta labels
+0.0,0,0,0,0.0,1,86400,0.0,normal,0x70de15ccae66882dfa8e35a0ad2fc22c4dea1dc7,etherscan-label-dump:balancer,2026-03-30T18:24:33Z,etherscan label dump / balancer
+0.4406025,0,0,0,0.0,0,86400,0.0,anomaly,0xdbb7241c87bfa190b0201f552c5ee4d2019f3866,forta:phishing_scams,2026-03-30T18:24:35Z,phishing / forta labels
+0.0,0,0,0,0.0,1,86400,0.0,normal,0x4671a2a5cfb5422d5831d2c8604174c0ce9a4706,etherscan-label-dump:balancer,2026-03-30T18:24:36Z,etherscan label dump / balancer
+0.0,0,0,0,0.0,0,86400,0.0,anomaly,0xeb148735f7e75b41aaf344cda706b8f95d5e39d4,forta:phishing_scams,2026-03-30T18:24:38Z,phishing / forta labels
+0.0,0,0,0,0.0,1,86400,0.0,normal,0x6ca4732e385ea5475ac7cd1be3f4d0fb97a498ea,etherscan-label-dump:balancer,2026-03-30T18:24:39Z,etherscan label dump / balancer
+0.016766,0,0,0,0.0,0,86400,0.0,anomaly,0x3cb3cca6185bff079b69dcb1fc2256dd8932632b,forta:phishing_scams,2026-03-30T18:24:41Z,phishing / forta labels
+0.0,0,0,0,0.0,1,86400,0.0,normal,0x54cd6e8483e1e240caad41bd6ec9decd049252a3,etherscan-label-dump:balancer,2026-03-30T18:24:42Z,etherscan label dump / balancer
+0.00041197,0,0,0,0.0,0,86400,0.0,anomaly,0xe575d2262f516a392e018bd5db9afbc6ae656c92,forta:phishing_scams,2026-03-30T18:24:44Z,phishing / forta labels
+0.0,0,0,0,0.0,1,86400,0.0,normal,0x02e216e519e83ca19f7eddf4678a2fb8ebddc5e5,etherscan-label-dump:balancer,2026-03-30T18:24:45Z,etherscan label dump / balancer
+57.81764651,0,0,0,0.0,0,86400,0.0,anomaly,0xfa9980a7240ea1beb0b5ce58c0744fcd67f06104,forta:phishing_scams,2026-03-30T18:24:47Z,phishing / forta labels
+0.0,0,0,0,0.0,1,86400,0.0,normal,0xfd71623d7f41360aefe200de4f17e20a29e1d58c,etherscan-label-dump:aave,2026-03-30T18:24:48Z,etherscan label dump / aave
+0.0,0,0,0,0.0,0,86400,0.0,anomaly,0x3b54694c7e1305cbee7615a97d0ec989a201020b,forta:phishing_scams,2026-03-30T18:24:49Z,phishing / forta labels
+0.0,0,0,0,0.0,1,86400,0.0,normal,0x8c4564ff018937c230fea90cdacdfdb6dcdb518d,etherscan-label-dump:bancor,2026-03-30T18:24:51Z,etherscan label dump / bancor
+0.0,0,0,0,0.0,0,86400,0.0,anomaly,0x7e22895288ea22acc1bf1b95cd47bf4b225c21d5,forta:phishing_scams,2026-03-30T18:24:53Z,phishing / forta labels
+0.0,0,0,0,0.0,1,86400,0.0,normal,0x979dbcfe925b442d61ca93605c9125e013d08317,etherscan-label-dump:balancer,2026-03-30T18:24:54Z,etherscan label dump / balancer
+0.0,0,0,0,0.0,0,86400,0.0,anomaly,0xe3c9884f24d6a89dd67a04aebfb2a3a766bb5a20,forta:phishing_scams,2026-03-30T18:24:55Z,phishing / forta labels
+0.0,0,0,0,0.0,1,86400,0.0,normal,0xa9e511466f192e9c3308379dc965667f77f286e0,etherscan-label-dump:balancer,2026-03-30T18:24:57Z,etherscan label dump / balancer
+0.0,0,0,0,0.0,1,86400,0.0,anomaly,0xB4238689C4938E97B4843e5651E2C66EB6513774,forta:phishing_scams,2026-03-30T18:24:59Z,phishing / forta labels
+0.0,0,0,0,0.0,1,86400,0.0,normal,0xd44082f25f8002c5d03165c5d74b520fbc6d342d,etherscan-label-dump:balancer,2026-03-30T18:25:02Z,etherscan label dump / balancer
+11.41101925,0,0,0,0.0,0,86400,0.0,anomaly,0x93a036a4fb47f22989ec1d11b134bb177e66a6bd,forta:etherscan_malicious_labels,2026-03-30T18:25:03Z,exploit/heist/phish-hack / forta labels
+0.0,0,0,0,0.0,1,86400,0.0,normal,0xdbfbc2b28113c1e2d1038df692d363fa1e51681b,etherscan-label-dump:bancor,2026-03-30T18:25:05Z,etherscan label dump / bancor
+0.84818913,0,0,0,0.0,0,86400,0.0,anomaly,0x1e0a8374a6c63acaaf4c020cce65c30e855b2b71,forta:phishing_scams,2026-03-30T18:25:07Z,phishing / forta labels
+0.0,0,0,0,0.0,1,86400,0.0,normal,0xb28ec326b975236163f8a999d5b8a21008286138,etherscan-label-dump:balancer,2026-03-30T18:25:08Z,etherscan label dump / balancer
+0.0,0,0,0,0.0,0,86400,0.0,anomaly,0x820c415a17bf165a174e6b55232d956202d9470f,forta:phishing_scams,2026-03-30T18:25:10Z,phishing / forta labels
+0.0,0,0,0,0.0,1,86400,0.0,normal,0x0a365f254db81dc23c07e42ec669d007514c661a,etherscan-label-dump:balancer,2026-03-30T18:25:11Z,etherscan label dump / balancer
+0.0006687,0,0,0,0.0,0,86400,0.0,anomaly,0xe22a6e6d3a4f612609d22938281d31f20820ff0e,forta:etherscan_malicious_labels,2026-03-30T18:25:12Z,exploit/heist/phish-hack / forta labels
+0.0,0,0,0,0.0,1,86400,0.0,normal,0xf42305ea9d1527211eda8fb333fbf2668bffd9e1,etherscan-label-dump:bancor,2026-03-30T18:25:14Z,etherscan label dump / bancor
+12.65562456,0,0,0,0.0,0,86400,0.0,anomaly,0xe009321b26350c2cff5db607068c1f6813df40d7,forta:phishing_scams,2026-03-30T18:25:16Z,phishing / forta labels
+0.0,0,0,0,0.0,1,86400,0.0,normal,0xdbc030e20571cbeecfd292eae40756632b58de5e,etherscan-label-dump:balancer,2026-03-30T18:25:18Z,etherscan label dump / balancer
+9.023e-05,0,0,0,0.0,0,86400,0.0,anomaly,0x9c2b4a4094ff0f86bc1a11e1a50f4fce32e03169,forta:phishing_scams,2026-03-30T18:25:19Z,phishing / forta labels
+0.0,0,0,0,0.0,1,86400,0.0,normal,0x0edb65e163f9ef42a874fae76ebd010d493e808a,etherscan-label-dump:balancer,2026-03-30T18:25:21Z,etherscan label dump / balancer
+0.0,0,0,0,0.0,0,86400,0.0,anomaly,0xd882cfc20f52f2599d84b8e8d58c7fb62cfe344b,ofac,2026-03-30T18:25:22Z,sanctioned / public OFAC list
+0.0,0,0,0,0.0,1,86400,0.0,normal,0x687a13a016f038ed9b40ad518766619f6f4de8f5,etherscan-label-dump:balancer,2026-03-30T18:25:24Z,etherscan label dump / balancer
+4.48061506,0,0,0,0.0,0,86400,0.0,anomaly,0x4bb1c210e3921e0f051ed00e898b9605c902114e,forta:phishing_scams,2026-03-30T18:25:25Z,phishing / forta labels
+0.0,0,0,0,0.0,1,86400,0.0,normal,0xfeb93cc0f22b65369348b5b6fd010e2f72090f14,etherscan-label-dump:bancor,2026-03-30T18:25:27Z,etherscan label dump / bancor
+0.0,0,0,0,0.0,1,86400,0.0,anomaly,0xc85e0474068dba5b49450c26879541ee6cc94554,forta:phishing_scams,2026-03-30T18:25:29Z,phishing / forta labels
+0.0,0,0,0,0.0,1,86400,0.0,normal,0x0450b752a15bb5ddb5056ad2e27ead21289d31ed,etherscan-label-dump:balancer,2026-03-30T18:25:32Z,etherscan label dump / balancer
+7.6223995,0,0,0,0.0,0,86400,0.0,anomaly,0x2911e43157656b747c803162ba166ed3f9ca8aa2,forta:phishing_scams,2026-03-30T18:25:34Z,phishing / forta labels
+0.0,0,0,0,0.0,1,86400,0.0,normal,0x72c4d884245d80c6eeb89f9774def966e883c6d1,etherscan-label-dump:balancer,2026-03-30T18:25:36Z,etherscan label dump / balancer
+0.0,0,0,0,0.0,0,86400,0.0,anomaly,0xd4637c5588242836c28d4bc2be560b07a49222c3,forta:etherscan_malicious_labels,2026-03-30T18:25:37Z,exploit/heist/phish-hack / forta labels
+0.0,0,0,0,0.0,1,86400,0.0,normal,0xfab9446167bd8c375a2a64fe85bd71488cf14edd,etherscan-label-dump:balancer,2026-03-30T18:25:38Z,etherscan label dump / balancer
+0.54075003,0,0,0,0.0,0,86400,0.0,anomaly,0x48885fafc90378b865dea8deb8aa7c6018656a03,forta:phishing_scams,2026-03-30T18:25:41Z,phishing / forta labels
+0.0,0,0,0,0.0,1,86400,0.0,normal,0xc9a722be71ac8b1faa00c995e6d47835c933dad6,etherscan-label-dump:bancor,2026-03-30T18:25:43Z,etherscan label dump / bancor
+0.0,0,0,0,0.0,0,86400,0.0,anomaly,0x3Ce88849387ea47c0278F9b65831bFC53Ee2Ffe2,forta:phishing_scams,2026-03-30T18:25:44Z,phishing / forta labels
+0.0,0,0,0,0.0,1,86400,0.0,normal,0xc08552d3dae88ee61bc400c5a7357b10b2f02b0b,etherscan-label-dump:balancer,2026-03-30T18:25:46Z,etherscan label dump / balancer
+0.0,0,0,0,0.0,0,86400,0.0,anomaly,0xba367d6445c181e4033bb2b49181d5c45868d975,forta:phishing_scams,2026-03-30T18:25:47Z,phishing / forta labels
+0.0,0,0,0,0.0,1,86400,0.0,normal,0x32c4d7db7a712d4e41b8a1ca84d52a31267eedea,etherscan-label-dump:balancer,2026-03-30T18:25:48Z,etherscan label dump / balancer
+0.520639,0,0,0,0.0,0,86400,0.0,anomaly,0xb1507f936066831b3cac64c203df247ef2c80cdc,forta:phishing_scams,2026-03-30T18:25:50Z,phishing / forta labels
+0.0,0,0,0,0.0,1,86400,0.0,normal,0xddce7b2c3f7fbc4f1eab24970c3fd26fee1ff80f,etherscan-label-dump:balancer,2026-03-30T18:25:52Z,etherscan label dump / balancer
+0.0,0,0,0,0.0,1,86400,0.0,anomaly,0x8e1701e9509250d808eeca648feb1b8d7eed0704,forta:phishing_scams,2026-03-30T18:25:54Z,phishing / forta labels
+0.0,0,0,0,0.0,1,86400,0.0,normal,0x12e51e77daaa58aa0e9247db7510ea4b46f9bead,etherscan-label-dump:aave,2026-03-30T18:25:56Z,etherscan label dump / aave
+0.0,0,0,0,0.0,0,86400,0.0,anomaly,0x04dfb08172a29d86de9a5cc1182edbee5d8cdb84,forta:etherscan_malicious_labels,2026-03-30T18:25:57Z,exploit/heist/phish-hack / forta labels
+0.0,0,0,0,0.0,1,86400,0.0,normal,0x6862e23f01eb5491d72d609038dc90ae0fb73bfb,etherscan-label-dump:balancer,2026-03-30T18:25:59Z,etherscan label dump / balancer
+0.0,0,0,0,0.0,0,86400,0.0,anomaly,0x24328c35066c61523e03ac14996131aef4b3f525,forta:phishing_scams,2026-03-30T18:26:00Z,phishing / forta labels
+0.0,0,0,0,0.0,1,86400,0.0,normal,0xe638a52ddad3fa31233152c17422e3312a3f6643,etherscan-label-dump:bancor,2026-03-30T18:26:02Z,etherscan label dump / bancor
+0.15692319,0,0,0,0.0,0,86400,0.0,anomaly,0x26f7eb488661c33c43089ad61944f3231222b32f,forta:phishing_scams,2026-03-30T18:26:03Z,phishing / forta labels
+0.0,0,0,0,0.0,1,86400,0.0,normal,0x5bdb050a92cadccfcdcccbfc17204a1c9cc0ab73,etherscan-label-dump:aave,2026-03-30T18:26:05Z,etherscan label dump / aave
+3.47618466,0,0,0,0.0,0,86400,0.0,anomaly,0x89cbf1f6799bff1263f0a806a4f585a9d8168cfd,forta:phishing_scams,2026-03-30T18:26:07Z,phishing / forta labels
+0.0,0,0,0,0.0,1,86400,0.0,normal,0x7c03b887b447313e0db600b63e26874a19eec24a,etherscan-label-dump:balancer,2026-03-30T18:26:08Z,etherscan label dump / balancer
+0.0,0,0,0,0.0,0,86400,0.0,anomaly,0x908bc24c7fad5b870f2936d9425383f8ea9c80db,forta:phishing_scams,2026-03-30T18:26:10Z,phishing / forta labels
+0.0,0,0,0,0.0,1,86400,0.0,normal,0x8d06afd8e322d39ebaba6dd98f17a0ae81c875b8,etherscan-label-dump:bancor,2026-03-30T18:26:11Z,etherscan label dump / bancor
+1.53612414,0,0,0,0.0,0,86400,0.0,anomaly,0xb119ea0fa97c926dd55ff11cb90a1a0d578dc57e,forta:phishing_scams,2026-03-30T18:26:13Z,phishing / forta labels
+0.0,0,0,0,0.0,1,86400,0.0,normal,0x720de55b8689a1e19847b0e31ffe574d4ab72d31,etherscan-label-dump:balancer,2026-03-30T18:26:14Z,etherscan label dump / balancer
+0.00379623,0,0,0,0.0,0,86400,0.0,anomaly,0x22f6ac88d47513f7ee29f7b4600ca9e48d12e548,forta:phishing_scams,2026-03-30T18:26:16Z,phishing / forta labels
+0.0,0,0,0,0.0,1,86400,0.0,normal,0xc60e079d655254a996fc22650245c26aefd6128b,etherscan-label-dump:balancer,2026-03-30T18:26:18Z,etherscan label dump / balancer
+0.0,0,0,0,0.0,0,86400,0.0,anomaly,0x09e5D03AE284f20AeC77A541C1FB274ec1422469,forta:phishing_scams,2026-03-30T18:26:19Z,phishing / forta labels
+0.0,0,0,0,0.0,1,86400,0.0,normal,0x2b2d9a11b6d4f1f010c47166d15b3dee90fee1c8,etherscan-label-dump:balancer,2026-03-30T18:26:20Z,etherscan label dump / balancer
+2198.38891129,0,0,0,0.0,0,86400,0.0,anomaly,0x5457bb4430d8b8d1a3708576100aef0e027c5b9b,forta:phishing_scams,2026-03-30T18:26:22Z,phishing / forta labels
+0.0,0,0,0,0.0,1,86400,0.0,normal,0x51a5d2c9e91df18af3cbbdc7715f0df609260815,etherscan-label-dump:balancer,2026-03-30T18:26:24Z,etherscan label dump / balancer
+0.0,0,0,0,0.0,0,86400,0.0,anomaly,0xb490cec960b665b233d6666f8e2626d8bcae5d44,forta:phishing_scams,2026-03-30T18:26:25Z,phishing / forta labels
+0.0,0,0,0,0.0,1,86400,0.0,normal,0x0e3e2781ee4ed14758c04eca5b4cc4a7aee459cd,etherscan-label-dump:balancer,2026-03-30T18:26:28Z,etherscan label dump / balancer
+0.0,0,0,0,0.0,1,86400,0.0,anomaly,0x0cC4682b1465BD3bf3B9b13DbD310A1f37c7500D,forta:phishing_scams,2026-03-30T18:26:30Z,phishing / forta labels
+0.45102847,0,0,0,0.0,0,86400,0.0,normal,0xa218c65ac17b57457a60d57b689f7972416522ea,etherscan-label-dump:augur,2026-03-30T18:26:31Z,etherscan label dump / augur
+0.00283848,0,0,0,0.0,0,86400,0.0,anomaly,0xcda94feb23fbf1c4ca73b45de92e1a4cc2bd40ab,forta:etherscan_malicious_labels,2026-03-30T18:26:32Z,exploit/heist/phish-hack / forta labels
+0.0,0,0,0,0.0,1,86400,0.0,normal,0xd99b0efeea095b87c5ad8bcc8b955ed5ca5ba146,etherscan-label-dump:bancor,2026-03-30T18:26:34Z,etherscan label dump / bancor
+0.0,0,0,0,0.0,0,86400,0.0,anomaly,0x09909c850f0e3019a645e0530aa37798dba59eb1,forta:phishing_scams,2026-03-30T18:26:35Z,phishing / forta labels
+0.0,0,0,0,0.0,1,86400,0.0,normal,0x36fe2b66006d1552aa48fa679bad669b96c53da0,etherscan-label-dump:bancor,2026-03-30T18:26:37Z,etherscan label dump / bancor
+0.103036,0,0,0,0.0,1,86400,0.0,anomaly,0x996bbec9cc6c41325baed4ff636eae32013dd395,forta:etherscan_malicious_labels,2026-03-30T18:26:38Z,exploit/heist/phish-hack / forta labels
+0.0,0,0,0,0.0,1,86400,0.0,normal,0x2eb7591f01194e00a3e200305b02d76d69d18f6d,etherscan-label-dump:balancer,2026-03-30T18:26:40Z,etherscan label dump / balancer
+0.499139,0,0,0,0.0,0,86400,0.0,anomaly,0xc82e2dfc140fb5d94b612af056c45d08c6560c84,forta:phishing_scams,2026-03-30T18:26:42Z,phishing / forta labels
+0.0,0,0,0,0.0,1,86400,0.0,normal,0xc34473ccac5e14a4b7bf558d41477a05976e670c,etherscan-label-dump:balancer,2026-03-30T18:26:44Z,etherscan label dump / balancer
+0.097858,0,0,0,0.0,0,86400,0.0,anomaly,0xe79eb5cf318c6dba47ecaf504e3a462820950c93,forta:etherscan_malicious_labels,2026-03-30T18:26:45Z,exploit/heist/phish-hack / forta labels
+0.0,0,0,0,0.0,1,86400,0.0,normal,0x29d2e5957249e5c8c2b22a9101002183f7d35382,etherscan-label-dump:balancer,2026-03-30T18:26:47Z,etherscan label dump / balancer
+0.753485,0,0,0,0.0,0,86400,0.0,anomaly,0xbe7518a34df454157d68a36096da1554afde1806,forta:etherscan_malicious_labels,2026-03-30T18:26:49Z,exploit/heist/phish-hack / forta labels
+0.0,0,0,0,0.0,1,86400,0.0,normal,0x4a49985b14bd0ce42c25efde5d8c379a48ab02f3,etherscan-label-dump:aave,2026-03-30T18:26:50Z,etherscan label dump / aave
+0.02137778,0,0,0,0.0,0,86400,0.0,anomaly,0x29d981dd09e5981dfd398978463d7185cbe45bb0,forta:phishing_scams,2026-03-30T18:26:52Z,phishing / forta labels
+0.0,0,0,0,0.0,1,86400,0.0,normal,0x6eb5a538f4ae1dd3f34e2cede975ab6b6ca35d76,etherscan-label-dump:balancer,2026-03-30T18:26:54Z,etherscan label dump / balancer
+2.24,0,0,0,0.0,0,86400,0.0,anomaly,0xb3b35fb20695f3ce1bd56c56e4df20d8ce222943,forta:phishing_scams,2026-03-30T18:26:55Z,phishing / forta labels
+0.0,0,0,0,0.0,1,86400,0.0,normal,0x8adfc8cce132526a9fe74d83196270624058ffc3,etherscan-label-dump:balancer,2026-03-30T18:26:57Z,etherscan label dump / balancer
+0.0,0,0,0,0.0,1,86400,0.0,anomaly,0x8eb3fecaaa963c86d9b49004d9f28092f1db3d6c,forta:phishing_scams,2026-03-30T18:27:00Z,phishing / forta labels
+0.0,0,0,0,0.0,1,86400,0.0,normal,0x26bd10af71ea2c262cad5961fb71c24a7a4a2ccf,etherscan-label-dump:balancer,2026-03-30T18:27:01Z,etherscan label dump / balancer
+0.0,0,0,0,0.0,0,86400,0.0,anomaly,0xCc49d1f23F01DEcD4E18B6AAACccb038c9648E30,forta:phishing_scams,2026-03-30T18:27:02Z,phishing / forta labels
+0.0,1,2,2,2.19675125,1,3305,0.0,normal,0x059edd72cd353df5106d2b9cc5ab83a52287ac3a,etherscan-label-dump:art-blocks,2026-03-30T18:27:04Z,etherscan label dump / art-blocks
+0.0,0,0,0,0.0,1,86400,0.0,anomaly,0x9760bf0de453bc323cc50e48eb14a4c6da058953,forta:malicious_smart_contracts,2026-03-30T18:27:06Z,malicious smart contract / forta labels
+0.0,0,0,0,0.0,1,86400,0.0,normal,0xf013d90e4e4e3baf420dfea60735e75dbd42f1e1,etherscan-label-dump:aave,2026-03-30T18:27:07Z,etherscan label dump / aave
+0.05374,0,0,0,0.0,0,86400,0.0,anomaly,0xefaf04c238dc0754e4903d692719de7b12897cfe,forta:phishing_scams,2026-03-30T18:27:08Z,phishing / forta labels
+0.0,0,0,0,0.0,1,86400,0.0,normal,0xda7d441a3974efb39e088c066e1c88ac18aea235,etherscan-label-dump:balancer,2026-03-30T18:27:10Z,etherscan label dump / balancer
+6.3139445,0,0,0,0.0,0,86400,0.0,anomaly,0x1363077895B20Ae90f80794cE4e575559517d033,forta:phishing_scams,2026-03-30T18:27:12Z,phishing / forta labels
+0.0,0,0,0,0.0,1,86400,0.0,normal,0x126b3a4ed4cd1323253205fbcc57f32b9367acb5,etherscan-label-dump:balancer,2026-03-30T18:27:13Z,etherscan label dump / balancer
+0.0,0,0,0,0.0,0,86400,0.0,anomaly,0x903fe18b6023db2c58623a39b064e7b3d3fd7740,forta:phishing_scams,2026-03-30T18:27:14Z,phishing / forta labels
+0.0,0,0,0,0.0,1,86400,0.0,normal,0x9d91be44c06d373a8a226e1f3b146956083803eb,etherscan-label-dump:aave,2026-03-30T18:27:16Z,etherscan label dump / aave
+0.099139,0,0,0,0.0,0,86400,0.0,anomaly,0xfb2050604a065cf9699bcf07b33accb6f5c27231,forta:phishing_scams,2026-03-30T18:27:17Z,phishing / forta labels
+0.0,0,0,0,0.0,1,86400,0.0,normal,0x51478f6917a3e1928b53e3a584cc9684ad7878ab,etherscan-label-dump:balancer,2026-03-30T18:27:19Z,etherscan label dump / balancer
+0.04578809,0,0,0,0.0,0,86400,0.0,anomaly,0x17d4434b5bec2b880b69f0577f48eadb6edb26d3,forta:phishing_scams,2026-03-30T18:27:20Z,phishing / forta labels
+0.0,0,0,0,0.0,1,86400,0.0,normal,0x79c44cd4291a72aa26a2f04a3559daf67e3ff761,etherscan-label-dump:balancer,2026-03-30T18:27:23Z,etherscan label dump / balancer
+5.03908791,0,0,0,0.0,0,86400,0.0,anomaly,0x3adfe5ce233fddf99bc8525c57f89e20fba5a302,forta:phishing_scams,2026-03-30T18:27:25Z,phishing / forta labels
+0.0,0,0,0,0.0,1,86400,0.0,normal,0x05fc47e6e0bef8f6e686053e0bba474c40dfa717,etherscan-label-dump:balancer,2026-03-30T18:27:26Z,etherscan label dump / balancer
+0.96,0,0,0,0.0,0,86400,0.0,anomaly,0xb6e1aa84145c259c6ddad5447f6b436f80c025c8,forta:etherscan_malicious_labels,2026-03-30T18:27:27Z,exploit/heist/phish-hack / forta labels
+0.0,0,0,0,0.0,1,86400,0.0,normal,0x40a526da205c73139749434a10a46239bceccbaf,etherscan-label-dump:balancer,2026-03-30T18:27:29Z,etherscan label dump / balancer
+7.1,0,0,0,0.0,0,86400,0.0,anomaly,0xed6b90c028310122af361ce84a4604afbed40910,forta:phishing_scams,2026-03-30T18:27:30Z,phishing / forta labels
+0.0,0,0,0,0.0,1,86400,0.0,normal,0x5664e55ebfbc7dfc283ac9a4c9e7237d546a9a7b,etherscan-label-dump:balancer,2026-03-30T18:27:32Z,etherscan label dump / balancer
+1.0,0,0,0,0.0,0,86400,0.0,anomaly,0x54a508ff8da468cbdbe9a68550ec5ef745c08126,forta:phishing_scams,2026-03-30T18:27:34Z,phishing / forta labels
+0.0,0,0,0,0.0,1,86400,0.0,normal,0x587d316479c669ebafdc19fe61bd815bee5a9115,etherscan-label-dump:bancor,2026-03-30T18:27:35Z,etherscan label dump / bancor
+0.23634083,0,0,0,0.0,0,86400,0.0,anomaly,0x239b4eb7bbbffafe2c94bd98b01de9db7d35accf,forta:etherscan_malicious_labels,2026-03-30T18:27:36Z,exploit/heist/phish-hack / forta labels
+0.0,0,0,0,0.0,1,86400,0.0,normal,0x5704ded131e36a3e171e317057ca7c894bf5b423,etherscan-label-dump:balancer,2026-03-30T18:27:38Z,etherscan label dump / balancer
+0.01047063,0,0,0,0.0,0,86400,0.0,anomaly,0x53d8cb1c0ffce101816f12df92f19c6e6ecf6c26,forta:etherscan_malicious_labels,2026-03-30T18:27:39Z,exploit/heist/phish-hack / forta labels
+0.0,0,0,0,0.0,1,86400,0.0,normal,0x39c6b3e42d6a679d7d776778fe880bc9487c2eda,etherscan-label-dump:aave,2026-03-30T18:27:41Z,etherscan label dump / aave
+45.0057404,0,0,0,0.0,0,86400,0.0,anomaly,0xd36f0976d54b9f1c0445142e885d3169b77da020,forta:phishing_scams,2026-03-30T18:27:42Z,phishing / forta labels
+0.0,0,0,0,0.0,1,86400,0.0,normal,0xa66aa48a7ce2621ac775dd00efd1496899eef4fa,etherscan-label-dump:balancer,2026-03-30T18:27:44Z,etherscan label dump / balancer
+0.0489418,0,0,0,0.0,0,86400,0.0,anomaly,0xd913d7352292ad90fd9d99ddf857022fda9d1ea9,historical-exploit:plustoken,2026-03-30T18:27:45Z,historical exploit / plustoken
+0.0,0,0,0,0.0,1,86400,0.0,normal,0xadfb1d3f50ac92ab67df58040dfbde6b2f411aba,etherscan-label-dump:bancor,2026-03-30T18:27:47Z,etherscan label dump / bancor
+0.16815348,0,0,0,0.0,0,86400,0.0,anomaly,0x5cdc4d573afffb0d65d97c3532b132c3aba314c2,forta:phishing_scams,2026-03-30T18:27:49Z,phishing / forta labels
+0.0,0,0,0,0.0,1,86400,0.0,normal,0x280267901c175565c64acbd9a3c8f60705a72639,etherscan-label-dump:balancer,2026-03-30T18:27:51Z,etherscan label dump / balancer
+11.1456,0,0,0,0.0,0,86400,0.0,anomaly,0xbf7c1fa00de07b3041b4a099c2c435a5a27f259f,forta:phishing_scams,2026-03-30T18:27:52Z,phishing / forta labels
+0.0,0,0,0,0.0,1,86400,0.0,normal,0x49930ad9ebbbc0eb120ccf1a318c3ae5bb24df55,etherscan-label-dump:alchemix-finance,2026-03-30T18:27:54Z,etherscan label dump / alchemix-finance
+74.20456437,0,0,0,0.0,0,86400,0.0,anomaly,0x9e9e3b124370C763d1a4e838069Da3dfDbfcA059,forta:phishing_scams,2026-03-30T18:27:55Z,phishing / forta labels
+0.0,0,0,0,0.0,1,86400,0.0,normal,0x2a72011e4e83258d78839e60c622770f3fe64950,etherscan-label-dump:balancer,2026-03-30T18:27:56Z,etherscan label dump / balancer
+0.32319705,0,0,0,0.0,0,86400,0.0,anomaly,0x05c1710606d5a780e654eeb3bd535e86f16705a4,forta:phishing_scams,2026-03-30T18:27:58Z,phishing / forta labels
+0.0,0,0,0,0.0,1,86400,0.0,normal,0x252b17eb53f8baeae583cfed1665a5483632829f,etherscan-label-dump:balancer,2026-03-30T18:28:00Z,etherscan label dump / balancer
+0.03267687,0,0,0,0.0,0,86400,0.0,anomaly,0xfc8b9308573bafd259da031628e5f5324bc37a19,forta:phishing_scams,2026-03-30T18:28:01Z,phishing / forta labels
+0.0,0,0,0,0.0,1,86400,0.0,normal,0x0f811b1af2b6b447b008eff31ecceee5a0b1d842,etherscan-label-dump:balancer,2026-03-30T18:28:02Z,etherscan label dump / balancer
+0.00294043,0,0,0,0.0,0,86400,0.0,anomaly,0xa3030970721a94648bd886b1aa6a6d7af091cd26,forta:phishing_scams,2026-03-30T18:28:04Z,phishing / forta labels
+0.0,0,0,0,0.0,1,86400,0.0,normal,0x3d7173d89d50a5797614cb7e0324ad6370851909,etherscan-label-dump:balancer,2026-03-30T18:28:06Z,etherscan label dump / balancer
+0.11287687,0,0,0,0.0,0,86400,0.0,anomaly,0xcfde4df46cf406324f3c53c9a72fd3517ede6bbb,forta:phishing_scams,2026-03-30T18:28:07Z,phishing / forta labels
+0.0,0,0,0,0.0,1,86400,0.0,normal,0x2b4fc10473ffc5d590d187fcb0b3a79d9ed7b03e,etherscan-label-dump:balancer,2026-03-30T18:28:09Z,etherscan label dump / balancer
+0.65750238,0,0,0,0.0,0,86400,0.0,anomaly,0x49a74e38d4d46beede12792a5d0a500ca823d979,forta:phishing_scams,2026-03-30T18:28:11Z,phishing / forta labels
+0.0,0,0,0,0.0,1,86400,0.0,normal,0x302b1e2eb889e3dcf813f55bd93dc8455b150649,etherscan-label-dump:balancer,2026-03-30T18:28:12Z,etherscan label dump / balancer
+0.21260298,0,0,0,0.0,0,86400,0.0,anomaly,0x4076fa5d50751623d70499dbf6bb1638d93485a9,forta:phishing_scams,2026-03-30T18:28:15Z,phishing / forta labels
+0.0,0,0,0,0.0,1,86400,0.0,normal,0xe3a3de71b827cb73663a24cdb6243ba7f986cc3b,etherscan-label-dump:aave,2026-03-30T18:28:16Z,etherscan label dump / aave
+0.0,0,0,0,0.0,1,86400,0.0,anomaly,0xdc5acd9059ecccdce0d95a8d2a7bb980c428af7a,forta:phishing_scams,2026-03-30T18:28:17Z,phishing / forta labels
+0.0,0,0,0,0.0,1,86400,0.0,normal,0xb521525b2e6ad8ef4c03e747b4541f366e5b8035,etherscan-label-dump:bancor,2026-03-30T18:28:19Z,etherscan label dump / bancor
+0.0,0,0,0,0.0,0,86400,0.0,anomaly,0xe99ab3035cffc3810c9a9b96b8f2fa2f9c140403,forta:phishing_scams,2026-03-30T18:28:20Z,phishing / forta labels
+0.0,0,0,0,0.0,1,86400,0.0,normal,0x0a95920cd600478e2af01b900e185cab29c92bc2,etherscan-label-dump:bancor,2026-03-30T18:28:22Z,etherscan label dump / bancor
+1.199559,0,0,0,0.0,0,86400,0.0,anomaly,0x51d3ce5237b0aacb14ea4ddd1093b10afc69d40a,forta:phishing_scams,2026-03-30T18:28:24Z,phishing / forta labels
+0.0,0,0,0,0.0,1,86400,0.0,normal,0xb53acbbe6db0f80f9dab5b9dc9e95e2e2393f000,etherscan-label-dump:balancer,2026-03-30T18:28:26Z,etherscan label dump / balancer
+7.73504936,0,0,0,0.0,0,86400,0.0,anomaly,0x0AFC3711b354136A569edeeea3C6A51e1725013E,forta:phishing_scams,2026-03-30T18:28:27Z,phishing / forta labels
+0.0,0,0,0,0.0,1,86400,0.0,normal,0xb52744ea2d3b9e1c9e09425cc2c591fe4dcd11fd,etherscan-label-dump:balancer,2026-03-30T18:28:29Z,etherscan label dump / balancer
+0.0,0,0,0,0.0,1,86400,0.0,anomaly,0x1d3878ac859aEa6003Bbe56c2F4c585bC8F3549C,forta:phishing_scams,2026-03-30T18:28:30Z,phishing / forta labels
+0.0,0,0,0,0.0,1,86400,0.0,normal,0x564f10f2e5deb8d475c20b418c5b6ed071855f2b,etherscan-label-dump:balancer,2026-03-30T18:28:32Z,etherscan label dump / balancer
+0.0,0,0,0,0.0,0,86400,0.0,anomaly,0x58d9f57967cf2d08afd51ec69998faad68dd876d,forta:phishing_scams,2026-03-30T18:28:33Z,phishing / forta labels
+0.0,0,0,0,0.0,1,86400,0.0,normal,0x82c970c55711dc5f33aa40fee6614fbb857ceb83,etherscan-label-dump:bancor,2026-03-30T18:28:35Z,etherscan label dump / bancor
+0.0,0,0,0,0.0,0,86400,0.0,anomaly,0x09ac4b425ef1ebeadfe4999d9f99e89c99b5937b,forta:phishing_scams,2026-03-30T18:28:36Z,phishing / forta labels
+0.0,0,0,0,0.0,1,86400,0.0,normal,0xe2a5d73dc0877d1c6c80f89100de370b7373eb23,etherscan-label-dump:balancer,2026-03-30T18:28:38Z,etherscan label dump / balancer
+16.0628,0,0,0,0.0,0,86400,0.0,anomaly,0x23cb06dc044f4c9937866a5928c2427639f390a0,forta:phishing_scams,2026-03-30T18:28:39Z,phishing / forta labels
+0.0,0,0,0,0.0,1,86400,0.0,normal,0xf8f470300625f1370cddb36a865f06c2936456c7,etherscan-label-dump:balancer,2026-03-30T18:28:41Z,etherscan label dump / balancer
+18.85958406,0,0,0,0.0,0,86400,0.0,anomaly,0x95a85a9e13c096bda41ce0cdf271885698142bd5,forta:phishing_scams,2026-03-30T18:28:42Z,phishing / forta labels
+0.0,0,0,0,0.0,1,86400,0.0,normal,0xa1ec308f05bca8acc84eaf76bc9c92a52ac25415,etherscan-label-dump:balancer,2026-03-30T18:28:44Z,etherscan label dump / balancer
+0.388,0,0,0,0.0,0,86400,0.0,anomaly,0xfedc43d08f2df67bb9087b461db0298ba95d5d3b,forta:phishing_scams,2026-03-30T18:28:45Z,phishing / forta labels
+0.0,0,0,0,0.0,1,86400,0.0,normal,0x7ff10d4add8c9c2f5e47798cd60544ad91c1f4ec,etherscan-label-dump:bancor,2026-03-30T18:28:46Z,etherscan label dump / bancor
+0.0,0,0,0,0.0,0,86400,0.0,anomaly,0x36C22a0a2C7248B2B48BF105BFaF511c5BeB1DC8,forta:phishing_scams,2026-03-30T18:28:47Z,phishing / forta labels

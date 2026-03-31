@@ -4,6 +4,7 @@ dist/
 .env.local
 packages/contracts/.env
 apps/demo/.next/*
+packages/models/packages/models/.cache/real-data
 
 # Hardhat
 artifacts/

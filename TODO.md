@@ -62,6 +62,7 @@ Items are ordered roughly by dependency: later items generally require earlier o
 
 **Ideas:**
 - A platform where you can send other wallets (with FHE ACLs) the result of the scan of your wallet and depending on your score 0-10 they grant you access to a platform or not.
+  - Right now you upload your score on-chain but then you decrypt it yourself, operationally it does not make sense.
 - The score must be 0-10 instead of true/false.
 
 ---
