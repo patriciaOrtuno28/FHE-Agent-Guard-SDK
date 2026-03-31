@@ -5,33 +5,12 @@ Items are ordered roughly by dependency: later items generally require earlier o
 
 ---
 
-## 8. Training Data: Replace Synthetic Data with Real Data
+## 12. Real use case
 
-**Current state:** `packages/models/scripts/compile_random_forest.py` generates fully synthetic training data with hardcoded anomaly patterns. The model has never seen real on-chain behavior.
-
-**What needs to happen:**
-- Collect a labelled dataset of real Ethereum transactions (normal + known-anomalous addresses).
-- Sources: Etherscan labels, community-maintained lists (e.g. Forta, Chainalysis public feeds), historical exploit addresses.
-- Retrain the model and re-compile the FHE circuit.
-- Track model version in the artifact manifest alongside a data provenance note.
-- Establish a retraining cadence as new attack patterns emerge.
-
----
-
-## 9. Vercel Deployment
-
-**Current state:** The Next.js app runs locally. It has not been deployed.
-
-**What needs to happen:**
-- Push the repo to GitHub.
-- Connect the repo to Vercel. Set root directory to `apps/demo`.
-- Add all environment variables in the Vercel dashboard:
-  - `SEPOLIA_RPC_URL`
-  - `MAINNET_RPC_URL`
-  - `INFERENCE_URL` (must be a publicly reachable URL, not localhost)
-  - `INFERENCE_API_KEY`
-- The inference server must be deployed somewhere reachable (e.g. Railway, Fly.io, or a VPS) before Vercel can call it.
-- Verify `maxDuration = 30` in the scan route is within Vercel's plan limits (Pro = 300s, Hobby = 10s).
+**Ideas:**
+- Based on your 0-10 score the webpage grants you access (ACL to the webpage owner's contract to allow them to see your encrypted score and determine whether they grant you access or not).
+- Turn the tool into a plugin insertable in a Login page: show the desired grade for that webpage to let you in.
+- Access a trading website where you can share (with ACLs) your score to others and them to you and then decide to trade with them.
 
 ---
 
@@ -58,23 +37,19 @@ Items are ordered roughly by dependency: later items generally require earlier o
 
 ---
 
-## 12. Real use case
+## 12. Vercel Deployment
 
-**Ideas:**
-- A platform where you can send other wallets (with FHE ACLs) the result of the scan of your wallet and depending on your score 0-10 they grant you access to a platform or not.
-  - Right now you upload your score on-chain but then you decrypt it yourself, operationally it does not make sense.
-- The score must be 0-10 instead of true/false.
+**Current state:** The Next.js app runs locally. It has not been deployed.
+
+**What needs to happen:**
+- Push the repo to GitHub.
+- Connect the repo to Vercel. Set root directory to `apps/demo`.
+- Add all environment variables in the Vercel dashboard:
+  - `SEPOLIA_RPC_URL`
+  - `MAINNET_RPC_URL`
+  - `INFERENCE_URL` (must be a publicly reachable URL, not localhost)
+  - `INFERENCE_API_KEY`
+- The inference server must be deployed somewhere reachable (e.g. Railway, Fly.io, or a VPS) before Vercel can call it.
+- Verify `maxDuration = 30` in the scan route is within Vercel's plan limits (Pro = 300s, Hobby = 10s).
 
 ---
-
-## Summary: Minimum Viable Production Path
-
-```
-Item 4  Deploy AnomalyAgent + wire score submission ← most critical next step
-Item 6  Private RPC URLs
-Item 7  Inference server auth + rate limiting
-Item 9  Deploy to Vercel + hosted inference
-```
-
-Items 5 (decrypt button), 8 (real training data), 10 (hardening), and 11 (monitoring)
-follow naturally once the core pipeline is real.

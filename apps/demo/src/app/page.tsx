@@ -580,7 +580,7 @@ export default function Page() {
       // externalEuint64 is bytes32 at the ABI level
       const data = encodeFunctionData({
         abi: [{
-          name: 'submitMyScore',
+          name: 'registerMyScore',
           type: 'function',
           stateMutability: 'nonpayable',
           inputs: [
@@ -589,14 +589,14 @@ export default function Page() {
           ],
           outputs: [],
         }] as const,
-        functionName: 'submitMyScore',
+        functionName: 'registerMyScore',
         args: [realFheHandle as `0x${string}`, realFheProof as `0x${string}`],
       });
 
       // fhevm's FHE.fromExternal() reads coprocessor state in ways that cause
       // MetaMask's static-call gas estimation to revert (→ fallback 21M gas → cap error).
       // Set an explicit gas limit to bypass estimation entirely.
-      // 1,000,000 gas is a safe upper bound for submitMyScore on Sepolia fhevm.
+      // 1,000,000 gas is a safe upper bound for registerMyScore on Sepolia fhevm.
       const txHash = await window.ethereum.request<string>({
         method: 'eth_sendTransaction',
         params: [{ from: walletAddress, to: contractAddress, data, gas: '0x2DC6C0' }],
