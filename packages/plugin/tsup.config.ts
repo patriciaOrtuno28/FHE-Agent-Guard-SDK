@@ -6,6 +6,9 @@ export default defineConfig([
     entry: { index: 'src/index.ts' },
     format: ['esm'],
     dts: true,
+    // Preserve the 'use client' directive so Next.js App Router treats this
+    // bundle as a Client Module. tsup strips directive strings by default.
+    banner: { js: '"use client";' },
     external: ['react', 'react-dom', 'next', 'next/server'],
     noExternal: ['@fhe-guard/sdk'],
     splitting: false,
