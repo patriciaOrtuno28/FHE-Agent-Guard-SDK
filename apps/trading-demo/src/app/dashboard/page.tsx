@@ -2,8 +2,13 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { useFheGuard } from '@fhe-guard/plugin';
-import { isLoggedIn, logout, getUsername, getWalletAddress } from '@/lib/auth';
+import { getAddress } from 'viem';
+import type { Hex } from 'viem';
+import { useFheGuard, decryptAnomalyScore, isFheSupported } from '@fhe-guard/plugin';
+import { isLoggedIn, logout, getUsername, getWalletAddress, removeAccount } from '@/lib/auth';
+import { getChainId } from '@/lib/chain';
+
+const CONTRACT_ADDRESS = process.env.NEXT_PUBLIC_TRUST_SCORE_AGENT_SEPOLIA as `0x${string}` | undefined;
 
 // ── Mock market data ──────────────────────────────────────────────────────────
 
@@ -28,8 +33,45 @@ const MOCK_ASSETS: Asset[] = [
 export default function DashboardPage() {
   const router  = useRouter();
   const { score, isAllowed, status, threshold } = useFheGuard();
-  const username = getUsername() ?? 'Trader';
-  const wallet   = getWalletAddress();
+  const [username,      setUsername]      = useState('Trader');
+  const [wallet,        setWallet]        = useState<string | null>(null);
+  const [cachedScore,   setCachedScore]   = useState<number | null>(null);
+  const [alreadyVerified, setAlreadyVerified] = useState(false);
+  useEffect(() => {
+    const w = getWalletAddress();
+    setWallet(w);
+    void getUsername().then((name) => setUsername(name ?? 'Trader'));
+    const prevScore   = localStorage.getItem('fheguard_td_score');
+    const prevAllowed = localStorage.getItem('fheguard_td_allowed');
+    if (prevScore !== null && prevAllowed === '1') {
+      setCachedScore(parseFloat(prevScore));
+      setAlreadyVerified(true);
+    }
+    void getChainId().then(setChainId);
+    if (typeof window !== 'undefined') {
+      setFheHandle(localStorage.getItem('lastSubmittedFheHandle'));
+    }
+    // fetch pending invite count
+    if (w) {
+      void fetch(`/api/trade/invite?wallet=${encodeURIComponent(w)}&type=received`)
+        .then((r) => r.json() as Promise<{ invites: { status: string }[] }>)
+        .then((d) => setPendingInvites(d.invites.filter((i) => i.status === 'pending').length))
+        .catch(() => null);
+    }
+  }, []);
+
+  const [confirmRemove, setConfirmRemove] = useState(false);
+  const [removing,      setRemoving]      = useState(false);
+
+  // ── On-chain decrypt ──────────────────────────────────────────────────────
+  const [chainId,        setChainId]        = useState<number | null>(null);
+  const [fheHandle,      setFheHandle]      = useState<string | null>(null);
+  const [decryptedScore, setDecryptedScore] = useState<bigint | null>(null);
+  const [decrypting,     setDecrypting]     = useState(false);
+  const [decryptError,   setDecryptError]   = useState<string | null>(null);
+
+  // ── Pending invites badge ─────────────────────────────────────────────────
+  const [pendingInvites, setPendingInvites] = useState(0);
 
   const [tradeModal, setTradeModal] = useState<Asset | null>(null);
   const [tradeAmount, setTradeAmount] = useState('');
@@ -39,25 +81,49 @@ export default function DashboardPage() {
   // Guard: must be logged in and have passed the score check
   useEffect(() => {
     if (!isLoggedIn()) {
-      router.replace('/login');
+      router.replace('/');
       return;
     }
-    // If we arrive here without a completed scan, re-verify
-    if (status === 'idle') {
-      router.replace('/verify');
-    }
-  }, [router, status]);
+    // Skip re-verification if the user already completed it this session.
+    if (alreadyVerified) return;
+    if (status === 'idle') router.replace('/verify');
+  }, [router, status, alreadyVerified]);
 
-  // If scan completes and user is not allowed, redirect
+  // If a fresh scan completes and the user is not allowed, redirect
   useEffect(() => {
-    if (status === 'complete' && !isAllowed) {
+    if (status === 'complete' && !isAllowed && !alreadyVerified) {
       router.replace('/verify');
     }
-  }, [status, isAllowed, router]);
+  }, [status, isAllowed, router, alreadyVerified]);
 
   function handleLogout() {
     logout();
     router.push('/');
+  }
+
+  async function handleRemoveAccount() {
+    setRemoving(true);
+    await removeAccount();
+    router.push('/');
+  }
+
+  async function handleDecryptMyScore() {
+    if (!wallet || !chainId || !fheHandle || !CONTRACT_ADDRESS) return;
+    setDecrypting(true);
+    setDecryptError(null);
+    try {
+      const value = await decryptAnomalyScore({
+        chainId,
+        userAddress:     getAddress(wallet) as `0x${string}`,
+        contractAddress: getAddress(CONTRACT_ADDRESS) as `0x${string}`,
+        handle:          fheHandle as Hex,
+      });
+      setDecryptedScore(value);
+    } catch (err) {
+      setDecryptError(err instanceof Error ? err.message : 'Decryption failed');
+    } finally {
+      setDecrypting(false);
+    }
   }
 
   function handleTrade(asset: Asset) {
@@ -77,7 +143,8 @@ export default function DashboardPage() {
     (sum, a) => sum + a.price * a.balance, 0,
   );
 
-  if (status === 'idle' || (status !== 'complete')) {
+  // Show spinner only when there's no cached verification and scan hasn't finished yet
+  if (!alreadyVerified && status !== 'complete') {
     return (
       <div className="min-h-screen flex items-center justify-center bg-slate-950">
         <div className="text-center space-y-3">
@@ -87,6 +154,9 @@ export default function DashboardPage() {
       </div>
     );
   }
+
+  // Use live score when available, fall back to cached value
+  const displayScore = score ?? cachedScore;
 
   return (
     <div className="min-h-screen flex flex-col bg-slate-950">
@@ -99,11 +169,34 @@ export default function DashboardPage() {
         </div>
 
         <div className="flex items-center gap-4">
+          {/* Nav links */}
+          <nav className="flex items-center gap-3 text-xs">
+            <button
+              onClick={() => router.push('/directory')}
+              className="text-slate-500 hover:text-slate-300 transition-colors"
+            >
+              Directory
+            </button>
+            <button
+              onClick={() => router.push('/invites')}
+              className="relative text-slate-500 hover:text-slate-300 transition-colors"
+            >
+              Invites
+              {pendingInvites > 0 && (
+                <span className="absolute -top-1.5 -right-3 px-1 rounded-full bg-red-500 text-white text-[9px] font-bold leading-tight">
+                  {pendingInvites}
+                </span>
+              )}
+            </button>
+          </nav>
+
+          <span className="text-slate-800">|</span>
+
           {/* Trust score badge */}
-          {score !== null && (
+          {displayScore !== null && (
             <div className="flex items-center gap-1.5 px-3 py-1 rounded-full border border-emerald-500/30 bg-emerald-950/30 text-xs">
               <span className="text-slate-500">Trust Score</span>
-              <span className="font-black text-emerald-300">{score.toFixed(1)}/{threshold}</span>
+              <span className="font-black text-emerald-300">{displayScore.toFixed(1)}/{threshold}</span>
             </div>
           )}
 
@@ -116,12 +209,39 @@ export default function DashboardPage() {
             )}
           </div>
 
-          <button
-            onClick={handleLogout}
-            className="text-xs text-slate-600 hover:text-slate-400 transition-colors"
-          >
-            Sign out
-          </button>
+          {!confirmRemove ? (
+            <>
+              <button
+                onClick={handleLogout}
+                className="text-xs text-slate-600 hover:text-slate-400 transition-colors"
+              >
+                Sign out
+              </button>
+              <button
+                onClick={() => setConfirmRemove(true)}
+                className="text-xs text-red-800 hover:text-red-500 transition-colors"
+              >
+                Remove account
+              </button>
+            </>
+          ) : (
+            <div className="flex items-center gap-2">
+              <span className="text-xs text-red-400">Delete your account?</span>
+              <button
+                onClick={() => void handleRemoveAccount()}
+                disabled={removing}
+                className="text-xs px-2 py-0.5 rounded border border-red-600 text-red-400 hover:bg-red-600 hover:text-white transition-all disabled:opacity-50"
+              >
+                {removing ? 'Removing…' : 'Confirm'}
+              </button>
+              <button
+                onClick={() => setConfirmRemove(false)}
+                className="text-xs text-slate-600 hover:text-slate-400 transition-colors"
+              >
+                Cancel
+              </button>
+            </div>
+          )}
         </div>
       </header>
 
@@ -138,7 +258,7 @@ export default function DashboardPage() {
           <div className="card space-y-1">
             <div className="text-xs text-slate-500 uppercase tracking-wide">Trust Score</div>
             <div className="text-2xl font-black text-emerald-300">
-              {score !== null ? `${score.toFixed(1)}/10` : '–'}
+              {displayScore !== null ? `${displayScore.toFixed(1)}/10` : '–'}
             </div>
             <div className="text-[11px] text-slate-600">FHE-verified — plaintext never exposed</div>
           </div>
@@ -148,6 +268,37 @@ export default function DashboardPage() {
             <div className="text-[11px] text-slate-600">Score ≥ required {threshold}/10</div>
           </div>
         </section>
+
+        {/* On-chain score decrypt */}
+        {fheHandle && CONTRACT_ADDRESS && chainId !== null && isFheSupported(chainId) && (
+          <section className="card space-y-3">
+            <div className="flex items-center justify-between">
+              <div>
+                <div className="text-xs font-semibold text-slate-500 uppercase tracking-widest">On-Chain Score</div>
+                <div className="text-[11px] text-slate-600 mt-0.5">Re-decrypt your FHE score from the contract at any time</div>
+              </div>
+              {decryptedScore !== null && (
+                <span className="text-2xl font-black text-emerald-300 font-mono">{decryptedScore.toString()}/10</span>
+              )}
+            </div>
+            {decryptedScore === null && (
+              <button
+                onClick={() => void handleDecryptMyScore()}
+                disabled={decrypting}
+                className="w-full py-2 rounded-lg border border-violet-500/40 text-violet-300 text-xs font-semibold
+                           hover:bg-violet-500/10 hover:border-violet-400 transition-all
+                           disabled:opacity-50 disabled:cursor-wait flex items-center justify-center gap-2"
+              >
+                {decrypting ? (
+                  <><span className="inline-block w-3.5 h-3.5 border-2 border-violet-400 border-t-transparent rounded-full animate-spin" />Signing &amp; decrypting…</>
+                ) : (
+                  '🔓 Decrypt My On-Chain Score'
+                )}
+              </button>
+            )}
+            {decryptError && <p className="text-[11px] text-red-400">{decryptError}</p>}
+          </section>
+        )}
 
         {/* Markets */}
         <section>

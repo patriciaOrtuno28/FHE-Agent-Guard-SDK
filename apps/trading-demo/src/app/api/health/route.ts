@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import type { NetworkId } from '@fhe-guard/plugin';
 
+export const runtime = 'nodejs';
+
 const RPC_BY_NETWORK: Partial<Record<NetworkId, string | undefined>> = {
   sepolia: process.env.SEPOLIA_RPC_URL,
   mainnet: process.env.MAINNET_RPC_URL,
@@ -11,6 +13,15 @@ const CHAIN_NAMES: Record<number, string> = {
   11155111: 'sepolia',
 };
 
+/**
+ * Health check endpoint suitable for uptime monitors (UptimeRobot, BetterStack, etc.).
+ *
+ * Returns 200 when all checks pass, 503 when any check fails — so monitors
+ * can detect outages by watching for non-2xx responses.
+ *
+ * Query params:
+ *   network — "sepolia" (default) | "mainnet"
+ */
 export async function GET(req: NextRequest) {
   const network      = (req.nextUrl.searchParams.get('network') ?? 'sepolia') as NetworkId;
   const rpcUrl       = RPC_BY_NETWORK[network];
@@ -18,12 +29,13 @@ export async function GET(req: NextRequest) {
 
   if (!rpcUrl) {
     return NextResponse.json({
+      ok:        false,
       checks:    { inference: false, rpc: false },
       chainId:   null,
       network:   null,
       error:     `Missing RPC URL for network: ${network}`,
       timestamp: Date.now(),
-    }, { status: 500 });
+    }, { status: 503 });
   }
 
   const checks: Record<string, boolean> = {};
@@ -52,5 +64,10 @@ export async function GET(req: NextRequest) {
     }
   } catch { checks.rpc = false; }
 
-  return NextResponse.json({ checks, chainId, network: networkName, timestamp: Date.now() });
+  const allOk = Object.values(checks).every(Boolean);
+
+  return NextResponse.json(
+    { ok: allOk, checks, chainId, network: networkName, timestamp: Date.now() },
+    { status: allOk ? 200 : 503 },
+  );
 }
