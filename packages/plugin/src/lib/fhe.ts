@@ -91,7 +91,8 @@ export function handleToHex32(handle: unknown): Hex {
 
   if (len === 32) return hex;
 
-  // Temporary compatibility shim: a 33-byte handle with an extra trailing 00.
+  // Temporary compatibility shim for your current output:
+  // your screenshot shows a 33-byte handle with an extra trailing 00.
   if (len === 33 && hex.endsWith('00')) {
     return `0x${hex.slice(2, -2)}` as Hex;
   }
@@ -101,16 +102,27 @@ export function handleToHex32(handle: unknown): Hex {
 
 // ── SDK init ───────────────────────────────────────────────────────────────
 
+// Must match the installed @zama-fhe/relayer-sdk version in package.json.
+// Changing this busts the browser's memory-cache for the UMD script tag so a
+// stale window.relayerSDK from an older SDK version never survives a restart.
 const RELAYER_SDK_VERSION = '0.4.2';
 
 /**
  * Injects the Zama Relayer SDK UMD bundle as a <script> tag (once) and waits
- * for it to execute. Accepts a custom endpoint so the plugin works in any
- * Next.js app regardless of route layout.
+ * for it to execute. The UMD sets window.relayerSDK = { initSDK, createInstance,
+ * SepoliaConfig }. The thin @zama-fhe/relayer-sdk/bundle wrapper just re-exports
+ * from window.relayerSDK, so the UMD must run first — it can't be webpack-bundled.
+ * We serve it from /api/relayer-sdk to avoid copying files out of node_modules.
+ *
+ * The src URL is versioned (?v=x.y.z) so that after an SDK upgrade the old
+ * script tag (which lives in the browser's memory cache between navigations)
+ * is treated as a different resource and re-fetched.
  */
-function loadRelayerSdkScript(endpoint = '/api/relayer-sdk'): Promise<void> {
-  const scriptSrc = `${endpoint}?v=${RELAYER_SDK_VERSION}`;
+function loadRelayerSdkScript(): Promise<void> {
+  const scriptSrc = `/api/relayer-sdk?v=${RELAYER_SDK_VERSION}`;
 
+  // If there is an old script tag from a previous SDK version, remove it and
+  // clear window.relayerSDK so the new UMD runs fresh.
   const existing = document.getElementById('zama-relayer-sdk') as HTMLScriptElement | null;
   if (existing && existing.dataset.sdkVersion !== RELAYER_SDK_VERSION) {
     existing.remove();
@@ -118,10 +130,12 @@ function loadRelayerSdkScript(endpoint = '/api/relayer-sdk'): Promise<void> {
     (window as any).relayerSDK = undefined;
   }
 
+  // Already loaded at the correct version.
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   if ((window as any).relayerSDK) return Promise.resolve();
 
   if (document.getElementById('zama-relayer-sdk')) {
+    // Correct-version script tag already injected — poll until UMD executes.
     return new Promise((resolve, reject) => {
       const check = setInterval(() => {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -133,30 +147,33 @@ function loadRelayerSdkScript(endpoint = '/api/relayer-sdk'): Promise<void> {
 
   return new Promise((resolve, reject) => {
     const script = document.createElement('script');
-    script.id                 = 'zama-relayer-sdk';
-    script.dataset.sdkVersion = RELAYER_SDK_VERSION;
-    script.src                = scriptSrc;
-    script.onload             = () => resolve();
-    script.onerror            = () => reject(new Error(`Failed to load Zama Relayer SDK from ${scriptSrc}`));
+    script.id                  = 'zama-relayer-sdk';
+    script.dataset.sdkVersion  = RELAYER_SDK_VERSION;
+    script.src                 = scriptSrc;
+    script.onload              = () => resolve();
+    script.onerror             = () => reject(new Error(`Failed to load Zama Relayer SDK from ${scriptSrc}`));
     document.head.appendChild(script);
   });
 }
 
-async function getFhevmInstance(chainId: number, relayerSdkEndpoint?: string) {
+async function getFhevmInstance(chainId: number) {
   if (typeof window === 'undefined') throw new Error('FHE can only be used in the browser.');
   if (!isFheSupported(chainId)) throw new Error(`FHE not supported on chain ${chainId}. Switch to Sepolia.`);
 
+  // Return existing instance if same chain
   if (_instancePromise && _instanceChainId === chainId) return _instancePromise;
 
   _instanceChainId = chainId;
   _instancePromise = (async () => {
-    await loadRelayerSdkScript(relayerSdkEndpoint);
+    // Load the real UMD bundle that sets window.relayerSDK, then use it directly.
+    await loadRelayerSdkScript();
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const sdk = (window as any).relayerSDK;
     if (!sdk) throw new Error('window.relayerSDK not defined after script load');
     await sdk.initSDK();
     return sdk.createInstance({ ...sdk.SepoliaConfig, network: window.ethereum });
   })().catch((err) => {
+    // Don't cache a failed initialisation — next call will retry.
     _instancePromise = null;
     _instanceChainId = null;
     throw err;
@@ -167,15 +184,19 @@ async function getFhevmInstance(chainId: number, relayerSdkEndpoint?: string) {
 
 // ── Encrypt ────────────────────────────────────────────────────────────────
 
+/**
+ * Encrypt a uint64 value client-side so it can be submitted to AnomalyAgent.
+ * Returns the handle (ciphertext reference) and inputProof (ZK proof of
+ * correct encryption) that the contract's `submitScore` expects.
+ */
 export async function encryptUint64(params: {
   chainId: number;
   contractAddress: `0x${string}`;
   userAddress: `0x${string}`;
   value: bigint;
-  relayerSdkEndpoint?: string;
 }): Promise<{ handle: Hex; inputProof: Hex }> {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const instance = await getFhevmInstance(params.chainId, params.relayerSdkEndpoint) as any;
+  const instance = await getFhevmInstance(params.chainId) as any;
 
   const buffer = instance.createEncryptedInput(params.contractAddress, params.userAddress);
   buffer.add64(params.value);
@@ -199,25 +220,37 @@ export async function encryptUint64(params: {
 
 // ── Decrypt ────────────────────────────────────────────────────────────────
 
+/**
+ * Decrypt an encrypted score handle from AnomalyAgent using the Zama KMS gateway.
+ *
+ * The user must sign an EIP-712 message with MetaMask to authorize decryption.
+ * The KMS checks the on-chain ACL (the contract must have called FHE.allow()
+ * for this user's address) before returning the plaintext.
+ *
+ * @returns The decrypted uint64 value (the anomaly score).
+ */
 export async function decryptAnomalyScore(params: {
   chainId: number;
   userAddress: `0x${string}`;
   contractAddress: `0x${string}`;
   handle: Hex;
-  relayerSdkEndpoint?: string;
 }): Promise<bigint> {
   if (!window.ethereum) throw new Error('MetaMask not found');
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const instance = await getFhevmInstance(params.chainId, params.relayerSdkEndpoint) as any;
+  const instance = await getFhevmInstance(params.chainId) as any;
 
-  const keypair   = instance.generateKeypair();
-  const startTs   = Math.floor(Date.now() / 1000);
-  const durationD = 10;
-  const contracts = [params.contractAddress];
+  const keypair    = instance.generateKeypair();
+  const startTs    = Math.floor(Date.now() / 1000);
+  const durationD  = 10;
+  const contracts  = [params.contractAddress];
 
   const eip712 = instance.createEIP712(keypair.publicKey, contracts, startTs, durationD);
 
+  // Ask MetaMask to sign the EIP-712 authorization message
+  // MetaMask's eth_signTypedData_v4 expects a JSON string.
+  // The SDK may put BigInt values (e.g. chainId) inside the EIP-712 object,
+  // which JSON.stringify cannot handle natively — convert them to strings.
   const eip712Json = JSON.stringify(
     {
       domain:      eip712.domain,

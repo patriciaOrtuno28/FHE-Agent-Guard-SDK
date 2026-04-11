@@ -5,28 +5,6 @@ Items are ordered roughly by dependency: later items generally require earlier o
 
 ---
 
-## 12. Real use case
-
-**Ideas:**
-- Based on your 0-10 score the webpage grants you access (ACL to the webpage owner's contract to allow them to see your encrypted score and determine whether they grant you access or not).
-- Turn the tool into a plugin insertable in a Login page: show the desired grade for that webpage to let you in.
-- Access a trading website where you can share (with ACLs) your score to others and them to you and then decide to trade with them.
-
----
-
-## 10. Security Hardening
-
-**Current state:** Basic server-side validation exists but several attack surfaces remain open.
-
-**What needs to happen:**
-- **Rate limiting on `/api/scan`:** Each scan triggers multiple RPC calls and an inference request. Add per-IP rate limiting (e.g. `@upstash/ratelimit` with Redis on Vercel, or a simple in-memory limiter for self-hosted).
-- **CORS:** Restrict `Access-Control-Allow-Origin` in API routes to your own domain.
-- **Content-Security-Policy header:** Add a strict CSP in `next.config.mjs` to block XSS vectors, especially since the app loads a WASM bundle from `@zama-fhe/relayer-sdk`.
-- **Submitter key isolation:** The private key that calls `submitScore` on-chain should be a dedicated hot wallet with minimal ETH, not the deployer key.
-- **Contract access control review:** Audit who can call `addWatcher`, `removeWatcher`, `setThreshold`, `pause`. Currently only `owner()` — confirm the owner is a multisig, not an EOA, before mainnet.
-
----
-
 ## 11. Monitoring & Observability
 
 **What needs to happen:**
@@ -53,3 +31,11 @@ Items are ordered roughly by dependency: later items generally require earlier o
 - Verify `maxDuration = 30` in the scan route is within Vercel's plan limits (Pro = 300s, Hobby = 10s).
 
 ---
+
+## 13. Malicious testing
+
+**Current state:** The webpage has only been tested with trusted wallets.
+
+**What needs to happen:**
+- Simulate a malicious wallet.
+- Try to connect it and see how it does not get access granted.

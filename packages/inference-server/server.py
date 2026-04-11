@@ -16,13 +16,52 @@ FHE modes (SIMULATE_FHE env var):
 import os
 import sys
 import json
+import hashlib
+import logging
 import numpy as np
+from datetime import datetime, timezone
 from fastapi import FastAPI, HTTPException, Header, Request
 from pydantic import BaseModel
 from typing import List
 from concrete.ml.common.serialization.loaders import load
 from collections import defaultdict, deque
 import time
+
+# ── Structured JSON logging ───────────────────────────────────
+
+class _JsonFormatter(logging.Formatter):
+    """Emit one JSON object per log line for easy parsing by log aggregators."""
+
+    def format(self, record: logging.LogRecord) -> str:
+        payload: dict = {
+            "ts":    datetime.now(timezone.utc).isoformat(),
+            "level": record.levelname,
+            "msg":   record.getMessage(),
+        }
+        # Merge any extra fields attached via `extra=` kwarg
+        for key, val in record.__dict__.items():
+            if key not in logging.LogRecord.__dict__ and not key.startswith("_"):
+                payload[key] = val
+        return json.dumps(payload)
+
+
+def _setup_logging() -> logging.Logger:
+    handler = logging.StreamHandler(sys.stdout)
+    handler.setFormatter(_JsonFormatter())
+    root = logging.getLogger()
+    root.handlers.clear()
+    root.addHandler(handler)
+    root.setLevel(logging.INFO)
+    return logging.getLogger("inference")
+
+
+log = _setup_logging()
+
+
+def _hash_subject(subject: str) -> str:
+    """SHA-256 prefix of subject address — identifies it in logs without revealing plaintext."""
+    return hashlib.sha256(subject.strip().lower().encode()).hexdigest()[:16]
+
 
 # ── Config ────────────────────────────────────────────────────
 
@@ -72,18 +111,8 @@ def _enforce_rate_limit(bucket_key: str) -> None:
 
 def _check_artifact(path: str, label: str) -> None:
     if not os.path.exists(path):
-        print()
-        print("=" * 60)
-        print(f"  MISSING ARTIFACT: {label}")
-        print(f"  Expected at: {path}")
-        print()
-        print("  Fix: run the model compiler first —")
-        print("       pnpm models:compile")
-        print()
-        print("  Then restart the inference server:")
-        print("       pnpm inference:start")
-        print("=" * 60)
-        print()
+        log.error("Missing artifact", extra={"artifact": label, "path": path,
+                  "fix": "run pnpm models:compile then restart inference server"})
         sys.exit(1)
 
 _check_artifact(MANIFEST_PATH, "anomaly_model.manifest.json")
@@ -91,13 +120,13 @@ _check_artifact(MODEL_PATH,    "anomaly_model.json")
 
 # ── Load manifest ─────────────────────────────────────────────
 
-print(f"Loading manifest from {MANIFEST_PATH}...")
+log.info("Loading manifest", extra={"path": MANIFEST_PATH})
 with open(MANIFEST_PATH, "r") as f:
     manifest = json.load(f)
 
 # ── Load model ────────────────────────────────────────────────
 
-print(f"Loading model from {MODEL_PATH}...")
+log.info("Loading model", extra={"path": MODEL_PATH})
 with open(MODEL_PATH, "r") as f:
     model = load(f)
 
@@ -106,7 +135,7 @@ with open(MODEL_PATH, "r") as f:
 # Use data matching the training distribution — random data causes
 # assertion errors in the MLIR compiler.
 
-print("Compiling FHE circuit (this takes ~30s)...")
+log.info("Compiling FHE circuit", extra={"note": "takes ~30s"})
 
 def _compile_data(n: int = 200, seed: int = 42) -> np.ndarray:
     rng = np.random.default_rng(seed)
@@ -135,7 +164,7 @@ def _compile_data(n: int = 200, seed: int = 42) -> np.ndarray:
 model.compile(_compile_data())
 
 fhe_mode = "simulate" if SIMULATE_FHE else "execute"
-print(f"Model ready — FHE mode: {fhe_mode} | model: {manifest.get('modelId')}")
+log.info("Model ready", extra={"fhe_mode": fhe_mode, "model": manifest.get("modelId")})
 
 # ── API ───────────────────────────────────────────────────────
 
@@ -182,6 +211,9 @@ def predict(
             detail=f"Expected {len(FEATURE_NAMES)} features, got {len(req.features)}",
         )
 
+    subject_hash = _hash_subject(req.subject)
+    t0 = time.perf_counter()
+
     X = np.array([req.features], dtype=np.float32)
 
     # Preferred: probability output
@@ -192,6 +224,21 @@ def predict(
     trust_score = int(np.clip(round((1.0 - risk_probability) * 10), 0, 10))
 
     label = "trusted" if trust_score >= 7 else "blocked"
+
+    latency_ms = round((time.perf_counter() - t0) * 1000, 2)
+
+    log.info(
+        "predict",
+        extra={
+            "subject_hash":    subject_hash,
+            "label":           label,
+            "trust_score":     trust_score,
+            "risk_probability": round(risk_probability, 4),
+            "fhe_mode":        fhe_mode,
+            "latency_ms":      latency_ms,
+            "client_ip":       client_ip,
+        },
+    )
 
     return PredictResponse(
         label=label,

@@ -5,6 +5,7 @@ dist/
 packages/contracts/.env
 apps/demo/.next/*
 packages/models/packages/models/.cache/real-data
+apps/trading-demo/.next
 
 # Hardhat
 artifacts/
