@@ -18,7 +18,7 @@ export async function GET() {
 
   // Backfill the index for any wallets that were missing from it
   if (wallets.length) {
-    await redis.sadd('users:index', ...wallets);
+    await redis.sadd('users:index', ...(wallets as [string, ...string[]]));
   }
 
   return NextResponse.json({ users });
