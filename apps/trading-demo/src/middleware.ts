@@ -9,7 +9,8 @@ const ALLOWED_ORIGIN = process.env.ALLOWED_ORIGIN ?? 'http://localhost:3000';
  * - Handles CORS preflight (OPTIONS) so browsers don't block cross-origin fetches.
  */
 export function middleware(req: NextRequest) {
-  const { pathname, method } = req.nextUrl;
+  const { pathname } = req.nextUrl;
+  const { method } = req;
   const isApi = pathname.startsWith('/api/');
 
   // ── CORS preflight ────────────────────────────────────────────────────────
