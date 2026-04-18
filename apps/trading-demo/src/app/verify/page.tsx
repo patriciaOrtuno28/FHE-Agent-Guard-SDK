@@ -33,7 +33,7 @@ function scanStepIndex(status: string): number {
 
 export default function VerifyPage() {
   const router = useRouter();
-  const { scan, status, score, isAllowed, isLoading, error, threshold } = useFheGuard();
+  const { scan, status, score, result, isAllowed, isLoading, error, threshold } = useFheGuard();
   const scanStarted = useRef(false);
 
   // ── MetaMask chain ───────────────────────────────────────────────────────
@@ -310,6 +310,7 @@ export default function VerifyPage() {
         {status === 'complete' && (
           <AccessResultCard
             score={score}
+            label={result?.label ?? 'blocked'}
             isAllowed={isAllowed}
             threshold={threshold}
             canEnter={alreadySubmitted || !canFhe}
@@ -318,7 +319,7 @@ export default function VerifyPage() {
         )}
 
         {/* ── FHE on-chain verification ── */}
-        {status === 'complete' && score !== null && (
+        {status === 'complete' && score !== null && result?.label !== 'insufficient_data' && (
           <div className="card space-y-4">
             <div className="text-xs font-semibold text-slate-500 uppercase tracking-widest">
               FHE On-Chain Verification
@@ -422,15 +423,34 @@ export default function VerifyPage() {
 // ── Sub-components ────────────────────────────────────────────────────────────
 
 function AccessResultCard({
-  score, isAllowed, threshold, canEnter, onEnter,
+  score, label, isAllowed, threshold, canEnter, onEnter,
 }: {
   score: number | null;
+  label: 'trusted' | 'blocked' | 'insufficient_data';
   isAllowed: boolean;
   threshold: number;
   canEnter: boolean;
   onEnter: () => void;
 }) {
-  const display = score !== null ? score.toFixed(1) : '–';
+  const display = score !== null && label !== 'insufficient_data' ? score.toFixed(1) : '–';
+
+  if (label === 'insufficient_data') {
+    return (
+      <div className="card border-amber-500/30 bg-amber-950/20 shadow-[0_0_30px_rgba(245,158,11,0.08)] space-y-3 animate-fade-in">
+        <div className="flex items-center gap-3">
+          <span className="text-3xl text-amber-400">&#9432;</span>
+          <div className="flex-1">
+            <div className="font-black text-amber-300 text-lg">Not Enough Data</div>
+            <div className="text-sm text-amber-400/70">Wallet activity is too low to run the risk model</div>
+          </div>
+        </div>
+        <p className="text-sm text-slate-400 border-t border-amber-900/40 pt-3">
+          This does not mean your wallet is suspicious — there simply weren&apos;t enough recent transactions to analyse.
+          Make at least one transaction on <span className="text-slate-300 font-semibold">Sepolia</span> and try again.
+        </p>
+      </div>
+    );
+  }
 
   if (isAllowed) {
     return (
