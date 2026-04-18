@@ -18,7 +18,7 @@ const sentryHost = (() => {
 const csp = isProd
   ? [
       "default-src 'self'",
-      "script-src 'self' 'unsafe-inline' 'wasm-unsafe-eval'",
+      "script-src 'self' 'unsafe-inline' 'wasm-unsafe-eval' https://vercel.live",
       "style-src 'self' 'unsafe-inline'",
       "img-src 'self' data: blob:",
       "font-src 'self'",
