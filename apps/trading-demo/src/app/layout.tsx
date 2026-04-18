@@ -10,6 +10,9 @@ export const metadata: Metadata = {
   title: 'FHE TradeSafe — Privacy-First Trading',
   description:
     'Decentralised trading platform protected by Fully Homomorphic Encryption trust scoring. Your data stays private — always.',
+  icons: {
+    icon: '/favicon.png',
+  },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
