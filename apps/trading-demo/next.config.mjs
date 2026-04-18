@@ -2,15 +2,23 @@ import { withSentryConfig } from '@sentry/nextjs';
 
 const isProd = process.env.NODE_ENV === 'production';
 
-// Sentry injects tunnel routes into connect-src — allow them when DSN is set.
-const sentryHost = process.env.NEXT_PUBLIC_SENTRY_DSN
-  ? ` https://*.ingest.sentry.io`
-  : '';
+// Extract the exact ingest host from the DSN so connect-src is as tight as possible.
+// DSN format: https://<key>@<host>/<project-id>
+const sentryHost = (() => {
+  const dsn = process.env.NEXT_PUBLIC_SENTRY_DSN;
+  if (!dsn) return '';
+  try {
+    const host = new URL(dsn.replace(/^https:\/\/[^@]+@/, 'https://')).host;
+    return ` https://${host}`;
+  } catch {
+    return ' https://*.ingest.sentry.io https://*.ingest.de.sentry.io';
+  }
+})();
 
 const csp = isProd
   ? [
       "default-src 'self'",
-      "script-src 'self' 'wasm-unsafe-eval'",
+      "script-src 'self' 'unsafe-inline' 'wasm-unsafe-eval'",
       "style-src 'self' 'unsafe-inline'",
       "img-src 'self' data: blob:",
       "font-src 'self'",
