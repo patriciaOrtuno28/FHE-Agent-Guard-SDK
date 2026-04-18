@@ -12,6 +12,7 @@ RUN pip install --no-cache-dir \
     "numpy>=1.24.0,<2.0.0"
 
 COPY server.py .
+COPY artifacts/ /artifacts/
 
 EXPOSE 8000
 

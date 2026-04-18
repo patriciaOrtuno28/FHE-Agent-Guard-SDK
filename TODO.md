@@ -32,10 +32,3 @@ Items are ordered roughly by dependency: later items generally require earlier o
 
 ---
 
-## 13. Malicious testing
-
-**Current state:** The webpage has only been tested with trusted wallets.
-
-**What needs to happen:**
-- Simulate a malicious wallet.
-- Try to connect it and see how it does not get access granted.

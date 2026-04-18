@@ -42,6 +42,24 @@
 
 </td>
 </tr>
+<tr>
+<td width="100%" valign="top" align="center">
+
+**🏪 &nbsp;Merchant integration**
+
+[Quickstart](#-merchant-integration-guide) &nbsp;·&nbsp; [Install](#1-install-the-plugin) &nbsp;·&nbsp; [API route](#2-add-the-scan-api-route) &nbsp;·&nbsp; [Provider](#3-wrap-your-app-with-the-provider) &nbsp;·&nbsp; [Login page](#4-add-trust-check-to-your-login-page) &nbsp;·&nbsp; [Gate pages](#5-gate-protected-pages)
+
+</td>
+</tr>
+<tr>
+<td width="100%" valign="top" align="center">
+
+**🧪 &nbsp;Testing**
+
+[Run tests](#-testing) &nbsp;·&nbsp; [Test files](#test-files) &nbsp;·&nbsp; [Malicious wallet simulation](#malicious-wallet-simulation)
+
+</td>
+</tr>
 </table>
 
 ---
@@ -183,7 +201,10 @@ NEXT_PUBLIC_REQUIRED_SCORE=7          # admin-configured threshold (0–10)
 
 <br/>
 
-## 🚀 Local setup
+---
+
+<details>
+<summary><h2>🚀 Local setup</h2></summary>
 
 Install dependencies:
 ```bash
@@ -226,9 +247,12 @@ pnpm trading-demo
 
 Open `http://localhost:3001`
 
-<br/>
+</details>
 
-## 🌐 Sepolia deployment
+---
+
+<details>
+<summary><h2>🌐 Sepolia deployment</h2></summary>
 
 The current supported network is:
 
@@ -237,62 +261,233 @@ The current supported network is:
 
 After deploying to Sepolia, update `NEXT_PUBLIC_TRUST_SCORE_AGENT_SEPOLIA=0x...` in `apps/trading-demo/.env.local`. Then restart the app.
 
+</details>
+
+---
+
 <br/>
 
-## 📦 Using `@fhe-guard/plugin`
+## 🏪 Merchant Integration Guide
 
-The plugin is the core product. Any Next.js application can install it and add FHE trust score gating to its login flow.
+This section explains how to add **FHE Agent Guard** to the login or registration flow of your own Next.js application. The plugin handles wallet scanning, scoring, and access gating — you only wire up a few files.
 
-**1. Wrap your app with the provider** (sets the threshold and network):
+> The full working example is in [`apps/trading-demo`](apps/trading-demo).
 
-```tsx
-// app/layout.tsx
-import { FheGuardProvider } from '@fhe-guard/plugin';
+<br/>
 
-export default function Layout({ children }) {
-  return (
-    <FheGuardProvider threshold={7} network="sepolia">
-      {children}
-    </FheGuardProvider>
-  );
-}
+### 1. Install the plugin
+
+```bash
+npm install @fhe-guard/plugin
+# or
+pnpm add @fhe-guard/plugin
 ```
 
-**2. Add the server-side scan route** (thin wrapper in your API routes):
+Set the following environment variables in your `.env.local`:
+
+```bash
+# Your blockchain RPC endpoint (Alchemy, Infura, etc.)
+SEPOLIA_RPC_URL=https://eth-sepolia.g.alchemy.com/v3/YOUR_KEY
+
+# The inference server that scores wallets
+INFERENCE_URL=https://your-inference-server.example.com
+INFERENCE_API_KEY=your-secret-key
+
+# Minimum score a wallet must achieve to gain access (0–10)
+NEXT_PUBLIC_REQUIRED_SCORE=7
+```
+
+<br/>
+
+### 2. Add the scan API route
+
+Create a thin server-side handler in your Next.js API routes. This is the endpoint the plugin calls internally — you do not need to call it yourself.
 
 ```ts
 // app/api/scan/route.ts
 import { createFheGuardHandler } from '@fhe-guard/plugin/server';
 
 export const runtime = 'nodejs';
+export const maxDuration = 30;
+
 export const POST = createFheGuardHandler({
-  getRpcUrl:        (n) => process.env[`${n.toUpperCase()}_RPC_URL`],
+  getRpcUrl:         (network) => process.env[`${network.toUpperCase()}_RPC_URL`],
   getExplorerApiUrl: () => undefined,
-  inferenceUrl:     process.env.INFERENCE_URL!,
-  inferenceApiKey:  process.env.INFERENCE_API_KEY,
+  inferenceUrl:      process.env.INFERENCE_URL!,
+  inferenceApiKey:   process.env.INFERENCE_API_KEY,
 });
 ```
 
-**3. Use the hook in your login flow**:
+<br/>
+
+### 3. Wrap your app with the provider
+
+Add `FheGuardProvider` at the root of your layout. It sets the threshold and network for every page.
+
+```tsx
+// app/layout.tsx
+import { FheGuardProvider } from '@fhe-guard/plugin';
+
+export default function Layout({ children }: { children: React.ReactNode }) {
+  const threshold = Number(process.env.NEXT_PUBLIC_REQUIRED_SCORE ?? 7);
+
+  return (
+    <FheGuardProvider threshold={threshold} network="sepolia">
+      {children}
+    </FheGuardProvider>
+  );
+}
+```
+
+<br/>
+
+### 4. Add trust check to your login page
+
+Use the `useFheGuard` hook to trigger a scan when the user submits their wallet address. Show the result inline — the hook streams progress events so you can display a step-by-step status.
 
 ```tsx
 'use client';
 import { useFheGuard } from '@fhe-guard/plugin';
 
-export function TrustCheck({ walletAddress }) {
+export function LoginForm() {
   const { scan, status, score, isAllowed, threshold } = useFheGuard();
+  const [wallet, setWallet] = React.useState('');
+
+  async function handleSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    await scan(wallet);
+  }
 
   return (
-    <div>
-      <p>Required score: {threshold}/10</p>
-      <button onClick={() => scan(walletAddress)}>Verify</button>
+    <form onSubmit={handleSubmit}>
+      <p>Minimum score required: {threshold}/10</p>
+
+      <input
+        value={wallet}
+        onChange={(e) => setWallet(e.target.value)}
+        placeholder="0x..."
+      />
+      <button type="submit" disabled={status === 'scanning'}>
+        {status === 'scanning' ? 'Scanning…' : 'Verify wallet'}
+      </button>
+
       {status === 'complete' && (
-        <p>{isAllowed ? `Access granted (${score}/10)` : `Access denied (${score}/10)`}</p>
+        isAllowed
+          ? <p>✅ Access granted — score {score}/10</p>
+          : <p>❌ Access denied — score {score}/10 (minimum {threshold})</p>
       )}
-    </div>
+    </form>
   );
 }
 ```
+
+| `status` value | Meaning |
+|---|---|
+| `idle` | No scan started yet |
+| `scanning` | Scan in progress (streaming events) |
+| `complete` | Score ready — check `isAllowed` |
+| `error` | Scan failed — check `errorMessage` |
+
+<br/>
+
+### 5. Gate protected pages
+
+Wrap any page or component that requires a passing score with `FheGuardGate`. Users who have not passed the scan are automatically redirected.
+
+```tsx
+// app/dashboard/page.tsx
+import { FheGuardGate } from '@fhe-guard/plugin';
+
+export default function Dashboard() {
+  return (
+    <FheGuardGate redirectTo="/login">
+      <YourDashboardContent />
+    </FheGuardGate>
+  );
+}
+```
+
+`FheGuardGate` reads the cached scan result from the provider context. If no passing result is found it redirects to `redirectTo`.
+
+<br/>
+
+### Threshold configuration
+
+The threshold can be set per-environment via the provider prop or the env variable:
+
+```tsx
+// Set in code (takes priority)
+<FheGuardProvider threshold={8} network="sepolia">
+
+// Or via environment variable (read by the provider default)
+NEXT_PUBLIC_REQUIRED_SCORE=8
+```
+
+Scores range from **0** (fully anomalous) to **10** (fully trusted). A threshold of **7** is the recommended starting point for financial applications.
+
+<br/>
+
+---
+
+<br/>
+
+## 🧪 Testing
+
+### Run tests
+
+All tests live in `packages/sdk/src/test/` and use [Vitest](https://vitest.dev/). No inference server or RPC connection is needed — connectors and the inference API are mocked.
+
+```bash
+# From the repo root
+cd packages/sdk
+npm test
+```
+
+Expected output:
+
+```
+✓ src/test/AgentGuard.test.ts        (5 tests)
+✓ src/test/MaliciousWallet.test.ts   (15 tests)
+✓ src/test/FhEVMConnector.test.ts    (9 tests)
+
+Test Files  3 passed (3)
+      Tests  29 passed (29)
+```
+
+<br/>
+
+### Test files
+
+| File | What it covers |
+|---|---|
+| [`AgentGuard.test.ts`](packages/sdk/src/test/AgentGuard.test.ts) | Core pipeline: connector calls, event emission, watch loop, onAnomaly suppression for trusted wallets |
+| [`FhEVMConnector.test.ts`](packages/sdk/src/test/FhEVMConnector.test.ts) | On-chain feature extraction: balance ratio clamping, 1h vs 24h tx windows, contract interaction flag, RPC health |
+| [`MaliciousWallet.test.ts`](packages/sdk/src/test/MaliciousWallet.test.ts) | Malicious wallet simulation — see below |
+
+<br/>
+
+### Malicious wallet simulation
+
+`MaliciousWallet.test.ts` verifies that the guard correctly **blocks** anomalous wallets and **allows** trusted ones. Three attack profiles are simulated by injecting crafted feature vectors into a mock connector:
+
+| Profile | Key signals | Expected result |
+|---|---|---|
+| **Bot / spammer** | 487 tx/h · 3 821 tx/24h · 412 unique targets · last tx 3 s ago | `blocked` · `onAnomaly` called |
+| **Large-value attacker** | 4 500 ETH transfer · 8 000 gwei gas · −97 % balance drain | `blocked` · `onAnomaly` called |
+| **Flash-loan attacker** | Contract interaction · 5 000 gwei gas · −85 % balance drain | `blocked` · score = 0 |
+| **Score boundary** | Score = 6 (one below threshold) | `blocked` |
+| **Score boundary** | Score = 7 (exactly at threshold) | `trusted` · `onAnomaly` not called |
+| **Trusted wallet** | Normal low-frequency activity | `trusted` · `onAnomaly` not called |
+
+Each profile asserts:
+- Correct `label` (`"blocked"` or `"trusted"`)
+- `rawScore` relative to the threshold
+- Whether `onAnomaly` was invoked
+- Whether the `anomaly_action` event was emitted
+
+<br/>
+
+---
 
 <br/>
 
