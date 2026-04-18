@@ -138,26 +138,31 @@ with open(MODEL_PATH, "r") as f:
 log.info("Compiling FHE circuit", extra={"note": "takes ~30s"})
 
 def _compile_data(n: int = 200, seed: int = 42) -> np.ndarray:
+    """
+    Calibration data for FHE circuit quantization.
+    Must cover the full feature range seen in training, including
+    low-activity personal wallets (tx_count_24h=0..60) added in v2.
+    """
     rng = np.random.default_rng(seed)
     normal = np.column_stack([
-        rng.lognormal(0.5, 1.0, n).clip(0, 100),
-        rng.poisson(5, n).clip(0, 50).astype(float),
-        rng.poisson(30, n).clip(0, 200).astype(float),
-        rng.poisson(8, n).clip(0, 50).astype(float),
-        rng.normal(30, 15, n).clip(1, 500),
-        rng.binomial(1, 0.6, n).astype(float),
-        rng.exponential(3600, n).clip(0, 86400),
-        rng.normal(0.0, 0.1, n).clip(-1, 1),
+        rng.lognormal(0.5, 1.5, n).clip(0, 100),          # tx_value_eth: 0..100
+        rng.poisson(1, n).clip(0, 20).astype(float),       # tx_count_1h: low for personal wallets
+        rng.poisson(8, n).clip(0, 60).astype(float),       # tx_count_24h: 0..60 (personal range)
+        rng.poisson(3, n).clip(0, 20).astype(float),       # unique_counterparts: few
+        rng.normal(25, 15, n).clip(1, 200),                # gas_price_gwei: normal range
+        rng.binomial(1, 0.5, n).astype(float),             # contract_interaction: 50/50
+        rng.exponential(7200, n).clip(0, 86400),           # time_since_last_tx: hours to days
+        rng.normal(0.0, 0.08, n).clip(-1, 1),              # balance_change_ratio: small changes
     ])
     anomaly = np.column_stack([
-        rng.lognormal(5.0, 2.0, n).clip(0, 10000),
-        rng.poisson(200, n).clip(0, 1000).astype(float),
-        rng.poisson(2000, n).clip(0, 10000).astype(float),
-        rng.poisson(100, n).clip(0, 500).astype(float),
-        rng.normal(500, 200, n).clip(1, 10000),
-        rng.binomial(1, 0.95, n).astype(float),
-        rng.exponential(60, n).clip(0, 86400),
-        rng.uniform(-1, 1, n),
+        rng.lognormal(5.0, 2.0, n).clip(0, 10000),        # tx_value_eth: very large
+        rng.poisson(200, n).clip(0, 1000).astype(float),  # tx_count_1h: bot-level
+        rng.poisson(2000, n).clip(0, 10000).astype(float),# tx_count_24h: extreme
+        rng.poisson(100, n).clip(0, 500).astype(float),   # unique_counterparts: scatter
+        rng.normal(500, 200, n).clip(1, 10000),            # gas_price_gwei: extreme urgency
+        rng.binomial(1, 0.95, n).astype(float),            # contract_interaction: almost always
+        rng.exponential(60, n).clip(0, 86400),             # time_since_last_tx: seconds
+        rng.uniform(-1, -0.3, n),                          # balance_change_ratio: heavy drain
     ])
     return np.vstack([normal, anomaly]).astype(np.float32)
 

@@ -2,7 +2,7 @@
   "modelId": "base-anomaly-rf-v2",
   "version": "2.0.0",
   "modelType": "RandomForestClassifier",
-  "compiledAt": 1774950107992,
+  "compiledAt": 1776508994666,
   "nBits": {
     "op_inputs": 6,
     "op_leaves": 6
@@ -64,11 +64,11 @@
   ],
   "trainingData": {
     "path": "/app/data/test_data.csv",
-    "sha256": "9ab544f96f22be629a9d265526e09755940ef5020c50dea4435509306f8771d6",
+    "sha256": "be91279d47480e109462ab8b8cc5a41e302812aafbf1a663cbdccb8f8d3e7f94",
     "labelColumn": "label",
-    "rows": 220,
-    "normalRows": 110,
-    "anomalyRows": 110,
+    "rows": 440,
+    "normalRows": 270,
+    "anomalyRows": 170,
     "availableMetaColumns": [
       "subject",
       "source",
@@ -80,9 +80,9 @@
   "modelPath": "./artifacts/anomaly_model.json",
   "metrics": {
     "accuracy": 0.954545,
-    "precision": 1.0,
-    "recall": 0.909091,
-    "f1": 0.952381,
-    "testRows": 44
+    "precision": 0.96875,
+    "recall": 0.911765,
+    "f1": 0.939394,
+    "testRows": 88
   }
 }

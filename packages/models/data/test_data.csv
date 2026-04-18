@@ -219,3 +219,223 @@ tx_value_eth,tx_count_1h,tx_count_24h,unique_counterparts,gas_price_gwei,contrac
 0.388,0,0,0,0.0,0,86400,0.0,anomaly,0xfedc43d08f2df67bb9087b461db0298ba95d5d3b,forta:phishing_scams,2026-03-30T18:28:45Z,phishing / forta labels
 0.0,0,0,0,0.0,1,86400,0.0,normal,0x7ff10d4add8c9c2f5e47798cd60544ad91c1f4ec,etherscan-label-dump:bancor,2026-03-30T18:28:46Z,etherscan label dump / bancor
 0.0,0,0,0,0.0,0,86400,0.0,anomaly,0x36C22a0a2C7248B2B48BF105BFaF511c5BeB1DC8,forta:phishing_scams,2026-03-30T18:28:47Z,phishing / forta labels
+1.089409,4,9,3,39.46,0,1791,-0.099082,normal,0xb8efa9efc6b5a003abf7aa740a7feb174a498bc4,synthetic:personal-wallet-augmentation,2026-04-18T09:53:36Z,synthetic: moderate personal wallet
+2096.438106,32,63,14,1103.24,1,41,-0.924416,anomaly,0x628633c3fa816332fde59520f2404822f7df410c,synthetic:personal-wallet-augmentation,2026-04-18T09:53:36Z,synthetic: flash-loan / contract exploit
+16.109245,0,41,10,65.23,1,1434,-0.15732,normal,0x4ebaf1f82aaca3f3413780c76bb5800a628edfc4,synthetic:personal-wallet-augmentation,2026-04-18T09:53:36Z,synthetic: active DeFi personal wallet
+18.16907,0,30,6,67.18,1,185,-0.013386,normal,0xcd7b7016d386154eef09f535315f4953a536c301,synthetic:personal-wallet-augmentation,2026-04-18T09:53:36Z,synthetic: active DeFi personal wallet
+15.912522,2,30,11,25.48,1,174,0.130177,normal,0xa0d9acbb203eea526c1b7dd02d6c6f930685dc3c,synthetic:personal-wallet-augmentation,2026-04-18T09:53:36Z,synthetic: active DeFi personal wallet
+3.597881,2,13,2,19.41,0,5301,-0.053131,normal,0x0e6ca4a70df8cfac591dd4172cabfdcc83ed060d,synthetic:personal-wallet-augmentation,2026-04-18T09:53:36Z,synthetic: moderate personal wallet
+1.795411,0,0,1,18.79,0,86400,-0.049641,normal,0xfbe6cf9a48d5b0c0a13da900a6adcb3d64069481,synthetic:personal-wallet-augmentation,2026-04-18T09:53:36Z,synthetic: dormant personal wallet
+0.44953,2,2,3,48.86,0,2924,-0.020224,normal,0xcf19cc9937031761f31ec04b2a6c14ea59335c12,synthetic:personal-wallet-augmentation,2026-04-18T09:53:36Z,synthetic: low-activity personal wallet
+5.519755,2,59,10,27.83,1,1344,0.171219,normal,0xce3785b9c9a3c5f1883968e6d151a1164d8ef0d2,synthetic:personal-wallet-augmentation,2026-04-18T09:53:36Z,synthetic: active DeFi personal wallet
+0.397866,1,3,2,32.25,1,21981,0.052928,normal,0xe2755a1897819ea00011714c94ddd5ba1843fa74,synthetic:personal-wallet-augmentation,2026-04-18T09:53:36Z,synthetic: low-activity personal wallet
+13.960472,5,41,9,52.57,1,1475,-0.169507,normal,0x53b8562ea902f59b4c8530367a3b4efe8a3ca6ef,synthetic:personal-wallet-augmentation,2026-04-18T09:53:36Z,synthetic: active DeFi personal wallet
+11.162305,0,19,4,47.66,1,2568,0.045123,normal,0x271b94eacb036a0c5fea6a3e6adb382cb4302c7a,synthetic:personal-wallet-augmentation,2026-04-18T09:53:36Z,synthetic: active DeFi personal wallet
+1.58082,1,13,8,50.79,1,3487,0.030766,normal,0xfd227cc771d39eccf80b7c2c5857b7c25f0394ca,synthetic:personal-wallet-augmentation,2026-04-18T09:53:36Z,synthetic: moderate personal wallet
+0.933332,0,1,1,22.48,0,2183,-0.093826,normal,0x4615221721ba6621c4367e69683911112c93f433,synthetic:personal-wallet-augmentation,2026-04-18T09:53:36Z,synthetic: low-activity personal wallet
+0.096587,1,3,3,10.04,1,35584,-0.09873,normal,0xdfee29e75973358576133fab861a88df87976f2b,synthetic:personal-wallet-augmentation,2026-04-18T09:53:36Z,synthetic: low-activity personal wallet
+0.818445,4,4,3,47.85,0,3179,0.071497,normal,0x9f5b74fe82deb200399215187d3813a36bb02cd5,synthetic:personal-wallet-augmentation,2026-04-18T09:53:36Z,synthetic: moderate personal wallet
+17.506917,1,33,15,35.72,1,2326,0.087743,normal,0x9e84a66d4d76c810a7c24f95722f65ed4c5edcaa,synthetic:personal-wallet-augmentation,2026-04-18T09:53:36Z,synthetic: active DeFi personal wallet
+0.471771,3,9,7,25.53,0,5681,0.062092,normal,0xf7797b03e344b39944487baa3cd9564feccf693a,synthetic:personal-wallet-augmentation,2026-04-18T09:53:36Z,synthetic: moderate personal wallet
+8.890605,4,54,14,23.72,1,3256,-0.079786,normal,0xb20ea6c33053e253f2a68c7f06d30aae76b6a800,synthetic:personal-wallet-augmentation,2026-04-18T09:53:36Z,synthetic: active DeFi personal wallet
+2961.723631,30,42,34,1277.93,1,10,-0.618913,anomaly,0x3aa4aa401160690a769632667b77f1a43e12a62e,synthetic:personal-wallet-augmentation,2026-04-18T09:53:36Z,synthetic: flash-loan / contract exploit
+14.885877,0,33,13,39.76,1,1207,-0.147488,normal,0xc48c228b6d729e30b828b80b243ea66f01ea47e4,synthetic:personal-wallet-augmentation,2026-04-18T09:53:36Z,synthetic: active DeFi personal wallet
+3.273921,4,9,4,12.8,1,1343,-0.121965,normal,0x4f6b492eb7b9d8b04ea97584f4109ee88eb98c43,synthetic:personal-wallet-augmentation,2026-04-18T09:53:36Z,synthetic: moderate personal wallet
+17.149215,3,47,5,40.41,1,67,-0.199859,normal,0x59357de880b433c04581d526a9e38897b99cc01e,synthetic:personal-wallet-augmentation,2026-04-18T09:53:36Z,synthetic: active DeFi personal wallet
+0.723717,0,0,2,7.77,0,86400,-0.010831,normal,0x517ed02111f6a652da3524872b6a31d7ffe45877,synthetic:personal-wallet-augmentation,2026-04-18T09:53:36Z,synthetic: dormant personal wallet
+11.410644,1,30,3,47.94,1,1532,0.179758,normal,0x91ce68417a7a3007361bfa6b752c574e870fd9c9,synthetic:personal-wallet-augmentation,2026-04-18T09:53:36Z,synthetic: active DeFi personal wallet
+1.188159,0,1,3,16.61,1,22353,-0.015247,normal,0x0ab3839018bca4f3930fd30fdf32b1f0186e2e93,synthetic:personal-wallet-augmentation,2026-04-18T09:53:36Z,synthetic: low-activity personal wallet
+0.150341,0,0,2,36.71,0,86400,0.005039,normal,0xe7aae6da47627c2e59af2ea37abc84670ad3c4d3,synthetic:personal-wallet-augmentation,2026-04-18T09:53:36Z,synthetic: dormant personal wallet
+0.663722,0,3,3,22.32,0,29332,-0.099615,normal,0x925fb8de14d16f8d5c465c755964282cfd8c5969,synthetic:personal-wallet-augmentation,2026-04-18T09:53:36Z,synthetic: low-activity personal wallet
+13.509651,3,46,13,63.66,1,3314,-0.115589,normal,0x514a6933ee30672e19d47283e2d94f1d441551e4,synthetic:personal-wallet-augmentation,2026-04-18T09:53:36Z,synthetic: active DeFi personal wallet
+744.531274,5,56,20,5991.05,1,106,-0.650844,anomaly,0xe4b8cf847758ea54bf1d0ec070a4cd15fef16558,synthetic:personal-wallet-augmentation,2026-04-18T09:53:36Z,synthetic: flash-loan / contract exploit
+0.004996,291,1198,350,1391.65,1,116,0.00219,anomaly,0x62df2681c35c8279d2bb83251df16ca704e3f3ae,synthetic:personal-wallet-augmentation,2026-04-18T09:53:36Z,synthetic: bot / spam wallet
+4.472059,2,12,8,21.74,1,1295,-0.109314,normal,0x03e8cfe4ca9a5621499a9d81ae2561285b9bb4ef,synthetic:personal-wallet-augmentation,2026-04-18T09:53:36Z,synthetic: moderate personal wallet
+0.884404,2,2,1,16.93,0,12141,0.061173,normal,0x94b9b7ce4c7e16fcbf36beed294fa10fb08f0a30,synthetic:personal-wallet-augmentation,2026-04-18T09:53:36Z,synthetic: low-activity personal wallet
+4233.180809,3,10,2,3708.61,0,52,-0.713934,anomaly,0x1bdac552bebb44b7bd824853504d4c383f519e31,synthetic:personal-wallet-augmentation,2026-04-18T09:53:36Z,synthetic: large-value drain / exit scam
+0.583283,2,12,6,53.57,1,3362,0.045385,normal,0x3fd8b37dc661ef91b079df118e0cae4f7b422f64,synthetic:personal-wallet-augmentation,2026-04-18T09:53:36Z,synthetic: moderate personal wallet
+4.496774,4,11,6,27.16,0,1458,-0.041185,normal,0xbb269f593896afd750946a60d35d1e36b415d205,synthetic:personal-wallet-augmentation,2026-04-18T09:53:36Z,synthetic: moderate personal wallet
+1.491681,0,0,0,18.19,0,86400,0.025211,normal,0xff8eb8406e2f8a7fc4cce4dd9f0b4110d9f2fa00,synthetic:personal-wallet-augmentation,2026-04-18T09:53:36Z,synthetic: dormant personal wallet
+1.05383,0,0,0,37.83,0,86400,-0.02381,normal,0x5c679f9c6994e45b8ab1098012070961f37de436,synthetic:personal-wallet-augmentation,2026-04-18T09:53:36Z,synthetic: dormant personal wallet
+0.003389,146,2301,64,584.8,1,105,0.049057,anomaly,0x4ca4a058ae60d61c0076b005821413a774a288bb,synthetic:personal-wallet-augmentation,2026-04-18T09:53:36Z,synthetic: bot / spam wallet
+0.601316,2,2,3,48.8,1,30585,-0.057597,normal,0x422362f0734ab4d3ef9640f0b57588c081da5ff6,synthetic:personal-wallet-augmentation,2026-04-18T09:53:36Z,synthetic: low-activity personal wallet
+0.938292,1,3,2,11.97,1,22668,-0.005093,normal,0x6b91deafd8801a9495b5fcceaa8bb068fc3ca962,synthetic:personal-wallet-augmentation,2026-04-18T09:53:36Z,synthetic: low-activity personal wallet
+0.548633,1,2,2,29.18,0,2964,0.027287,normal,0x2aa0281bc1450d21386343fb93547121b38151a5,synthetic:personal-wallet-augmentation,2026-04-18T09:53:36Z,synthetic: low-activity personal wallet
+2.345967,4,24,10,57.15,1,2120,0.075015,normal,0x8ce65b33829bcad158e330ebafa5690fc673366a,synthetic:personal-wallet-augmentation,2026-04-18T09:53:36Z,synthetic: active DeFi personal wallet
+16.744857,6,57,6,33.32,1,1965,-0.024662,normal,0x3b38ebfb2fcf3cf8f55876dae11f3c612288b8e3,synthetic:personal-wallet-augmentation,2026-04-18T09:53:36Z,synthetic: active DeFi personal wallet
+4064.93016,5,2,3,2887.05,0,298,-0.759681,anomaly,0xac51fa8c2afb174cdb2ad496da022c4434c08d3a,synthetic:personal-wallet-augmentation,2026-04-18T09:53:36Z,synthetic: large-value drain / exit scam
+0.007608,351,2976,142,984.46,1,101,0.047122,anomaly,0xdc2d6ad1cd4477bdb8c2fdba41716e88391245cf,synthetic:personal-wallet-augmentation,2026-04-18T09:53:36Z,synthetic: bot / spam wallet
+334.286233,6,23,47,5616.68,1,267,-0.622359,anomaly,0x88235a0b0875e12ce87a5d67a0ad0d43acbe2124,synthetic:personal-wallet-augmentation,2026-04-18T09:53:36Z,synthetic: flash-loan / contract exploit
+1.53434,0,0,2,11.97,0,86400,0.043625,normal,0x0894ea27e689c66b6b262e4886b8438f39ba76fe,synthetic:personal-wallet-augmentation,2026-04-18T09:53:36Z,synthetic: dormant personal wallet
+9.917479,7,56,14,78.45,1,263,0.150087,normal,0x3cc1e59f4dea11a6f746038a496017c8588f7b95,synthetic:personal-wallet-augmentation,2026-04-18T09:53:36Z,synthetic: active DeFi personal wallet
+1659.923754,11,23,59,5918.24,1,121,-0.527225,anomaly,0x58b1be35f521509d4e81331e19657f692b82812c,synthetic:personal-wallet-augmentation,2026-04-18T09:53:36Z,synthetic: flash-loan / contract exploit
+0.301977,1,2,3,8.87,0,27872,0.093939,normal,0xe8171411888b1233803e06de791493399cb1553d,synthetic:personal-wallet-augmentation,2026-04-18T09:53:36Z,synthetic: low-activity personal wallet
+226.463456,14,33,27,889.63,1,233,-0.598537,anomaly,0xf37fc09496cd1083f7a46de7b79ce8b82cb86a77,synthetic:personal-wallet-augmentation,2026-04-18T09:53:36Z,synthetic: flash-loan / contract exploit
+961.065545,2,10,4,1760.71,0,244,-0.87001,anomaly,0xe82e7aef0172cb3365d02c93baab7f88a97113cd,synthetic:personal-wallet-augmentation,2026-04-18T09:53:36Z,synthetic: large-value drain / exit scam
+2833.297449,4,10,2,4251.3,0,268,-0.978013,anomaly,0xc423ce33b5d9abb4c84dee0315f4b5cddd985002,synthetic:personal-wallet-augmentation,2026-04-18T09:53:36Z,synthetic: large-value drain / exit scam
+4.795819,4,4,6,55.07,0,3880,0.027074,normal,0x4be13f4396d0938c7c2c93e871c567bbeb9bf4f0,synthetic:personal-wallet-augmentation,2026-04-18T09:53:36Z,synthetic: moderate personal wallet
+3.425977,0,4,6,26.14,0,2958,-0.067366,normal,0x10883220b262e6c50a1b70ca16e11b7a7f721651,synthetic:personal-wallet-augmentation,2026-04-18T09:53:36Z,synthetic: moderate personal wallet
+8.828417,0,19,6,66.37,1,3073,-0.121307,normal,0x8767970b0820b569d50687b553a1b59c351659b5,synthetic:personal-wallet-augmentation,2026-04-18T09:53:36Z,synthetic: active DeFi personal wallet
+0.00325,141,401,127,433.04,0,60,-0.046977,anomaly,0xa43db9f39f263623c6dff7228171e6a2f4d6bee4,synthetic:personal-wallet-augmentation,2026-04-18T09:53:36Z,synthetic: bot / spam wallet
+3.968059,1,15,5,57.67,1,235,-0.131208,normal,0xb3e6f67ea8ba5b389823e8303952c9ec12111431,synthetic:personal-wallet-augmentation,2026-04-18T09:53:36Z,synthetic: active DeFi personal wallet
+1.370368,1,3,1,38.12,0,4268,-0.097054,normal,0x28c79f9f54f91ea1bce0f0554a3bb953d5f4c5e7,synthetic:personal-wallet-augmentation,2026-04-18T09:53:36Z,synthetic: low-activity personal wallet
+2260.072978,37,44,25,972.59,1,161,-0.771758,anomaly,0x72306fe1bcecb2f80db6cd6b51b1fecf504ed95e,synthetic:personal-wallet-augmentation,2026-04-18T09:53:36Z,synthetic: flash-loan / contract exploit
+0.496359,0,0,0,8.18,0,86400,-0.035613,normal,0x15c90b999b772b4fc7a6fd4c914a16db4708752b,synthetic:personal-wallet-augmentation,2026-04-18T09:53:36Z,synthetic: dormant personal wallet
+1.11333,0,0,0,15.14,0,86400,0.004069,normal,0x9d5c3460be31201e69fedaa0eee8b9997f5c7c29,synthetic:personal-wallet-augmentation,2026-04-18T09:53:36Z,synthetic: dormant personal wallet
+0.147702,2,3,2,18.18,1,41562,-0.068708,normal,0xd8f7e90ad15da705c7fa3613806f5266b233e968,synthetic:personal-wallet-augmentation,2026-04-18T09:53:36Z,synthetic: low-activity personal wallet
+4112.085127,2,5,3,2240.63,0,209,-0.930353,anomaly,0x596738ec6e8bd91afa00e22c23d448a3eb576eac,synthetic:personal-wallet-augmentation,2026-04-18T09:53:36Z,synthetic: large-value drain / exit scam
+3551.96013,1,6,1,7811.9,0,119,-0.709281,anomaly,0xa004d4b35c06675b72346b3e88a5c4cf0d22d938,synthetic:personal-wallet-augmentation,2026-04-18T09:53:36Z,synthetic: large-value drain / exit scam
+1.37121,0,2,3,8.56,0,20573,0.01242,normal,0x849a5ed711a30adc1bfe143cd7cfe42207c64ff3,synthetic:personal-wallet-augmentation,2026-04-18T09:53:36Z,synthetic: low-activity personal wallet
+0.265862,0,0,1,26.71,0,86400,0.024798,normal,0x3e96968f89be828565e07e5f7d784e9060a721ca,synthetic:personal-wallet-augmentation,2026-04-18T09:53:36Z,synthetic: dormant personal wallet
+0.002806,424,1041,234,229.48,1,62,-0.024268,anomaly,0x050cf01077ff47ba4ac6a415bc5d7408ea29e66f,synthetic:personal-wallet-augmentation,2026-04-18T09:53:36Z,synthetic: bot / spam wallet
+1.446079,2,15,12,68.52,1,174,-0.090577,normal,0xe095666be8cfe368681d5cde3f194624fe5c0754,synthetic:personal-wallet-augmentation,2026-04-18T09:53:36Z,synthetic: active DeFi personal wallet
+0.421926,0,3,2,27.48,0,26450,0.070866,normal,0xdf7197ed0b4883cf027cdcd775755c3fe8dda085,synthetic:personal-wallet-augmentation,2026-04-18T09:53:36Z,synthetic: low-activity personal wallet
+4.162283,2,10,8,31.4,1,1320,0.060787,normal,0xc034bab69ae72d8cca94e439e6f4594c0342bbfa,synthetic:personal-wallet-augmentation,2026-04-18T09:53:36Z,synthetic: moderate personal wallet
+0.298736,0,0,2,24.97,0,86400,-0.041054,normal,0x1d5dd92589082d852a7122873ee805add5894216,synthetic:personal-wallet-augmentation,2026-04-18T09:53:36Z,synthetic: dormant personal wallet
+0.41043,0,0,2,17.66,0,86400,0.025814,normal,0x982e85bb55b672a872637acd7466fcb60e0e8ff1,synthetic:personal-wallet-augmentation,2026-04-18T09:53:36Z,synthetic: dormant personal wallet
+2242.036907,5,6,1,3278.64,0,427,-0.979842,anomaly,0x068daa93fd52c10b26626b1e474b9f74701ddf87,synthetic:personal-wallet-augmentation,2026-04-18T09:53:36Z,synthetic: large-value drain / exit scam
+1971.197607,16,18,21,1700.55,1,261,-0.888727,anomaly,0x57a09444f738448c9e9a6671e2a340bafce5541e,synthetic:personal-wallet-augmentation,2026-04-18T09:53:36Z,synthetic: flash-loan / contract exploit
+16.086544,2,52,10,58.73,1,3083,-0.00151,normal,0x849b1bee54dec5993b2281767a65ea79fc19c8ca,synthetic:personal-wallet-augmentation,2026-04-18T09:53:36Z,synthetic: active DeFi personal wallet
+1239.098927,2,9,2,2376.39,0,92,-0.933653,anomaly,0x9a20c4e36c32d5f0a01ec476edf66484523da2cf,synthetic:personal-wallet-augmentation,2026-04-18T09:53:36Z,synthetic: large-value drain / exit scam
+1.263532,1,1,3,11.16,1,21439,0.064612,normal,0xf43bbb49a9711d5ce74ae04c88d6d27e4f0d8a97,synthetic:personal-wallet-augmentation,2026-04-18T09:53:36Z,synthetic: low-activity personal wallet
+0.009792,193,2443,290,1587.53,0,94,-0.015956,anomaly,0x7f20333ca70d0d74bd2422fe1a65eccd9ff4c19e,synthetic:personal-wallet-augmentation,2026-04-18T09:53:36Z,synthetic: bot / spam wallet
+1.13058,1,2,1,20.67,0,31936,-0.037095,normal,0xc62c5271cf64f25d6f15cc50c4b73f4c7e621513,synthetic:personal-wallet-augmentation,2026-04-18T09:53:36Z,synthetic: low-activity personal wallet
+2696.597723,18,26,38,1873.72,1,84,-0.808679,anomaly,0x5d50b48f1f7da912581bdad9624dbf3d398be1cb,synthetic:personal-wallet-augmentation,2026-04-18T09:53:36Z,synthetic: flash-loan / contract exploit
+8.906347,2,17,8,17.71,1,3114,-0.081901,normal,0xd0dc83b47ac54262be2068a82428e4c2c9d4fe0d,synthetic:personal-wallet-augmentation,2026-04-18T09:53:36Z,synthetic: active DeFi personal wallet
+4502.474038,2,9,4,4198.71,0,304,-0.831034,anomaly,0x32fea853af30bcc23947ff90a9c55ba00ea268ea,synthetic:personal-wallet-augmentation,2026-04-18T09:53:36Z,synthetic: large-value drain / exit scam
+1311.963143,37,49,57,2756.03,1,228,-0.686806,anomaly,0xf38c5bd0d06c196eec7d3c28bcdc040684f95062,synthetic:personal-wallet-augmentation,2026-04-18T09:53:36Z,synthetic: flash-loan / contract exploit
+0.401957,0,3,3,42.71,0,10522,0.094953,normal,0xa7b25278a7608434543464c44d4b9a98de8c6437,synthetic:personal-wallet-augmentation,2026-04-18T09:53:36Z,synthetic: low-activity personal wallet
+1.206084,0,0,2,38.1,0,86400,0.013746,normal,0xb36f13bcae48166882136805a7d1be5e9f276810,synthetic:personal-wallet-augmentation,2026-04-18T09:53:36Z,synthetic: dormant personal wallet
+0.005237,440,952,313,1598.85,1,13,-0.027767,anomaly,0x1d70bbdd50c227d567a79aa85ffb0549c1545d08,synthetic:personal-wallet-augmentation,2026-04-18T09:53:36Z,synthetic: bot / spam wallet
+0.86785,0,0,2,16.64,0,86400,-0.003684,normal,0x2b5157410e4dee4af2b34f430a073447de636c0e,synthetic:personal-wallet-augmentation,2026-04-18T09:53:36Z,synthetic: dormant personal wallet
+0.501494,2,2,2,10.55,1,40003,0.045142,normal,0x074d9edb7ec0c6c077e79100a48689d850159348,synthetic:personal-wallet-augmentation,2026-04-18T09:53:36Z,synthetic: low-activity personal wallet
+1.25616,0,2,3,32.21,0,29411,-0.079427,normal,0x305b178b3feefc8f383e3ecf4674744beccb5409,synthetic:personal-wallet-augmentation,2026-04-18T09:53:36Z,synthetic: low-activity personal wallet
+1.866931,0,0,1,20.78,0,86400,0.014449,normal,0x92f8194157f1d4af90988285cf7a9af7c93d5552,synthetic:personal-wallet-augmentation,2026-04-18T09:53:36Z,synthetic: dormant personal wallet
+7.893674,2,19,14,74.64,1,2198,0.124392,normal,0x3e84e606159cb5b8877c2331d3389d545a3ccec9,synthetic:personal-wallet-augmentation,2026-04-18T09:53:36Z,synthetic: active DeFi personal wallet
+4595.869444,5,3,3,900.63,0,86,-0.937782,anomaly,0x0b6eec4f6d494ee00fd945848d77d76eef1b2f02,synthetic:personal-wallet-augmentation,2026-04-18T09:53:36Z,synthetic: large-value drain / exit scam
+2.76321,3,25,3,22.22,1,3011,0.034139,normal,0xc20e042ced166824a5adecf869037c68b5c33532,synthetic:personal-wallet-augmentation,2026-04-18T09:53:36Z,synthetic: active DeFi personal wallet
+1.21885,0,8,3,19.44,1,4857,-0.031064,normal,0xb4537aa5a6fb8a916e971d0b5122b2e11fc6e1b5,synthetic:personal-wallet-augmentation,2026-04-18T09:53:36Z,synthetic: moderate personal wallet
+18.901944,2,52,10,44.67,1,2428,0.16819,normal,0xe1221bf056cc7af0f1483cfec3207a7502c87213,synthetic:personal-wallet-augmentation,2026-04-18T09:53:36Z,synthetic: active DeFi personal wallet
+0.002391,193,2121,334,208.85,0,62,0.024422,anomaly,0xc0381edd1c7a57a16c332af487efeb4326e7a232,synthetic:personal-wallet-augmentation,2026-04-18T09:53:36Z,synthetic: bot / spam wallet
+0.062321,0,0,0,27.3,0,86400,-0.012338,normal,0xe719097dfa8701e9232f21f2812687786976ebfc,synthetic:personal-wallet-augmentation,2026-04-18T09:53:36Z,synthetic: dormant personal wallet
+1.394084,0,0,0,7.12,0,86400,0.014713,normal,0xe491c5b10becb5563bfc1e6f93427ecbc8fe2955,synthetic:personal-wallet-augmentation,2026-04-18T09:53:36Z,synthetic: dormant personal wallet
+5.913421,0,54,4,79.51,1,797,0.080471,normal,0xe2d07b3d6e15c05ec78aaa4db95572b3c99dffa3,synthetic:personal-wallet-augmentation,2026-04-18T09:53:36Z,synthetic: active DeFi personal wallet
+2475.467153,1,7,4,4335.16,0,181,-0.742176,anomaly,0x48fe59c4500202b9d460c2d1aaf552a1c061896c,synthetic:personal-wallet-augmentation,2026-04-18T09:53:36Z,synthetic: large-value drain / exit scam
+0.004208,59,2723,290,1206.47,1,74,0.004292,anomaly,0xb0dfa159f60952c9bd3b95687f64bd9a825321e8,synthetic:personal-wallet-augmentation,2026-04-18T09:53:36Z,synthetic: bot / spam wallet
+1.165827,4,12,5,44.92,0,455,0.147234,normal,0xa221383df945db015b724b39b5fe27b26e72258b,synthetic:personal-wallet-augmentation,2026-04-18T09:53:36Z,synthetic: moderate personal wallet
+1.316641,0,0,2,20.13,0,86400,0.004591,normal,0xc99d6e75af6547cfb11b42072482dc531c2bc390,synthetic:personal-wallet-augmentation,2026-04-18T09:53:36Z,synthetic: dormant personal wallet
+0.967776,0,1,3,45.49,1,39744,0.087431,normal,0xfc7f5400161f0ccf5f79511d35066448d366d459,synthetic:personal-wallet-augmentation,2026-04-18T09:53:36Z,synthetic: low-activity personal wallet
+0.255485,0,3,1,43.35,0,10732,0.04923,normal,0xa762c7a87ac2f0f1030ddf779d6cc827574a100d,synthetic:personal-wallet-augmentation,2026-04-18T09:53:36Z,synthetic: low-activity personal wallet
+3.688874,4,9,4,46.09,0,6749,0.031138,normal,0x33b6a739117c82b562e40ae13a0af93825845e4c,synthetic:personal-wallet-augmentation,2026-04-18T09:53:36Z,synthetic: moderate personal wallet
+1.148847,0,0,2,22.33,0,86400,0.022945,normal,0x93253cd654af4dfad71427a0aeb3fee9232f8af2,synthetic:personal-wallet-augmentation,2026-04-18T09:53:36Z,synthetic: dormant personal wallet
+4.369986,2,12,7,29.04,0,4879,0.112621,normal,0x89e3070caf4df9f71012265dc8f351e5c97526b8,synthetic:personal-wallet-augmentation,2026-04-18T09:53:36Z,synthetic: moderate personal wallet
+3.392496,0,6,2,37.13,1,6088,0.081523,normal,0xc50e4a9f07c72c5a76a4603722b99862219f2d73,synthetic:personal-wallet-augmentation,2026-04-18T09:53:36Z,synthetic: moderate personal wallet
+0.153963,2,2,3,27.83,0,41384,-0.096894,normal,0x02043e2d6f3e42f1098d7ce65f19bb4a2b96ffeb,synthetic:personal-wallet-augmentation,2026-04-18T09:53:36Z,synthetic: low-activity personal wallet
+1.85618,3,21,15,29.02,1,1890,-0.177998,normal,0x66abf71cd547d0194aa4ab61035f8c862ca0c482,synthetic:personal-wallet-augmentation,2026-04-18T09:53:36Z,synthetic: active DeFi personal wallet
+14.518173,4,55,12,22.3,1,1628,0.004835,normal,0xd1731cbea88024f444dce8e861ae6139ce549063,synthetic:personal-wallet-augmentation,2026-04-18T09:53:36Z,synthetic: active DeFi personal wallet
+8.816042,4,26,13,25.82,1,3085,-0.086278,normal,0xc87fae830e2e6b84482322c89b2720220725b926,synthetic:personal-wallet-augmentation,2026-04-18T09:53:36Z,synthetic: active DeFi personal wallet
+3.87715,3,13,3,28.67,0,3372,-0.078929,normal,0xbe15076deb993d45da2c673ab556bbae05823e7a,synthetic:personal-wallet-augmentation,2026-04-18T09:53:36Z,synthetic: moderate personal wallet
+0.71323,0,0,0,30.28,0,86400,-0.016202,normal,0xeae109c4a997203975352b878b145c8a42d884cf,synthetic:personal-wallet-augmentation,2026-04-18T09:53:36Z,synthetic: dormant personal wallet
+740.872012,5,4,3,5276.45,0,415,-0.742629,anomaly,0x8411e3f40d2c29116eedf02994af5e453d5f85ac,synthetic:personal-wallet-augmentation,2026-04-18T09:53:36Z,synthetic: large-value drain / exit scam
+10.889409,2,37,5,23.99,1,3257,0.094872,normal,0xbdbb55397f5492c20f726370c4bb7bf186031932,synthetic:personal-wallet-augmentation,2026-04-18T09:53:36Z,synthetic: active DeFi personal wallet
+4.17669,4,8,3,37.75,1,6911,0.088482,normal,0x7a51bcb46ecfc06a98f36874e74385e1bc7ece6c,synthetic:personal-wallet-augmentation,2026-04-18T09:53:36Z,synthetic: moderate personal wallet
+0.768775,1,3,3,41.29,1,34489,-0.03143,normal,0xe96b5ec83eb61c818cc3cc1f0626d6d7b4873772,synthetic:personal-wallet-augmentation,2026-04-18T09:53:36Z,synthetic: low-activity personal wallet
+1229.131199,2,5,3,5543.65,0,232,-0.891808,anomaly,0xdea6c8d181e477f70c59545c4db31ee411e107e7,synthetic:personal-wallet-augmentation,2026-04-18T09:53:36Z,synthetic: large-value drain / exit scam
+0.085884,1,15,4,13.45,0,1669,0.002625,normal,0xd0b98805a615e890a9d289ccd8a2d6c44dc6c5d1,synthetic:personal-wallet-augmentation,2026-04-18T09:53:36Z,synthetic: moderate personal wallet
+16.53281,5,55,9,76.63,1,965,0.06099,normal,0xadda9c0299fa0838f3d6d299ea4aab6d2ab5c9ee,synthetic:personal-wallet-augmentation,2026-04-18T09:53:36Z,synthetic: active DeFi personal wallet
+0.006187,73,1488,283,266.94,1,18,-0.046262,anomaly,0x4220ee119923aedf2b4ac9301a1093453624a153,synthetic:personal-wallet-augmentation,2026-04-18T09:53:36Z,synthetic: bot / spam wallet
+1.203066,0,6,6,56.31,1,5742,0.033272,normal,0xc17b653b2c1119cfa6e2a1e900f2f0afc278c1b5,synthetic:personal-wallet-augmentation,2026-04-18T09:53:36Z,synthetic: moderate personal wallet
+0.246736,0,4,6,54.79,1,4454,0.082044,normal,0xdfdcc7edb714b3e705227532d1bfcd4e60d7f9cd,synthetic:personal-wallet-augmentation,2026-04-18T09:53:36Z,synthetic: moderate personal wallet
+0.009749,406,1126,214,160.36,0,44,-0.008694,anomaly,0x0bbf527a004f84e8f3c546857b3d8cd54c4645a4,synthetic:personal-wallet-augmentation,2026-04-18T09:53:36Z,synthetic: bot / spam wallet
+0.518349,0,0,2,26.18,0,86400,-0.005277,normal,0xb2ba29703474f064ac68f700f5b02b3dc666f45b,synthetic:personal-wallet-augmentation,2026-04-18T09:53:36Z,synthetic: dormant personal wallet
+3227.662194,4,9,3,1110.18,0,489,-0.805377,anomaly,0x3112fc996d21848ebd69da8ee9a2cdf23c174a97,synthetic:personal-wallet-augmentation,2026-04-18T09:53:36Z,synthetic: large-value drain / exit scam
+0.002951,28,1777,167,691.62,0,103,-0.002755,anomaly,0x214d61e7ef762ff1de4606626e37ea7b84d8a91d,synthetic:personal-wallet-augmentation,2026-04-18T09:53:36Z,synthetic: bot / spam wallet
+0.898375,0,0,2,14.72,0,86400,0.031928,normal,0x8ed4b7c2764d2a5a4d767706f85d8690024ad6bd,synthetic:personal-wallet-augmentation,2026-04-18T09:53:36Z,synthetic: dormant personal wallet
+0.003354,287,2124,228,708.3,1,96,-0.002116,anomaly,0x84aa1c2a8753872e201a8643a8aefb48601a4ed8,synthetic:personal-wallet-augmentation,2026-04-18T09:53:36Z,synthetic: bot / spam wallet
+0.24776,1,1,3,44.24,0,10809,0.068154,normal,0xeffe97eebfdad6265cb80e0a17a930f7f849116d,synthetic:personal-wallet-augmentation,2026-04-18T09:53:36Z,synthetic: low-activity personal wallet
+1.485617,0,1,3,28.43,0,17444,0.085099,normal,0x8fda31e4438213ad665cc12a0e1a11bdeaf920cb,synthetic:personal-wallet-augmentation,2026-04-18T09:53:36Z,synthetic: low-activity personal wallet
+1.590562,0,0,2,21.92,0,86400,-0.039861,normal,0xca4f2e53cb8ad1919dd51a9fb6d4d509ba64c8cf,synthetic:personal-wallet-augmentation,2026-04-18T09:53:36Z,synthetic: dormant personal wallet
+3.608813,3,9,2,51.93,1,1495,-0.067238,normal,0x830b5489790a6f18cce5669032647b1d42182825,synthetic:personal-wallet-augmentation,2026-04-18T09:53:36Z,synthetic: moderate personal wallet
+1.357688,1,3,2,14.03,1,13952,0.018378,normal,0x79a3be12655dce528ea7c056873a18b8e73581c9,synthetic:personal-wallet-augmentation,2026-04-18T09:53:36Z,synthetic: low-activity personal wallet
+3022.088831,4,9,1,5955.88,0,271,-0.873201,anomaly,0x79027bb67b2ff4c6dbabf3157119e77a135c6523,synthetic:personal-wallet-augmentation,2026-04-18T09:53:36Z,synthetic: large-value drain / exit scam
+1.276095,4,32,10,53.37,1,2469,0.12295,normal,0x14ef38f77296aea9756f6a900f72580e89d9bf20,synthetic:personal-wallet-augmentation,2026-04-18T09:53:36Z,synthetic: active DeFi personal wallet
+4.085986,1,8,5,24.12,1,6977,0.122677,normal,0x438d5a0fbbb3d30cec7fcdb4325d953a8a7014cf,synthetic:personal-wallet-augmentation,2026-04-18T09:53:36Z,synthetic: moderate personal wallet
+0.386533,0,1,3,17.79,0,33494,-0.021376,normal,0xe551bd7871581383b41e0e1884f71c334aa20265,synthetic:personal-wallet-augmentation,2026-04-18T09:53:36Z,synthetic: low-activity personal wallet
+3.617522,1,7,2,11.6,1,1232,-0.065023,normal,0x1cd7ad20e0045a54c19702e2b264f02ba5ebdb4f,synthetic:personal-wallet-augmentation,2026-04-18T09:53:36Z,synthetic: moderate personal wallet
+4.506139,2,14,5,33.0,1,6530,0.12105,normal,0x370721cdb31e74c0d1c0720f800a86de7b76b568,synthetic:personal-wallet-augmentation,2026-04-18T09:53:36Z,synthetic: moderate personal wallet
+0.407334,0,0,0,20.2,0,86400,-0.007625,normal,0x2ecfbaeb5342071a48cb2dbd574ab29152572237,synthetic:personal-wallet-augmentation,2026-04-18T09:53:36Z,synthetic: dormant personal wallet
+0.006037,228,2378,136,555.34,1,98,0.030691,anomaly,0xadb93f7cea3b2e84c5f2735e93eec9674263fb36,synthetic:personal-wallet-augmentation,2026-04-18T09:53:36Z,synthetic: bot / spam wallet
+0.411499,0,3,3,36.75,1,23031,0.006911,normal,0xf8c366779e1dcaee698204c5eb2cb52077cb84a4,synthetic:personal-wallet-augmentation,2026-04-18T09:53:36Z,synthetic: low-activity personal wallet
+4.321195,3,6,4,44.26,0,1304,0.142301,normal,0x04449a4db43156edcb2ed4adcbab107867071345,synthetic:personal-wallet-augmentation,2026-04-18T09:53:36Z,synthetic: moderate personal wallet
+0.50367,0,0,1,22.54,0,86400,-0.024064,normal,0xd6431fb5ead7424d09e15d024c5848f23d1fa6f7,synthetic:personal-wallet-augmentation,2026-04-18T09:53:36Z,synthetic: dormant personal wallet
+1.048873,0,0,2,11.71,0,86400,-0.027642,normal,0x00059aeb8ea17cf3787e0ed29d1c0b63ffd72983,synthetic:personal-wallet-augmentation,2026-04-18T09:53:36Z,synthetic: dormant personal wallet
+0.44889,2,3,3,26.53,0,31149,-0.035216,normal,0x83c73fbff6c256e17a4906ef6312507027bf47e4,synthetic:personal-wallet-augmentation,2026-04-18T09:53:36Z,synthetic: low-activity personal wallet
+7.912142,3,36,15,36.89,1,3573,-0.125706,normal,0x49d393446dad21d3220178ddce6d8c434d717a3f,synthetic:personal-wallet-augmentation,2026-04-18T09:53:36Z,synthetic: active DeFi personal wallet
+2.281282,8,54,12,72.88,1,375,0.065556,normal,0x6f777c1f7d25ac32156e599baf2bec5d05a2d2d0,synthetic:personal-wallet-augmentation,2026-04-18T09:53:36Z,synthetic: active DeFi personal wallet
+760.70818,16,69,59,3675.32,1,245,-0.703242,anomaly,0xc6513585e12e9fec6c01222f2e5ebc02ddd2e994,synthetic:personal-wallet-augmentation,2026-04-18T09:53:36Z,synthetic: flash-loan / contract exploit
+0.071733,2,15,5,20.32,0,2360,-0.058829,normal,0x389ee53952a6e3efb99456241705eff82aa98737,synthetic:personal-wallet-augmentation,2026-04-18T09:53:36Z,synthetic: moderate personal wallet
+18.707669,3,21,14,69.57,1,1729,0.197972,normal,0x5a21e1cbfb45047666cd1496a9c6eb3c2e712707,synthetic:personal-wallet-augmentation,2026-04-18T09:53:36Z,synthetic: active DeFi personal wallet
+2.609437,0,15,7,46.93,0,3474,-0.048895,normal,0xb447678d30f38941d33402d23cfecb4cd58f38c2,synthetic:personal-wallet-augmentation,2026-04-18T09:53:36Z,synthetic: moderate personal wallet
+0.002947,1,1,1,20.11,0,585,-0.030439,normal,0x30fb5efdb18551916d76ff543829fb35a7b630cd,synthetic:personal-wallet-augmentation,2026-04-18T09:53:36Z,synthetic: low-activity personal wallet
+2178.845895,12,43,34,733.36,1,118,-0.94837,anomaly,0x15b52b9ca2e2649f68f7ac40bfb5718e410bd6dc,synthetic:personal-wallet-augmentation,2026-04-18T09:53:36Z,synthetic: flash-loan / contract exploit
+0.537608,1,1,3,20.68,1,32079,-0.014301,normal,0x2bb94e9bc51d2ba647b007056b2496803349775f,synthetic:personal-wallet-augmentation,2026-04-18T09:53:36Z,synthetic: low-activity personal wallet
+2914.689737,18,70,60,5693.83,1,132,-0.791018,anomaly,0x30878db23ef690c06fa1df009a824640579530de,synthetic:personal-wallet-augmentation,2026-04-18T09:53:36Z,synthetic: flash-loan / contract exploit
+0.146276,0,0,2,34.94,0,86400,-0.025153,normal,0x37724f4d37ea2b14004077139b4180df39322499,synthetic:personal-wallet-augmentation,2026-04-18T09:53:36Z,synthetic: dormant personal wallet
+1.848943,1,9,6,55.99,1,2020,-0.132683,normal,0x36ce196efdd8ff50992948745346e2cd2d14e1f5,synthetic:personal-wallet-augmentation,2026-04-18T09:53:36Z,synthetic: moderate personal wallet
+1776.610099,28,33,12,4778.74,1,43,-0.899201,anomaly,0xa47a1b7189b257bbd08d52e0e05b01432edc784f,synthetic:personal-wallet-augmentation,2026-04-18T09:53:36Z,synthetic: flash-loan / contract exploit
+11.158305,4,57,11,72.58,1,2819,-0.17954,normal,0x9b7fc2df839c67431a6abfedfa48bbae66e91aa0,synthetic:personal-wallet-augmentation,2026-04-18T09:53:36Z,synthetic: active DeFi personal wallet
+0.006323,478,2815,345,993.9,1,94,0.033889,anomaly,0xb43623f7e4d506746a6ab9b93f11ecdd0c43db2f,synthetic:personal-wallet-augmentation,2026-04-18T09:53:36Z,synthetic: bot / spam wallet
+1.973684,0,15,6,23.32,1,649,0.03867,normal,0x728786f2b2f4714821ba6856bb7a584eeb5a16a4,synthetic:personal-wallet-augmentation,2026-04-18T09:53:36Z,synthetic: moderate personal wallet
+1669.100112,3,3,3,5366.22,0,463,-0.773649,anomaly,0x25e47d4f589cdda636db5417fe3e501d9114ab18,synthetic:personal-wallet-augmentation,2026-04-18T09:53:36Z,synthetic: large-value drain / exit scam
+1.220197,0,0,0,21.98,0,86400,0.044876,normal,0x4ac91b6d0c48d41a1e5ec9e6a0392854a8615eef,synthetic:personal-wallet-augmentation,2026-04-18T09:53:36Z,synthetic: dormant personal wallet
+0.063787,0,0,2,30.39,0,86400,0.048498,normal,0xe2563701288f29b3d73f6ac2b69edd2c19f264be,synthetic:personal-wallet-augmentation,2026-04-18T09:53:36Z,synthetic: dormant personal wallet
+2.505009,0,8,4,27.84,0,5783,-0.139767,normal,0x3066da32b9907948249baeb97db3cfab1eaca5f6,synthetic:personal-wallet-augmentation,2026-04-18T09:53:36Z,synthetic: moderate personal wallet
+2.376018,6,58,8,22.94,1,892,0.198451,normal,0x2594fab209fe2f66f88f9b2d6747f08a74991033,synthetic:personal-wallet-augmentation,2026-04-18T09:53:36Z,synthetic: active DeFi personal wallet
+1910.035925,6,12,13,1126.16,1,154,-0.647788,anomaly,0x992c68e18f021e92749d2ef749c3edc0e964708f,synthetic:personal-wallet-augmentation,2026-04-18T09:53:36Z,synthetic: flash-loan / contract exploit
+4.842966,1,7,3,37.41,0,1872,0.108652,normal,0x81306080fa74ea733929d025e1443a34ebc85762,synthetic:personal-wallet-augmentation,2026-04-18T09:53:36Z,synthetic: moderate personal wallet
+6.777336,5,37,12,15.64,1,808,-0.170941,normal,0x2d509f865c1749f6311dc4822d721f2197078942,synthetic:personal-wallet-augmentation,2026-04-18T09:53:36Z,synthetic: active DeFi personal wallet
+0.06933,2,3,1,8.11,1,20205,-0.078727,normal,0xb672d39a4468bbf35144077c4ce631204a8acd87,synthetic:personal-wallet-augmentation,2026-04-18T09:53:36Z,synthetic: low-activity personal wallet
+4.990567,3,15,6,51.44,1,4379,-0.12302,normal,0xd9e2aee71b69db41fa601685595378857f1e56b7,synthetic:personal-wallet-augmentation,2026-04-18T09:53:36Z,synthetic: moderate personal wallet
+1.897898,0,0,2,5.89,0,86400,0.011407,normal,0x4c81b1baf23e3bf9eef5f79f2b4934af87f5520b,synthetic:personal-wallet-augmentation,2026-04-18T09:53:36Z,synthetic: dormant personal wallet
+1366.367816,32,69,22,5116.81,1,84,-0.764625,anomaly,0x4ca271dec68e4c335d6152f362e1f8320866e313,synthetic:personal-wallet-augmentation,2026-04-18T09:53:36Z,synthetic: flash-loan / contract exploit
+1057.970485,3,9,3,4722.67,0,401,-0.855786,anomaly,0x6559b8606199967d20d7056b24693c7938923362,synthetic:personal-wallet-augmentation,2026-04-18T09:53:36Z,synthetic: large-value drain / exit scam
+1519.134748,21,43,10,1940.71,1,241,-0.849571,anomaly,0x7cd33a72043aa837e7fb0b736bb312a0c6d2c872,synthetic:personal-wallet-augmentation,2026-04-18T09:53:36Z,synthetic: flash-loan / contract exploit
+0.744444,0,0,1,18.66,0,86400,-0.013929,normal,0xdb8c188f341a924c7f88dfa161bfdb0ecc682919,synthetic:personal-wallet-augmentation,2026-04-18T09:53:36Z,synthetic: dormant personal wallet
+0.455681,0,0,1,37.38,0,86400,-0.000706,normal,0xadd7b9ca6503952269fd669f6376ee71879737fd,synthetic:personal-wallet-augmentation,2026-04-18T09:53:36Z,synthetic: dormant personal wallet
+0.177479,1,3,3,27.14,1,42834,-0.015986,normal,0x7fd9c7bce4e05b0b01faee78e4ea5bf2cc362241,synthetic:personal-wallet-augmentation,2026-04-18T09:53:36Z,synthetic: low-activity personal wallet
+0.003746,200,1435,251,818.66,0,30,-0.048741,anomaly,0xd27d1a574d9d81a6c2df9d447aac1cb058a34718,synthetic:personal-wallet-augmentation,2026-04-18T09:53:36Z,synthetic: bot / spam wallet
+8.471983,0,49,9,57.17,1,3326,0.180008,normal,0xc2fcb88ea552fd18b147661f539d579f1b98c4b8,synthetic:personal-wallet-augmentation,2026-04-18T09:53:36Z,synthetic: active DeFi personal wallet
+1.04111,1,3,3,43.27,0,26228,0.094098,normal,0x1ab9adcd7babdfa4cd1ba64bb47fd805ba375f23,synthetic:personal-wallet-augmentation,2026-04-18T09:53:36Z,synthetic: low-activity personal wallet
+1998.314158,21,65,50,2325.4,1,13,-0.827243,anomaly,0x1faeb8d110df9c75aeacf1375ff934bd648af916,synthetic:personal-wallet-augmentation,2026-04-18T09:53:36Z,synthetic: flash-loan / contract exploit
+1.568545,0,0,0,35.91,0,86400,-0.025151,normal,0x8d1532e70e20e2a6668de7f47e8467e546d53ec8,synthetic:personal-wallet-augmentation,2026-04-18T09:53:36Z,synthetic: dormant personal wallet
+0.391748,0,2,1,21.36,1,7782,-0.069326,normal,0x1d6cf4923d8367badd857a7931c794d4531d9649,synthetic:personal-wallet-augmentation,2026-04-18T09:53:36Z,synthetic: low-activity personal wallet
+1.691063,0,0,0,21.77,0,86400,0.026697,normal,0x65274ba9829b4406f61ff889326ffa9492edeeee,synthetic:personal-wallet-augmentation,2026-04-18T09:53:36Z,synthetic: dormant personal wallet
+0.002288,32,326,163,1074.31,0,82,0.021788,anomaly,0xe8625e689f8543501f73edad9ecba19c1ca12d96,synthetic:personal-wallet-augmentation,2026-04-18T09:53:36Z,synthetic: bot / spam wallet
+0.884236,0,0,0,28.49,0,86400,-0.042688,normal,0x9b3e4fbb498146ef7030cbf9537252dcceadd764,synthetic:personal-wallet-augmentation,2026-04-18T09:53:36Z,synthetic: dormant personal wallet
+1.083058,0,0,1,11.76,0,86400,0.023732,normal,0xf20fd27ecf14c011ed201f836320adb98bab1686,synthetic:personal-wallet-augmentation,2026-04-18T09:53:36Z,synthetic: dormant personal wallet
+1.197557,0,0,2,15.26,0,86400,-0.031465,normal,0x89e40186baa8a57d119e6fb65d00abc32af38e66,synthetic:personal-wallet-augmentation,2026-04-18T09:53:36Z,synthetic: dormant personal wallet
+3.556083,2,4,6,10.2,1,3316,0.102647,normal,0x070f6459fe884965d23e4a50360e332657fbefdc,synthetic:personal-wallet-augmentation,2026-04-18T09:53:36Z,synthetic: moderate personal wallet
+1.177543,1,2,1,45.97,0,40245,0.078227,normal,0x2e9865fd6d28e03b3c87d67747f2fc1df7ef49fb,synthetic:personal-wallet-augmentation,2026-04-18T09:53:36Z,synthetic: low-activity personal wallet
+7.41499,0,21,7,35.1,1,1241,-0.140871,normal,0xab62032826163a6dc5e9d06b280b1e0f45dc1c5c,synthetic:personal-wallet-augmentation,2026-04-18T09:53:36Z,synthetic: active DeFi personal wallet
+15.793402,0,17,5,62.69,1,2810,-0.133146,normal,0xb047686570a92201f513fea823206519bbd22fb2,synthetic:personal-wallet-augmentation,2026-04-18T09:53:36Z,synthetic: active DeFi personal wallet
+1.447434,3,11,4,24.65,1,4369,0.016605,normal,0xc4a403ffc2e3995e9b4adfc1762da9a57ca668da,synthetic:personal-wallet-augmentation,2026-04-18T09:53:36Z,synthetic: moderate personal wallet
+4771.874592,2,7,4,6432.62,0,254,-0.897982,anomaly,0x50ce5d923b450da5f5e1fd8cba0ab3a6f43baa82,synthetic:personal-wallet-augmentation,2026-04-18T09:53:36Z,synthetic: large-value drain / exit scam
+3.217122,3,9,4,53.97,1,1834,0.144403,normal,0x50f4884599902da902f87f52a3e76c1a6bb817e0,synthetic:personal-wallet-augmentation,2026-04-18T09:53:36Z,synthetic: moderate personal wallet
+4.784097,3,14,5,19.49,1,128,-0.042211,normal,0x2e92807d28460e0cca4a97bc5f56349ea7c25eb6,synthetic:personal-wallet-augmentation,2026-04-18T09:53:36Z,synthetic: moderate personal wallet
+1.219625,0,0,1,38.36,0,86400,-0.004336,normal,0xc8cbccc935f6cd1f61226ae15338ae1a34004d33,synthetic:personal-wallet-augmentation,2026-04-18T09:53:36Z,synthetic: dormant personal wallet
+0.874817,0,1,1,8.42,1,3928,0.003692,normal,0xb1ab90fc2e07d1f444887f5fbb1253be02b6e424,synthetic:personal-wallet-augmentation,2026-04-18T09:53:36Z,synthetic: low-activity personal wallet
+1434.63535,20,75,23,2754.95,1,218,-0.538183,anomaly,0x07743ba9cc7bd87caa7bc1139b89f0f5ef061bc2,synthetic:personal-wallet-augmentation,2026-04-18T09:53:36Z,synthetic: flash-loan / contract exploit
+0.647666,0,0,0,18.82,0,86400,-0.042756,normal,0x30bb1d6d132cded6237b2ed91e3f721fcb197117,synthetic:personal-wallet-augmentation,2026-04-18T09:53:36Z,synthetic: dormant personal wallet
+0.008751,321,2927,73,476.8,0,77,0.003485,anomaly,0x8b0e2302582b7f025875598779090c3a2a2d654c,synthetic:personal-wallet-augmentation,2026-04-18T09:53:36Z,synthetic: bot / spam wallet
+3.103148,4,10,8,50.48,1,5050,0.047531,normal,0xd7bcf64699af0e6071e52b4bbed5b87be1ca853a,synthetic:personal-wallet-augmentation,2026-04-18T09:53:36Z,synthetic: moderate personal wallet
+0.001677,236,433,135,252.43,1,102,-0.009107,anomaly,0x724d89d0301adf35089424935946d725c0993be4,synthetic:personal-wallet-augmentation,2026-04-18T09:53:36Z,synthetic: bot / spam wallet
+0.503307,0,0,0,22.76,0,86400,0.014964,normal,0x33ed123402f376e5bf1496773d19616326be5be5,synthetic:personal-wallet-augmentation,2026-04-18T09:53:36Z,synthetic: dormant personal wallet
+0.130173,2,2,3,9.06,0,20166,-0.047361,normal,0x57c277eb4011b2a74fe6a556ede0837640abec79,synthetic:personal-wallet-augmentation,2026-04-18T09:53:36Z,synthetic: low-activity personal wallet
+1048.997181,1,4,1,6296.72,0,182,-0.86979,anomaly,0x6214fec5d82f5b409a132b1c523f130ba75639ed,synthetic:personal-wallet-augmentation,2026-04-18T09:53:36Z,synthetic: large-value drain / exit scam
+0.002852,91,347,148,678.44,1,75,-0.030064,anomaly,0x21cd0c5406b8f77721f4bffb6c6e62f0679ee98a,synthetic:personal-wallet-augmentation,2026-04-18T09:53:36Z,synthetic: bot / spam wallet
+2337.149117,2,5,2,1709.2,0,449,-0.893036,anomaly,0xdf9b9e526fe42b4862a13f975ed5f5e1f8f28df1,synthetic:personal-wallet-augmentation,2026-04-18T09:53:36Z,synthetic: large-value drain / exit scam
+2.795079,0,8,2,42.77,1,1293,0.146858,normal,0x74cd2e0e443e1e685d84bb4c5a520eb37ce2ff6d,synthetic:personal-wallet-augmentation,2026-04-18T09:53:36Z,synthetic: moderate personal wallet
+1.07217,1,1,2,40.72,1,38069,0.050263,normal,0x1f9537fde40d440a7c2d725d55349f800f093163,synthetic:personal-wallet-augmentation,2026-04-18T09:53:36Z,synthetic: low-activity personal wallet
+1.492876,0,0,2,16.08,0,86400,-0.020259,normal,0x210c7736f3eec580dcfc43fe5d049b4d78a7a3eb,synthetic:personal-wallet-augmentation,2026-04-18T09:53:36Z,synthetic: dormant personal wallet
+1596.704432,15,54,16,3161.49,1,257,-0.898703,anomaly,0x946b70c6b7ab8c912bbd3abba746a83aad52d50b,synthetic:personal-wallet-augmentation,2026-04-18T09:53:36Z,synthetic: flash-loan / contract exploit
+12.492636,3,48,11,37.11,1,1591,-0.098854,normal,0x6600841d5b9c8ca5827b87e02efc2d6741d894be,synthetic:personal-wallet-augmentation,2026-04-18T09:53:36Z,synthetic: active DeFi personal wallet
