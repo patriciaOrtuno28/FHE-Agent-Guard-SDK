@@ -9,6 +9,7 @@ apps/trading-demo/.next
 
 # Hardhat
 artifacts/
+!packages/inference-server/artifacts/
 cache/
 coverage/
 coverage.json

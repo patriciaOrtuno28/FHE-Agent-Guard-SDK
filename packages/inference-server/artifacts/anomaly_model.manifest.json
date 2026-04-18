@@ -1,0 +1,88 @@
+{
+  "modelId": "base-anomaly-rf-v2",
+  "version": "2.0.0",
+  "modelType": "RandomForestClassifier",
+  "compiledAt": 1774950107992,
+  "nBits": {
+    "op_inputs": 6,
+    "op_leaves": 6
+  },
+  "nEstimators": 10,
+  "labels": {
+    "0": "normal",
+    "1": "anomaly"
+  },
+  "inputSchema": [
+    {
+      "name": "tx_value_eth",
+      "type": "float32",
+      "min": 0,
+      "max": 10000
+    },
+    {
+      "name": "tx_count_1h",
+      "type": "float32",
+      "min": 0,
+      "max": 1000
+    },
+    {
+      "name": "tx_count_24h",
+      "type": "float32",
+      "min": 0,
+      "max": 10000
+    },
+    {
+      "name": "unique_counterparts",
+      "type": "float32",
+      "min": 0,
+      "max": 500
+    },
+    {
+      "name": "gas_price_gwei",
+      "type": "float32",
+      "min": 0,
+      "max": 10000
+    },
+    {
+      "name": "contract_interaction",
+      "type": "float32",
+      "min": 0,
+      "max": 1
+    },
+    {
+      "name": "time_since_last_tx",
+      "type": "float32",
+      "min": 0,
+      "max": 86400
+    },
+    {
+      "name": "balance_change_ratio",
+      "type": "float32",
+      "min": -1,
+      "max": 1
+    }
+  ],
+  "trainingData": {
+    "path": "/app/data/test_data.csv",
+    "sha256": "9ab544f96f22be629a9d265526e09755940ef5020c50dea4435509306f8771d6",
+    "labelColumn": "label",
+    "rows": 220,
+    "normalRows": 110,
+    "anomalyRows": 110,
+    "availableMetaColumns": [
+      "subject",
+      "source",
+      "observed_at",
+      "label_reason"
+    ],
+    "provenanceNote": "Real labeled on-chain dataset supplied externally by the operator."
+  },
+  "modelPath": "./artifacts/anomaly_model.json",
+  "metrics": {
+    "accuracy": 0.954545,
+    "precision": 1.0,
+    "recall": 0.909091,
+    "f1": 0.952381,
+    "testRows": 44
+  }
+}
